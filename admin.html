@@ -1680,8 +1680,29 @@
         </section>
     </main>
 
-    <!-- Global Save Functions -->
+    <!-- Global Functions -->
     <script>
+        // Modal functions - must be defined before modals
+        function openModal(modalId) {
+            console.log('Opening modal:', modalId);
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } else {
+                console.error('Modal not found:', modalId);
+            }
+        }
+        
+        function closeModal(modalId) {
+            console.log('Closing modal:', modalId);
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        
         function saveArticle() {
             console.log('saveArticle global function called');
             if (typeof AdminAPI !== 'undefined' && AdminAPI.saveArticle) {
