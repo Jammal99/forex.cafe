@@ -1,183 +1,145 @@
 /**
  * Sections API - Forex Cafe
- * CRUD operations for sections
  */
 
 const { getDb } = require('../../db');
-const { sections } = require('../../db/schema');
-const { eq, asc, desc } = require('drizzle-orm');
+const { sections, homepageSections } = require('../../db/schema');
+const { eq, asc } = require('drizzle-orm');
 
-// Helper: Send JSON response
-const sendResponse = (res, status, data) => {
-    res.statusCode = status;
-    res.setHeader('Content-Type', 'application/json');
+module.exports = async (req, res) => {
+    // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.end(JSON.stringify(data));
-};
-
-// Helper: Parse request body
-const parseBody = async (req) => {
-    return new Promise((resolve) => {
-        let body = '';
-        req.on('data', chunk => body += chunk);
-        req.on('end', () => {
-            try {
-                resolve(JSON.parse(body));
-            } catch {
-                resolve({});
-            }
-        });
-    });
-};
-
-// Helper: Generate slug
-const generateSlug = (name) => {
-    return name
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .trim();
-};
-
-module.exports = async (req, res) => {
-    // Handle CORS preflight
-    if (req.method === 'OPTIONS') {
-        return sendResponse(res, 200, {});
-    }
     
-    const url = new URL(req.url, `http://${req.headers.host}`);
-    const pathParts = url.pathname.split('/').filter(Boolean);
-    const id = pathParts[2]; // /api/sections/[id]
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
     
     try {
         const db = getDb();
+        const url = new URL(req.url, `http://${req.headers.host}`);
+        const id = url.searchParams.get('id');
+        const type = url.searchParams.get('type'); // 'homepage' for homepage sections
         
         // ==========================================
-        // GET /api/sections - Get all sections
+        // GET - Get sections
         // ==========================================
-        if (req.method === 'GET' && !id) {
-            const result = await db.select().from(sections).orderBy(asc(sections.sortOrder));
-            
-            return sendResponse(res, 200, {
-                success: true,
-                data: result
-            });
-        }
-        
-        // ==========================================
-        // GET /api/sections/:id - Get single section
-        // ==========================================
-        if (req.method === 'GET' && id) {
-            const result = await db.select().from(sections).where(eq(sections.id, parseInt(id))).limit(1);
-            
-            if (result.length === 0) {
-                return sendResponse(res, 404, { 
-                    success: false, 
-                    error: 'القسم غير موجود' 
-                });
+        if (req.method === 'GET') {
+            // Homepage sections
+            if (type === 'homepage') {
+                const result = await db.select().from(homepageSections).orderBy(asc(homepageSections.order));
+                return res.status(200).json({ success: true, data: result });
             }
             
-            return sendResponse(res, 200, {
-                success: true,
-                data: result[0]
-            });
+            // Single section
+            if (id) {
+                const result = await db.select().from(sections).where(eq(sections.id, parseInt(id))).limit(1);
+                if (result.length === 0) {
+                    return res.status(404).json({ success: false, error: 'القسم غير موجود' });
+                }
+                return res.status(200).json({ success: true, data: result[0] });
+            }
+            
+            // All sections
+            const result = await db.select().from(sections).orderBy(asc(sections.order));
+            return res.status(200).json({ success: true, data: result });
         }
         
         // ==========================================
-        // POST /api/sections - Create section
+        // POST - Create section
         // ==========================================
         if (req.method === 'POST') {
-            const body = await parseBody(req);
-            const { name, nameEn, icon, description, showInFilter, isActive, sortOrder } = body;
+            const body = req.body;
             
-            if (!name) {
-                return sendResponse(res, 400, { 
-                    success: false, 
-                    error: 'اسم القسم مطلوب' 
-                });
+            if (!body.name) {
+                return res.status(400).json({ success: false, error: 'اسم القسم مطلوب' });
             }
             
-            const slug = generateSlug(nameEn || name);
+            // Homepage section
+            if (type === 'homepage') {
+                const result = await db.insert(homepageSections).values({
+                    name: body.name,
+                    title: body.title || body.name,
+                    type: body.type || 'articles',
+                    sectionId: body.sectionId,
+                    itemsCount: body.itemsCount || 6,
+                    order: body.order || 0,
+                    isActive: body.isActive !== false
+                }).returning();
+                return res.status(201).json({ success: true, data: result[0] });
+            }
+            
+            const slug = body.name.toLowerCase()
+                .replace(/[^\w\s-\u0600-\u06FF]/g, '')
+                .replace(/\s+/g, '-');
             
             const result = await db.insert(sections).values({
-                name,
-                nameEn,
+                name: body.name,
                 slug,
-                icon: icon || 'fas fa-folder',
-                description,
-                showInFilter: showInFilter ?? true,
-                isActive: isActive ?? true,
-                sortOrder: sortOrder || 0
+                description: body.description,
+                icon: body.icon,
+                color: body.color,
+                order: body.order || 0,
+                isActive: body.isActive !== false
             }).returning();
             
-            return sendResponse(res, 201, {
-                success: true,
-                data: result[0]
-            });
+            return res.status(201).json({ success: true, data: result[0] });
         }
         
         // ==========================================
-        // PUT /api/sections/:id - Update section
+        // PUT - Update section
         // ==========================================
-        if (req.method === 'PUT' && id) {
-            const body = await parseBody(req);
+        if (req.method === 'PUT') {
+            if (!id) {
+                return res.status(400).json({ success: false, error: 'معرف القسم مطلوب' });
+            }
+            
+            const body = req.body;
+            
+            // Homepage section
+            if (type === 'homepage') {
+                const result = await db.update(homepageSections)
+                    .set(body)
+                    .where(eq(homepageSections.id, parseInt(id)))
+                    .returning();
+                return res.status(200).json({ success: true, data: result[0] });
+            }
             
             const result = await db.update(sections)
-                .set({
-                    ...body,
-                    updatedAt: new Date()
-                })
+                .set(body)
                 .where(eq(sections.id, parseInt(id)))
                 .returning();
             
             if (result.length === 0) {
-                return sendResponse(res, 404, { 
-                    success: false, 
-                    error: 'القسم غير موجود' 
-                });
+                return res.status(404).json({ success: false, error: 'القسم غير موجود' });
             }
             
-            return sendResponse(res, 200, {
-                success: true,
-                data: result[0]
-            });
+            return res.status(200).json({ success: true, data: result[0] });
         }
         
         // ==========================================
-        // DELETE /api/sections/:id - Delete section
+        // DELETE - Delete section
         // ==========================================
-        if (req.method === 'DELETE' && id) {
-            const result = await db.delete(sections)
-                .where(eq(sections.id, parseInt(id)))
-                .returning();
-            
-            if (result.length === 0) {
-                return sendResponse(res, 404, { 
-                    success: false, 
-                    error: 'القسم غير موجود' 
-                });
+        if (req.method === 'DELETE') {
+            if (!id) {
+                return res.status(400).json({ success: false, error: 'معرف القسم مطلوب' });
             }
             
-            return sendResponse(res, 200, {
-                success: true,
-                message: 'تم حذف القسم بنجاح'
-            });
+            // Homepage section
+            if (type === 'homepage') {
+                await db.delete(homepageSections).where(eq(homepageSections.id, parseInt(id)));
+                return res.status(200).json({ success: true, message: 'تم الحذف' });
+            }
+            
+            await db.delete(sections).where(eq(sections.id, parseInt(id)));
+            return res.status(200).json({ success: true, message: 'تم حذف القسم' });
         }
         
-        // Not found
-        return sendResponse(res, 404, { 
-            success: false, 
-            error: 'المسار غير موجود' 
-        });
+        return res.status(405).json({ success: false, error: 'Method not allowed' });
         
     } catch (error) {
         console.error('Sections API Error:', error);
-        return sendResponse(res, 500, { 
-            success: false, 
-            error: 'خطأ في الخادم' 
-        });
+        return res.status(500).json({ success: false, error: 'خطأ في الخادم: ' + error.message });
     }
 };
