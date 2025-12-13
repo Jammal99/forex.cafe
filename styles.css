@@ -410,8 +410,12 @@ img {
 
 /* Hero Compact Version */
 .hero.hero-compact {
-    min-height: 50vh;
+    min-height: auto;
     padding: calc(var(--ticker-height) + var(--header-height) + 30px) 20px 40px;
+    position: sticky;
+    top: calc(var(--ticker-height) + var(--header-height));
+    z-index: 50;
+    background: var(--bg-primary);
 }
 
 .hero.hero-compact .hero-title {
