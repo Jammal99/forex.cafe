@@ -962,10 +962,16 @@
     <script>
         // Load articles from API
         async function loadArticlesFromAPI() {
+            console.log('Loading published articles from API...');
             try {
                 const result = await API.articles.getAll({ status: 'published', limit: 6 });
+                console.log('API response:', result);
+                
                 if (result.success && result.data && result.data.length > 0) {
+                    console.log('Rendering', result.data.length, 'articles');
                     renderArticles(result.data);
+                } else {
+                    console.log('No published articles found');
                 }
             } catch (error) {
                 console.error('Error loading articles:', error);
@@ -976,12 +982,14 @@
             const grid = document.querySelector('.articles-grid');
             if (!grid || articles.length === 0) return;
             
-            // Keep first 2 static articles as fallback, add API articles
+            // Clear static placeholder articles
+            grid.innerHTML = '';
+            
             const apiArticlesHtml = articles.map(article => {
-                const date = new Date(article.createdAt || article.publishedAt);
+                const date = new Date(article.publishedAt || article.createdAt);
                 const formattedDate = date.toLocaleDateString('ar', { day: 'numeric', month: 'long', year: 'numeric' });
                 const excerpt = article.excerpt || (article.content ? article.content.substring(0, 100) + '...' : '');
-                const category = article.tags ? article.tags.split(',')[0] : 'مقال';
+                const category = article.tags ? article.tags.split(',')[0].trim() : 'مقال';
                 
                 return `
                     <article class="article-card" data-category="${category}">
@@ -1011,8 +1019,7 @@
                 `;
             }).join('');
             
-            // Prepend API articles to the grid
-            grid.insertAdjacentHTML('afterbegin', apiArticlesHtml);
+            grid.innerHTML = apiArticlesHtml;
         }
         
         // Load articles when page loads

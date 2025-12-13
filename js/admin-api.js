@@ -339,6 +339,11 @@ const AdminAPI = {
     async saveArticle() {
         console.log('AdminAPI.saveArticle() started');
         
+        // Check if we're editing an existing article
+        if (this.editingArticleId) {
+            return this.updateArticle();
+        }
+        
         const title = document.getElementById('articleTitle')?.value?.trim();
         const content = document.getElementById('articleContent')?.value?.trim();
         const sectionId = document.getElementById('articleSection')?.value;
@@ -374,14 +379,7 @@ const AdminAPI = {
             if (result.success) {
                 showNotification('تم إضافة المقال بنجاح', 'success');
                 closeModal('addArticleModal');
-                // Clear form
-                document.getElementById('articleTitle').value = '';
-                document.getElementById('articleContent').value = '';
-                document.getElementById('articleSection').value = '';
-                document.getElementById('articleSubsection').value = '';
-                document.getElementById('subsectionRow').style.display = 'none';
-                document.getElementById('articleStatus').value = 'draft';
-                document.getElementById('articleTags').value = '';
+                this.resetArticleForm();
                 this.loadArticles();
                 this.loadDashboardStats();
             } else {
@@ -393,13 +391,152 @@ const AdminAPI = {
         }
     },
 
+    // Currently editing article ID
+    editingArticleId: null,
+    
     async editArticle(id) {
-        const article = this.articles.find(a => a.id === id);
-        if (!article) return;
+        console.log('AdminAPI.editArticle called for id:', id);
         
-        // For now, show info
-        showNotification('تعديل المقال: ' + article.title, 'info');
-        // TODO: Open edit modal with article data
+        // Find article in cache or fetch from API
+        let article = this.articles.find(a => a.id === id);
+        
+        if (!article) {
+            try {
+                const result = await API.articles.getById(id);
+                if (result.success) {
+                    article = result.data;
+                } else {
+                    showNotification('المقال غير موجود', 'error');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error fetching article:', error);
+                showNotification('خطأ في جلب المقال', 'error');
+                return;
+            }
+        }
+        
+        console.log('Editing article:', article);
+        
+        // Store the ID we're editing
+        this.editingArticleId = id;
+        
+        // Populate the modal with article data
+        document.getElementById('articleTitle').value = article.title || '';
+        document.getElementById('articleContent').value = article.content || '';
+        document.getElementById('articleStatus').value = article.status || 'draft';
+        document.getElementById('articleTags').value = article.tags || '';
+        document.getElementById('articleThumbnail').value = article.thumbnail || '';
+        
+        // Set section
+        const sectionSelect = document.getElementById('articleSection');
+        if (sectionSelect && article.sectionId) {
+            sectionSelect.value = article.sectionId;
+            // Load subsections for this section
+            await this.loadSubsectionsForArticle(article.sectionId);
+        }
+        
+        // Set subsection if exists
+        if (article.subsectionId) {
+            const subsectionSelect = document.getElementById('articleSubsection');
+            if (subsectionSelect) {
+                subsectionSelect.value = article.subsectionId;
+            }
+        }
+        
+        // Change modal title and button text to indicate editing
+        const modalTitle = document.querySelector('#addArticleModal .modal-header h2');
+        if (modalTitle) modalTitle.textContent = 'تعديل المقال';
+        
+        const saveBtn = document.querySelector('#addArticleModal .modal-footer .btn-primary');
+        if (saveBtn) saveBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التعديلات';
+        
+        // Open the modal
+        openModal('addArticleModal');
+    },
+    
+    async updateArticle() {
+        if (!this.editingArticleId) {
+            console.error('No article ID set for update');
+            return;
+        }
+        
+        console.log('Updating article ID:', this.editingArticleId);
+        
+        const title = document.getElementById('articleTitle')?.value?.trim();
+        const content = document.getElementById('articleContent')?.value?.trim();
+        const sectionId = document.getElementById('articleSection')?.value;
+        const subsectionId = document.getElementById('articleSubsection')?.value;
+        const status = document.getElementById('articleStatus')?.value || 'draft';
+        const tags = document.getElementById('articleTags')?.value?.trim();
+        const thumbnail = document.getElementById('articleThumbnail')?.value;
+        
+        if (!title) {
+            showNotification('يرجى إدخال عنوان المقال', 'error');
+            return;
+        }
+        
+        if (!content) {
+            showNotification('يرجى إدخال محتوى المقال', 'error');
+            return;
+        }
+        
+        const updateData = {
+            title,
+            content,
+            sectionId: sectionId ? parseInt(sectionId) : null,
+            subsectionId: subsectionId ? parseInt(subsectionId) : null,
+            status,
+            tags: tags || null,
+            thumbnail: thumbnail || null
+        };
+        
+        // Set publishedAt if changing to published
+        if (status === 'published') {
+            const existingArticle = this.articles.find(a => a.id === this.editingArticleId);
+            if (!existingArticle?.publishedAt) {
+                updateData.publishedAt = new Date().toISOString();
+            }
+        }
+        
+        console.log('Update data:', updateData);
+        
+        try {
+            const result = await API.articles.update(this.editingArticleId, updateData);
+            
+            if (result.success) {
+                showNotification('تم تحديث المقال بنجاح', 'success');
+                closeModal('addArticleModal');
+                this.resetArticleForm();
+                this.loadArticles();
+                this.loadDashboardStats();
+            } else {
+                showNotification(result.error || 'خطأ في تحديث المقال', 'error');
+            }
+        } catch (error) {
+            console.error('Update article error:', error);
+            showNotification('خطأ: ' + error.message, 'error');
+        }
+    },
+    
+    resetArticleForm() {
+        this.editingArticleId = null;
+        
+        // Reset form fields
+        document.getElementById('articleTitle').value = '';
+        document.getElementById('articleContent').value = '';
+        document.getElementById('articleSection').value = '';
+        document.getElementById('articleSubsection').value = '';
+        document.getElementById('subsectionRow').style.display = 'none';
+        document.getElementById('articleStatus').value = 'draft';
+        document.getElementById('articleTags').value = '';
+        
+        // Reset modal title and button
+        const modalTitle = document.querySelector('#addArticleModal .modal-header h2');
+        if (modalTitle) modalTitle.textContent = 'إضافة مقال جديد';
+        
+        const saveBtn = document.querySelector('#addArticleModal .modal-footer .btn-primary');
+        if (saveBtn) saveBtn.innerHTML = '<i class="fas fa-save"></i> حفظ المقال';
     },
 
     async deleteArticle(id) {

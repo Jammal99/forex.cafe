@@ -1268,7 +1268,7 @@ async function loadArticles() {
 
 // Render articles in table
 function renderArticlesTable(articles) {
-    const tbody = document.querySelector('#articles-section tbody');
+    const tbody = document.getElementById('articlesTableBody');
     if (!tbody) return;
     
     if (articles.length === 0) {
@@ -1312,140 +1312,36 @@ function renderArticlesTable(articles) {
     `).join('');
 }
 
-// Save new article
+// Save article - delegates to AdminAPI (which handles both create and update)
 async function saveArticle() {
-    console.log('saveArticle called');
-    
-    // Get data from modal inputs using proper IDs
-    const title = document.getElementById('articleTitle')?.value?.trim();
-    const content = document.getElementById('articleContent')?.value?.trim();
-    const sectionId = document.getElementById('articleSection')?.value;
-    const subsectionId = document.getElementById('articleSubsection')?.value;
-    const status = document.getElementById('articleStatus')?.value || 'draft';
-    const tags = document.getElementById('articleTags')?.value?.trim();
-    const thumbnail = document.getElementById('articleThumbnail')?.value;
-    
-    console.log('Article data:', { title, content, sectionId, subsectionId, status, tags });
-    
-    // Validate required fields
-    if (!title) {
-        showNotification('يرجى إدخال عنوان المقال', 'error');
-        return;
-    }
-    
-    if (!content) {
-        showNotification('يرجى إدخال محتوى المقال', 'error');
-        return;
-    }
-    
-    // Check if API is available
-    if (typeof API === 'undefined') {
-        showNotification('خطأ: API غير متوفر', 'error');
-        console.error('API object is not defined');
-        return;
-    }
-    
-    try {
-        // Prepare article data
-        const articleData = {
-            title: title,
-            content: content,
-            status: status
-        };
-        
-        // Add optional fields if they have values
-        if (sectionId) {
-            articleData.sectionId = parseInt(sectionId);
-        }
-        if (subsectionId) {
-            articleData.subsectionId = parseInt(subsectionId);
-        }
-        if (tags) {
-            articleData.tags = tags;
-        }
-        if (thumbnail) {
-            articleData.thumbnail = thumbnail;
-        }
-        
-        console.log('Sending to API:', articleData);
-        
-        const result = await API.articles.create(articleData);
-        
-        console.log('API response:', result);
-        
-        if (result.success) {
-            showNotification('تم إضافة المقال بنجاح', 'success');
-            closeModal('addArticleModal');
-            
-            // Clear form
-            document.getElementById('articleForm')?.reset();
-            document.getElementById('subsectionRow').style.display = 'none';
-            
-            // Reload articles
-            loadArticles();
-        } else {
-            showNotification(result.error || 'خطأ في إضافة المقال', 'error');
-        }
-    } catch (error) {
-        console.error('Error saving article:', error);
-        showNotification('خطأ في حفظ المقال: ' + error.message, 'error');
+    console.log('saveArticle called - delegating to AdminAPI');
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.saveArticle();
+    } else {
+        console.error('AdminAPI not defined');
+        showNotification('خطأ: AdminAPI غير متوفر', 'error');
     }
 }
 
-// Delete article
+// Load articles - delegates to AdminAPI
+async function loadArticles() {
+    console.log('loadArticles called - delegating to AdminAPI');
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.loadArticles();
+    }
+}
+
+// Delete article - delegates to AdminAPI
 async function deleteArticle(id) {
-    if (!confirm('هل أنت متأكد من حذف هذا المقال؟')) return;
-    
-    try {
-        const result = await API.articles.delete(id);
-        if (result.success) {
-            showNotification('تم حذف المقال بنجاح', 'success');
-            loadArticles();
-        } else {
-            showNotification(result.error || 'خطأ في الحذف', 'error');
-        }
-    } catch (error) {
-        showNotification('خطأ في الحذف: ' + error.message, 'error');
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.deleteArticle(id);
     }
 }
 
-// Load sections from API
-async function loadSections() {
-    try {
-        const result = await API.sections.getAll();
-        if (result.success) {
-            populateSectionSelects(result.data);
-        }
-    } catch (error) {
-        console.error('Error loading sections:', error);
+// Edit article - delegates to AdminAPI  
+async function editArticle(id) {
+    console.log('editArticle called for id:', id);
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.editArticle(id);
     }
 }
-
-// Populate section dropdowns
-function populateSectionSelects(sections) {
-    console.log('Populating sections:', sections);
-    
-    // Target the article section select by ID
-    const articleSectionSelect = document.getElementById('articleSection');
-    
-    if (articleSectionSelect) {
-        articleSectionSelect.innerHTML = '<option value="">اختر القسم</option>' + 
-            sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-        console.log('Article section select populated with', sections.length, 'sections');
-    }
-    
-    // Also populate any other section selects with data-sections attribute
-    document.querySelectorAll('select[data-sections]').forEach(select => {
-        select.innerHTML = '<option value="">اختر القسم</option>' + 
-            sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-    });
-}
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if API is available
-    if (typeof API !== 'undefined') {
-        loadSections();
-        loadArticles();
-    }
-});

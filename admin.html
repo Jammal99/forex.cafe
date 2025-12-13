@@ -1119,7 +1119,7 @@
         <section class="content-section" id="articles">
             <div class="section-header">
                 <h1>إدارة المقالات</h1>
-                <button class="btn btn-primary" onclick="openModal('addArticleModal')">
+                <button class="btn btn-primary" onclick="if(typeof AdminAPI !== 'undefined') AdminAPI.resetArticleForm(); openModal('addArticleModal')">
                     <i class="fas fa-plus"></i> إضافة مقال جديد
                 </button>
             </div>
@@ -1775,7 +1775,7 @@
         <div class="modal-content modal-lg">
             <div class="modal-header">
                 <h2>إضافة مقال جديد</h2>
-                <button class="close-modal" onclick="closeModal('addArticleModal')">&times;</button>
+                <button class="close-modal" onclick="closeModal('addArticleModal'); if(typeof AdminAPI !== 'undefined') AdminAPI.resetArticleForm();">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="articleForm">
@@ -1836,7 +1836,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal('addArticleModal')">إلغاء</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addArticleModal'); if(typeof AdminAPI !== 'undefined') AdminAPI.resetArticleForm();">إلغاء</button>
                 <button type="button" class="btn btn-primary" onclick="saveArticle(); return false;">
                     <i class="fas fa-save"></i> حفظ المقال
                 </button>
