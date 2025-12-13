@@ -19,111 +19,17 @@
         .article-layout {
             display: grid;
             grid-template-columns: 280px 1fr;
-            gap: 30px;
+            gap: 40px;
             max-width: 1400px;
             margin: 0 auto;
             padding: 40px 20px;
         }
         
-        .article-sidebar {
+        /* Use same sidebar styles as main page */
+        .article-page .sidebar {
             position: sticky;
             top: 100px;
             height: fit-content;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .article-sidebar .sidebar-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .article-sidebar .sidebar-title i {
-            color: #d97706;
-        }
-        
-        .sidebar-sections {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .sidebar-sections li {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-sections .section-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            color: #aaa;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-        
-        .sidebar-sections .section-link:hover {
-            background: rgba(217, 119, 6, 0.1);
-            color: #d97706;
-        }
-        
-        .sidebar-sections .section-link.active {
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(245, 158, 11, 0.1));
-            color: #f59e0b;
-            font-weight: 600;
-            border-right: 3px solid #d97706;
-        }
-        
-        .sidebar-sections .section-link i {
-            width: 20px;
-            text-align: center;
-            font-size: 14px;
-        }
-        
-        .sidebar-sections .section-link.active i {
-            color: #d97706;
-        }
-        
-        .sidebar-sections .subsections {
-            list-style: none;
-            padding: 0;
-            margin: 5px 0 10px 25px;
-        }
-        
-        .sidebar-sections .subsections li {
-            margin-bottom: 3px;
-        }
-        
-        .sidebar-sections .subsections a {
-            display: block;
-            padding: 8px 15px;
-            border-radius: 8px;
-            color: #888;
-            text-decoration: none;
-            font-size: 13px;
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-sections .subsections a:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ccc;
-        }
-        
-        .sidebar-sections .subsections a.active {
-            background: rgba(217, 119, 6, 0.15);
-            color: #f59e0b;
-            font-weight: 500;
         }
         
         .article-container {
@@ -136,7 +42,7 @@
                 grid-template-columns: 1fr;
             }
             
-            .article-sidebar {
+            .article-page .sidebar {
                 position: relative;
                 top: 0;
                 order: 2;
@@ -544,21 +450,33 @@
     <!-- Article Page -->
     <main class="article-page">
         <div class="article-layout">
-            <!-- Sidebar -->
-            <aside class="article-sidebar">
-                <h3 class="sidebar-title">
-                    <i class="fas fa-th-large"></i>
-                    الأقسام
-                </h3>
-                <ul class="sidebar-sections" id="sidebarSections">
-                    <!-- Sections will be loaded dynamically -->
-                    <li>
-                        <a href="index.html" class="section-link">
-                            <i class="fas fa-spinner fa-spin"></i>
-                            <span>جاري التحميل...</span>
-                        </a>
-                    </li>
-                </ul>
+            <!-- Sidebar (same structure as main page) -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-th-large"></i>
+                        الأقسام الرئيسية
+                    </h3>
+                    <ul class="sidebar-menu" id="sidebarSections">
+                        <!-- Sections will be loaded dynamically -->
+                        <li class="menu-item">
+                            <a href="index.html" class="menu-link">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span>جاري التحميل...</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-fire"></i>
+                        الأكثر قراءة
+                    </h3>
+                    <ul class="popular-posts" id="popularPosts">
+                        <!-- Popular posts will be loaded dynamically -->
+                    </ul>
+                </div>
             </aside>
             
             <!-- Main Article Content -->
@@ -729,7 +647,7 @@
             }
         }
         
-        // Render sections in sidebar
+        // Render sections in sidebar (same style as main page)
         function renderSidebarSections() {
             const sidebar = document.getElementById('sidebarSections');
             if (!sidebar) return;
@@ -753,13 +671,14 @@
                 const subsections = Object.values(subsectionsCache).filter(s => s.sectionId === section.id);
                 
                 return `
-                    <li>
-                        <a href="index.html?section=${section.id}" class="section-link" data-section-id="${section.id}">
+                    <li class="menu-item has-submenu" data-section-id="${section.id}">
+                        <a href="index.html?section=${section.id}" class="menu-link">
                             <i class="fas ${icon}"></i>
                             <span>${section.name}</span>
+                            ${subsections.length > 0 ? '<i class="fas fa-chevron-down arrow"></i>' : ''}
                         </a>
                         ${subsections.length > 0 ? `
-                            <ul class="subsections">
+                            <ul class="submenu">
                                 ${subsections.map(sub => `
                                     <li>
                                         <a href="index.html?subsection=${sub.id}" data-subsection-id="${sub.id}">${sub.name}</a>
@@ -770,6 +689,33 @@
                     </li>
                 `;
             }).join('');
+            
+            // Load popular posts
+            loadPopularPosts();
+        }
+        
+        // Load popular posts for sidebar
+        async function loadPopularPosts() {
+            const container = document.getElementById('popularPosts');
+            if (!container) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/articles?status=published&limit=4`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    container.innerHTML = result.data.map((article, index) => `
+                        <li>
+                            <a href="article.html?id=${article.id}">
+                                <span class="post-number">${index + 1}</span>
+                                <span class="post-title">${article.title}</span>
+                            </a>
+                        </li>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading popular posts:', error);
+            }
         }
         
         // Highlight current section in sidebar
@@ -777,26 +723,28 @@
             if (!article) return;
             
             // Remove all active classes
-            document.querySelectorAll('.sidebar-sections .section-link').forEach(link => {
-                link.classList.remove('active');
+            document.querySelectorAll('.sidebar-menu .menu-item').forEach(item => {
+                item.classList.remove('active');
             });
-            document.querySelectorAll('.sidebar-sections .subsections a').forEach(link => {
+            document.querySelectorAll('.sidebar-menu .submenu a').forEach(link => {
                 link.classList.remove('active');
             });
             
             // Highlight current section
             if (article.sectionId) {
-                const sectionLink = document.querySelector(`.section-link[data-section-id="${article.sectionId}"]`);
-                if (sectionLink) {
-                    sectionLink.classList.add('active');
+                const menuItem = document.querySelector(`.menu-item[data-section-id="${article.sectionId}"]`);
+                if (menuItem) {
+                    menuItem.classList.add('active');
                 }
             }
             
             // Highlight current subsection
             if (article.subsectionId) {
-                const subsectionLink = document.querySelector(`.subsections a[data-subsection-id="${article.subsectionId}"]`);
-                if (subsectionLink) {
-                    subsectionLink.classList.add('active');
+                const submenuLink = document.querySelector(`.submenu a[data-subsection-id="${article.subsectionId}"]`);
+                if (submenuLink) {
+                    submenuLink.classList.add('active');
+                    submenuLink.style.color = 'var(--primary)';
+                    submenuLink.style.background = 'var(--bg-glass)';
                 }
             }
         }

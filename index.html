@@ -843,12 +843,12 @@
                 }
                 
                 return `
-                    <article class="article-card" data-category="${sectionName}">
+                    <article class="article-card" data-category="${sectionName}" onclick="window.location.href='article.html?id=${article.id}'" style="cursor: pointer;">
                         <div class="card-image">
                             <img src="${article.thumbnail || 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80'}" alt="${article.title}">
                             <div class="card-overlay">
                                 <span class="category-badge">${categoryBadge}</span>
-                                <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                                <button class="bookmark-btn" onclick="event.stopPropagation();"><i class="far fa-bookmark"></i></button>
                             </div>
                         </div>
                         <div class="card-content">
@@ -863,7 +863,7 @@
                                     <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="الكاتب">
                                     <span>فوركس كافيه</span>
                                 </div>
-                                <a href="article.html?id=${article.id}" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                                <span class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></span>
                             </div>
                         </div>
                     </article>
