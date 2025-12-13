@@ -1253,3 +1253,154 @@ function resetHomepageSections() {
         showNotification('تم إعادة التعيين للافتراضي', 'success');
     }
 }
+
+// ==========================================
+// Articles API Functions
+// ==========================================
+
+// Load articles from API
+async function loadArticles() {
+    try {
+        const result = await API.articles.getAll();
+        if (result.success) {
+            renderArticlesTable(result.data);
+        }
+    } catch (error) {
+        console.error('Error loading articles:', error);
+        showNotification('خطأ في تحميل المقالات', 'error');
+    }
+}
+
+// Render articles in table
+function renderArticlesTable(articles) {
+    const tbody = document.querySelector('#articles-section tbody');
+    if (!tbody) return;
+    
+    if (articles.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-newspaper" style="font-size: 48px; color: #666; margin-bottom: 15px; display: block;"></i>
+                    <p>لا توجد مقالات حالياً</p>
+                    <button class="btn btn-primary" onclick="openModal('addArticleModal')" style="margin-top: 15px;">
+                        <i class="fas fa-plus"></i> إضافة مقال جديد
+                    </button>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tbody.innerHTML = articles.map(article => `
+        <tr data-id="${article.id}">
+            <td><input type="checkbox"></td>
+            <td>
+                <div class="article-title">
+                    <img src="${article.thumbnail || 'assets/placeholder.jpg'}" alt="" class="article-thumb">
+                    <span>${article.title}</span>
+                </div>
+            </td>
+            <td>${article.sectionId || '-'}</td>
+            <td><span class="status-badge ${article.status}">${article.status === 'published' ? 'منشور' : 'مسودة'}</span></td>
+            <td>${article.views || 0}</td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn-icon" onclick="editArticle(${article.id})" title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon danger" onclick="deleteArticle(${article.id})" title="حذف">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Save new article
+async function saveArticle() {
+    const form = document.getElementById('articleForm');
+    if (!form) {
+        // Get data from modal inputs
+        const modal = document.getElementById('addArticleModal');
+        const title = modal.querySelector('input[type="text"]').value;
+        const content = modal.querySelector('textarea').value;
+        const sectionSelect = modal.querySelectorAll('select')[0];
+        const statusSelect = modal.querySelectorAll('select')[1];
+        
+        if (!title || !content) {
+            showNotification('يرجى ملء العنوان والمحتوى', 'error');
+            return;
+        }
+        
+        try {
+            const result = await API.articles.create({
+                title: title,
+                content: content,
+                sectionId: sectionSelect?.value ? parseInt(sectionSelect.value) : null,
+                status: statusSelect?.value || 'draft'
+            });
+            
+            if (result.success) {
+                showNotification('تم إضافة المقال بنجاح', 'success');
+                closeModal('addArticleModal');
+                loadArticles();
+            } else {
+                showNotification(result.error || 'خطأ في الإضافة', 'error');
+            }
+        } catch (error) {
+            console.error('Error saving article:', error);
+            showNotification('خطأ في حفظ المقال: ' + error.message, 'error');
+        }
+        return;
+    }
+}
+
+// Delete article
+async function deleteArticle(id) {
+    if (!confirm('هل أنت متأكد من حذف هذا المقال؟')) return;
+    
+    try {
+        const result = await API.articles.delete(id);
+        if (result.success) {
+            showNotification('تم حذف المقال بنجاح', 'success');
+            loadArticles();
+        } else {
+            showNotification(result.error || 'خطأ في الحذف', 'error');
+        }
+    } catch (error) {
+        showNotification('خطأ في الحذف: ' + error.message, 'error');
+    }
+}
+
+// Load sections from API
+async function loadSections() {
+    try {
+        const result = await API.sections.getAll();
+        if (result.success) {
+            populateSectionSelects(result.data);
+        }
+    } catch (error) {
+        console.error('Error loading sections:', error);
+    }
+}
+
+// Populate section dropdowns
+function populateSectionSelects(sections) {
+    const selects = document.querySelectorAll('select[data-sections]');
+    const articleSectionSelect = document.querySelector('#addArticleModal select');
+    
+    if (articleSectionSelect) {
+        articleSectionSelect.innerHTML = '<option value="">اختر القسم</option>' + 
+            sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if API is available
+    if (typeof API !== 'undefined') {
+        loadSections();
+        loadArticles();
+    }
+});

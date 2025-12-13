@@ -118,12 +118,12 @@ const API = {
     sections: {
         async getAll() {
             const result = await API.request('/sections', { auth: false });
-            return result.data || [];
+            return result;
         },
         
         async getById(id) {
-            const result = await API.request(`/sections/${id}`, { auth: false });
-            return result.data;
+            const result = await API.request(`/sections?id=${id}`, { auth: false });
+            return result;
         },
         
         async create(data) {
@@ -134,14 +134,14 @@ const API = {
         },
         
         async update(id, data) {
-            return API.request(`/sections/${id}`, {
+            return API.request(`/sections?id=${id}`, {
                 method: 'PUT',
                 body: data
             });
         },
         
         async delete(id) {
-            return API.request(`/sections/${id}`, {
+            return API.request(`/sections?id=${id}`, {
                 method: 'DELETE'
             });
         }
@@ -154,18 +154,11 @@ const API = {
         async getAll(params = {}) {
             const query = new URLSearchParams(params).toString();
             const endpoint = query ? `/articles?${query}` : '/articles';
-            const result = await API.request(endpoint, { auth: false });
-            return result.data || [];
+            return API.request(endpoint, { auth: false });
         },
         
         async getById(id) {
-            const result = await API.request(`/articles/${id}`, { auth: false });
-            return result.data;
-        },
-        
-        async getBySlug(slug) {
-            const result = await API.request(`/articles/${slug}`, { auth: false });
-            return result.data;
+            return API.request(`/articles?id=${id}`, { auth: false });
         },
         
         async create(data) {
@@ -176,20 +169,16 @@ const API = {
         },
         
         async update(id, data) {
-            return API.request(`/articles/${id}`, {
+            return API.request(`/articles?id=${id}`, {
                 method: 'PUT',
                 body: data
             });
         },
         
         async delete(id) {
-            return API.request(`/articles/${id}`, {
+            return API.request(`/articles?id=${id}`, {
                 method: 'DELETE'
             });
-        },
-        
-        async search(query) {
-            return API.request(`/articles?search=${encodeURIComponent(query)}`, { auth: false });
         }
     },
     
@@ -198,31 +187,13 @@ const API = {
     // ==========================================
     settings: {
         async getAll() {
-            const result = await API.request('/settings', { auth: false });
-            return result.data || {};
+            return API.request('/settings', { auth: false });
         },
         
-        async get(key) {
-            const result = await API.request(`/settings/${key}`, { auth: false });
-            return result.data;
-        },
-        
-        async update(key, data) {
-            return API.request(`/settings/${key}`, {
-                method: 'PUT',
+        async update(data) {
+            return API.request('/settings', {
+                method: 'POST',
                 body: data
-            });
-        },
-        
-        async getHomepage() {
-            const result = await API.request('/settings/homepage', { auth: false });
-            return result.data || [];
-        },
-        
-        async updateHomepage(sections) {
-            return API.request('/settings/homepage', {
-                method: 'PUT',
-                body: { sections }
             });
         }
     },
@@ -232,8 +203,7 @@ const API = {
     // ==========================================
     stats: {
         async get() {
-            const result = await API.request('/stats', { auth: false });
-            return result.data || {};
+            return API.request('/stats', { auth: false });
         }
     }
 };
