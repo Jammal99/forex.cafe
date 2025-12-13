@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعداد المشروع - فوركس كافيه</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-primary: #d97706;
+            --accent-secondary: #b45309;
+            --border-color: #2a2a3a;
+            --success: #10b981;
+            --info: #3b82f6;
+            --neon-green: #00e676;
+            --vercel-blue: #0070f3;
+            --github-gray: #24292e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent-primary), #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p { color: var(--text-secondary); font-size: 16px; }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .tech-icon.neon { background: linear-gradient(135deg, #00e676, #00c853); color: white; }
+        .tech-icon.vercel { background: #000; color: white; border: 1px solid #333; }
+        .tech-icon.github { background: #24292e; color: white; }
+
+        .tech-item span { font-size: 14px; color: var(--text-secondary); }
+
+        .step-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .step-title { font-size: 20px; font-weight: 700; }
+        .step-content { color: var(--text-secondary); line-height: 1.8; }
+        .step-content a { color: var(--accent-primary); text-decoration: none; }
+        .step-content a:hover { text-decoration: underline; }
+
+        .code-block {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-primary);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover { background: var(--accent-secondary); }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: var(--info);
+            margin: 15px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: var(--success);
+            margin: 15px 0;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(217, 119, 6, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        ol, ul { margin-right: 25px; margin-top: 10px; }
+        li { margin-bottom: 8px; }
+
+        .highlight {
+            background: rgba(217, 119, 6, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .env-form { margin-top: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 14px; }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+        .form-group input:focus { outline: none; border-color: var(--accent-primary); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-rocket"></i> إعداد المشروع</h1>
+            <p>اتبع الخطوات لنشر موقع فوركس كافيه</p>
+        </div>
+
+        <div class="tech-stack">
+            <div class="tech-item">
+                <div class="tech-icon neon"><i class="fas fa-database"></i></div>
+                <span>Neon PostgreSQL</span>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon vercel"><i class="fas fa-cloud"></i></div>
+                <span>Vercel</span>
+            </div>
+            <div class="tech-item">
+                <div class="tech-icon github"><i class="fab fa-github"></i></div>
+                <span>GitHub</span>
+            </div>
+        </div>
+
+        <!-- Step 1: GitHub -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2 class="step-title">إنشاء مستودع GitHub</h2>
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>اذهب إلى <a href="https://github.com/new" target="_blank">GitHub - New Repository</a></li>
+                    <li>أدخل اسم المستودع: <span class="highlight">forex-cafe</span></li>
+                    <li>اختر Private أو Public حسب رغبتك</li>
+                    <li>اضغط "Create repository"</li>
+                </ol>
+
+                <p style="margin-top: 20px;"><strong>ثم قم بتهيئة Git ورفع الملفات:</strong></p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Initialize git
+git init
+
+# Add all files
+git add .
+
+# Commit
+git commit -m "Initial commit - Forex Cafe"
+
+# Add remote (استبدل USERNAME باسم المستخدم)
+git remote add origin https://github.com/USERNAME/forex-cafe.git
+
+# Push
+git branch -M main
+git push -u origin main
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Neon -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2 class="step-title">إنشاء قاعدة بيانات Neon</h2>
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>اذهب إلى <a href="https://neon.tech" target="_blank">neon.tech</a> وأنشئ حساب مجاني</li>
+                    <li>اضغط "Create a project"</li>
+                    <li>أدخل اسم المشروع: <span class="highlight">forex-cafe</span></li>
+                    <li>اختر أقرب منطقة (مثل: AWS EU Frankfurt)</li>
+                    <li>اضغط "Create project"</li>
+                </ol>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        بعد إنشاء المشروع، انسخ <strong>Connection string</strong> من Dashboard.
+                        <br>سيكون بهذا الشكل: <code>postgresql://user:pass@host/db?sslmode=require</code>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px;"><strong>بذر البيانات الأولية:</strong></p>
+                <p>أنشئ ملف <span class="highlight">.env</span> في المشروع وأضف:</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+DATABASE_URL=postgresql://user:password@host/database?sslmode=require
+JWT_SECRET=your-super-secret-key-change-this-in-production
+                </div>
+
+                <p style="margin-top: 15px;">ثم شغّل أمر البذر:</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+npm install
+npm run db:seed
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Vercel -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2 class="step-title">النشر على Vercel</h2>
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>اذهب إلى <a href="https://vercel.com" target="_blank">vercel.com</a> وسجّل بحساب GitHub</li>
+                    <li>اضغط "Add New Project"</li>
+                    <li>اختر مستودع <span class="highlight">forex-cafe</span></li>
+                    <li>في قسم "Environment Variables"، أضف:</li>
+                </ol>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+DATABASE_URL = postgresql://user:password@host/database?sslmode=require
+JWT_SECRET = your-super-secret-key-change-this
+                </div>
+
+                <ol start="5">
+                    <li>اضغط "Deploy"</li>
+                </ol>
+
+                <div class="success-box">
+                    <i class="fas fa-check-circle"></i>
+                    <strong>تهانينا!</strong> بعد النشر، ستحصل على رابط مثل:
+                    <br><code>https://forex-cafe.vercel.app</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: First Admin -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2 class="step-title">إنشاء حساب المدير</h2>
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>افتح الموقع بعد النشر: <code>https://your-site.vercel.app/login.html</code></li>
+                    <li>اضغط "حساب جديد"</li>
+                    <li>أنشئ أول حساب - سيكون تلقائياً حساب Admin</li>
+                    <li>سيتم توجيهك إلى لوحة التحكم</li>
+                </ol>
+
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <div>
+                        <strong>ملاحظة:</strong> أول مستخدم يسجّل في الموقع يحصل تلقائياً على صلاحيات المدير (Admin).
+                        جميع المستخدمين بعده سيكونون "مشتركين" عاديين.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5: Custom Domain -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <h2 class="step-title">ربط دومين مخصص (اختياري)</h2>
+            </div>
+            <div class="step-content">
+                <ol>
+                    <li>في Vercel، اذهب إلى Settings > Domains</li>
+                    <li>أضف دومينك: <span class="highlight">forex.cafe</span></li>
+                    <li>أضف سجلات DNS في مزود الدومين:</li>
+                </ol>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+Type: A
+Name: @
+Value: 76.76.21.21
+
+Type: CNAME
+Name: www
+Value: cname.vercel-dns.com
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="step-card" style="background: linear-gradient(135deg, rgba(217, 119, 6, 0.1), rgba(180, 83, 9, 0.1));">
+            <div class="step-header">
+                <div class="step-number"><i class="fas fa-check"></i></div>
+                <h2 class="step-title">ملخص الهيكل</h2>
+            </div>
+            <div class="step-content">
+                <div class="code-block" style="background: var(--bg-primary);">
+forex-cafe/
+├── api/                    # Vercel Serverless Functions
+│   ├── auth/[action].js   # Login, Register, Me
+│   ├── sections/index.js  # Sections CRUD
+│   ├── articles/index.js  # Articles CRUD
+│   └── settings/index.js  # Settings
+├── db/
+│   ├── schema.js          # Database schema (Drizzle)
+│   └── index.js           # Database connection
+├── js/
+│   └── api-service.js     # Frontend API client
+├── scripts/
+│   └── seed.js            # Database seeder
+├── index.html             # Homepage
+├── login.html             # Login page
+├── admin.html             # Admin panel
+├── package.json
+├── vercel.json            # Vercel configuration
+└── .env                   # Environment variables (local only)
+                </div>
+
+                <div class="buttons-row">
+                    <a href="login.html" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        تسجيل الدخول
+                    </a>
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fas fa-home"></i>
+                        الصفحة الرئيسية
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement;
+            const code = codeBlock.textContent.replace('نسخ', '').trim();
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'تم النسخ!';
+                setTimeout(() => btn.textContent = 'نسخ', 2000);
+            });
+        }
+    </script>
+</body>
+</html>

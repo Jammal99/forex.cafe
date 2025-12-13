@@ -1,0 +1,30 @@
+{
+  "name": "forex-cafe",
+  "version": "1.0.0",
+  "description": "منصة فوركس كافيه - موقع تعليمي للفوركس",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "start": "node api/index.js",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.0",
+    "@vercel/postgres": "^0.8.0",
+    "bcryptjs": "^2.4.3",
+    "drizzle-orm": "^0.30.0",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.21.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

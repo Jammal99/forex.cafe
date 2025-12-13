@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقهى الفوركس - منصة التداول العربية الاحترافية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Live Currency Ticker - Top -->
+    <div class="top-ticker">
+        <div class="ticker-wrapper">
+            <div class="ticker-content">
+                <div class="ticker-item">
+                    <span class="pair">EUR/USD</span>
+                    <span class="price">1.0875</span>
+                    <span class="change positive"><i class="fas fa-caret-up"></i> +0.25%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="pair">GBP/USD</span>
+                    <span class="price">1.2654</span>
+                    <span class="change negative"><i class="fas fa-caret-down"></i> -0.15%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="pair">USD/JPY</span>
+                    <span class="price">149.85</span>
+                    <span class="change positive"><i class="fas fa-caret-up"></i> +0.32%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="pair">XAU/USD</span>
+                    <span class="price">2,045.50</span>
+                    <span class="change positive"><i class="fas fa-caret-up"></i> +0.48%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="pair">BTC/USD</span>
+                    <span class="price">43,250</span>
+                    <span class="change negative"><i class="fas fa-caret-down"></i> -1.25%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="pair">USD/CHF</span>
+                    <span class="price">0.8765</span>
+                    <span class="change positive"><i class="fas fa-caret-up"></i> +0.18%</span>
+                </div>
+                <div class="ticker-item">
+                    <span class="pair">AUD/USD</span>
+                    <span class="price">0.6542</span>
+                    <span class="change negative"><i class="fas fa-caret-down"></i> -0.22%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="#home" class="logo">
+                <div class="logo-text">
+                    <span class="logo-candles">
+                        <svg viewBox="0 0 40 30" width="40" height="30">
+                            <rect x="4" y="8" width="4" height="14" fill="#10b981" rx="1"/>
+                            <line x1="6" y1="4" x2="6" y2="8" stroke="#10b981" stroke-width="1.5"/>
+                            <line x1="6" y1="22" x2="6" y2="26" stroke="#10b981" stroke-width="1.5"/>
+                            <rect x="12" y="12" width="4" height="10" fill="#ef4444" rx="1"/>
+                            <line x1="14" y1="6" x2="14" y2="12" stroke="#ef4444" stroke-width="1.5"/>
+                            <line x1="14" y1="22" x2="14" y2="26" stroke="#ef4444" stroke-width="1.5"/>
+                            <rect x="20" y="6" width="4" height="16" fill="#10b981" rx="1"/>
+                            <line x1="22" y1="2" x2="22" y2="6" stroke="#10b981" stroke-width="1.5"/>
+                            <line x1="22" y1="22" x2="22" y2="28" stroke="#10b981" stroke-width="1.5"/>
+                            <rect x="28" y="10" width="4" height="12" fill="#ef4444" rx="1"/>
+                            <line x1="30" y1="5" x2="30" y2="10" stroke="#ef4444" stroke-width="1.5"/>
+                            <line x1="30" y1="22" x2="30" y2="26" stroke="#ef4444" stroke-width="1.5"/>
+                        </svg>
+                    </span>
+                    <span class="logo-words">
+                        <span class="logo-ar">فوركس كافيه</span>
+                        <span class="logo-en">Forex.Cafe</span>
+                    </span>
+                </div>
+            </a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="#home"><i class="fas fa-home"></i> الرئيسية</a></li>
+                    <li><a href="#what-is-forex"><i class="fas fa-question-circle"></i> ما هو الفوركس</a></li>
+                    <li><a href="#strategies"><i class="fas fa-chess"></i> الاستراتيجيات</a></li>
+                    <li><a href="#analysis"><i class="fas fa-chart-bar"></i> التحليلات</a></li>
+                    <li><a href="#news"><i class="fas fa-newspaper"></i> الأخبار</a></li>
+                    <li><a href="#education"><i class="fas fa-graduation-cap"></i> التعليم</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" placeholder="ابحث هنا...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero hero-compact" id="home">
+        <div class="hero-particles"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="gradient-text">أتقن فن التداول</span>
+                من البداية حتى الاحتراف
+            </h1>
+            <p class="hero-subtitle">
+                مقالات يومية، شروحات مبسطة، تحليلات دقيقة، واستراتيجيات مجرّبة
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    <span>ابدأ رحلتك</span>
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-play-circle"></i>
+                    <span>شاهد الفيديو</span>
+                </button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="500">0</div>
+                    <div class="stat-label">مقال تعليمي</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="50">0</div>
+                    <div class="stat-label">استراتيجية</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="100">0</div>
+                    <div class="stat-label">تحليل يومي</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content with Sidebar -->
+    <section class="main-content-area">
+        <div class="container">
+            <div class="content-layout">
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-th-large"></i>
+                            الأقسام الرئيسية
+                        </h3>
+                        <ul class="sidebar-menu">
+                            <li class="menu-item has-submenu active">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>التحليلات</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#">تحليل فني</a></li>
+                                    <li><a href="#">تحليل أساسي</a></li>
+                                    <li><a href="#">تحليل نفسي</a></li>
+                                    <li><a href="#">تحليل يومي</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item has-submenu">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-chess"></i>
+                                    <span>الاستراتيجيات</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#">استراتيجية يومية</a></li>
+                                    <li><a href="#">استراتيجية سكالبينج</a></li>
+                                    <li><a href="#">استراتيجية سوينج</a></li>
+                                    <li><a href="#">استراتيجية طويلة الأمد</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item has-submenu">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-newspaper"></i>
+                                    <span>الأخبار</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#">أخبار اقتصادية</a></li>
+                                    <li><a href="#">أخبار البنوك المركزية</a></li>
+                                    <li><a href="#">أخبار العملات</a></li>
+                                    <li><a href="#">أخبار السلع</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item has-submenu">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    <span>التعليم</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#">أساسيات الفوركس</a></li>
+                                    <li><a href="#">قراءة الشارت</a></li>
+                                    <li><a href="#">المؤشرات الفنية</a></li>
+                                    <li><a href="#">إدارة المخاطر</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item has-submenu">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>إدارة المخاطر</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#">حجم الصفقة</a></li>
+                                    <li><a href="#">وقف الخسارة</a></li>
+                                    <li><a href="#">جني الأرباح</a></li>
+                                    <li><a href="#">نسبة المخاطرة</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item has-submenu">
+                                <a href="#" class="menu-link">
+                                    <i class="fas fa-laptop"></i>
+                                    <span>منصات التداول</span>
+                                    <i class="fas fa-chevron-down arrow"></i>
+                                </a>
+                                <ul class="submenu">
+                                    <li><a href="#">مراجعات الوسطاء</a></li>
+                                    <li><a href="#">MetaTrader 4</a></li>
+                                    <li><a href="#">MetaTrader 5</a></li>
+                                    <li><a href="#">TradingView</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-fire"></i>
+                            الأكثر قراءة
+                        </h3>
+                        <ul class="popular-posts">
+                            <li>
+                                <a href="#">
+                                    <span class="post-number">1</span>
+                                    <span class="post-title">كيف تبدأ التداول من الصفر</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="post-number">2</span>
+                                    <span class="post-title">أفضل استراتيجية للمبتدئين</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="post-number">3</span>
+                                    <span class="post-title">أخطاء يجب تجنبها في الفوركس</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="post-number">4</span>
+                                    <span class="post-title">تحليل EUR/USD اليوم</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+
+                <!-- Main Articles Area -->
+                <main class="main-articles">
+                    <div class="articles-header">
+                        <h2 class="articles-main-title">
+                            <i class="fas fa-newspaper"></i>
+                            أحدث المقالات
+                        </h2>
+                        <div class="articles-filter">
+                            <button class="filter-btn active" data-filter="all">الكل</button>
+                            <button class="filter-btn" data-filter="تحليل">تحليل</button>
+                            <button class="filter-btn" data-filter="استراتيجيات">استراتيجيات</button>
+                            <button class="filter-btn" data-filter="أخبار">أخبار</button>
+                            <button class="filter-btn" data-filter="تعليم">تعليم</button>
+                        </div>
+                    </div>
+
+                    <div class="articles-grid">
+                        <article class="article-card" data-category="تحليل">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="تحليل فني">
+                        <div class="card-overlay">
+                            <span class="category-badge">تحليل</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 12 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 5 دقائق</span>
+                        </div>
+                        <h3>تحليل فني شامل لزوج EUR/USD</h3>
+                        <p>نظرة عميقة على اتجاهات السوق الحالية وتوقعات الأداء المستقبلي لهذا الزوج...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>أحمد محمد</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="استراتيجيات">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="استراتيجية">
+                        <div class="card-overlay">
+                            <span class="category-badge">استراتيجية</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 11 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 8 دقائق</span>
+                        </div>
+                        <h3>استراتيجية التداول اليومي الفعالة</h3>
+                        <p>تعلم كيفية تطبيق استراتيجيات التداول اليومي بنجاح وتحقيق أرباح مستدامة...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>سارة علي</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="أخبار">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="أخبار">
+                        <div class="card-overlay">
+                            <span class="category-badge">أخبار</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 10 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 3 دقائق</span>
+                        </div>
+                        <h3>تطورات السوق الأوروبي اليوم</h3>
+                        <p>أحدث الأخبار المؤثرة على أسواق العملات العالمية وتأثيرها على التداول...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>محمد خالد</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="تعليم">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="تعليم">
+                        <div class="card-overlay">
+                            <span class="category-badge">تعليم</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 9 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 7 دقائق</span>
+                        </div>
+                        <h3>أساسيات التداول في الفوركس</h3>
+                        <p>تعلم المبادئ الأساسية للتداول في سوق العملات الأجنبية من الصفر...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>نور حسن</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="استراتيجيات">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="استراتيجية">
+                        <div class="card-overlay">
+                            <span class="category-badge">استراتيجية</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 8 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 6 دقائق</span>
+                        </div>
+                        <h3>استراتيجية المتوسط المتحرك</h3>
+                        <p>كيفية استخدام المتوسطات المتحركة في تحليل السوق واتخاذ القرارات...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>عمر فاروق</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="تحليل">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1535320903710-d993d3d77d29?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="تحليل">
+                        <div class="card-overlay">
+                            <span class="category-badge">تحليل</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 7 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 8 دقائق</span>
+                        </div>
+                        <h3>تحليل أساسي للدولار الأمريكي</h3>
+                        <p>فهم العوامل الاقتصادية المؤثرة على قيمة الدولار وتوقعات المستقبل...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>كريم أحمد</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="أخبار">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1611974519979-bfd7f44ad8f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="أخبار">
+                        <div class="card-overlay">
+                            <span class="category-badge">أخبار</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 6 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 4 دقائق</span>
+                        </div>
+                        <h3>توقعات البنك المركزي الأوروبي للفائدة</h3>
+                        <p>تحديث جديد حول الخطط المستقبلية لأسعار الفائدة في منطقة اليورو...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>فاطمة إبراهيم</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="استراتيجيات">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="استراتيجية">
+                        <div class="card-overlay">
+                            <span class="category-badge">استراتيجية</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 5 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 9 دقائق</span>
+                        </div>
+                        <h3>استراتيجية Scalping المتقدمة</h3>
+                        <p>تقنيات احترافية للتداول السريع والربح من تحركات السعر الصغيرة...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>يوسف محمود</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="تعليم">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="تعليم">
+                        <div class="card-overlay">
+                            <span class="category-badge">تعليم</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 4 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 6 دقائق</span>
+                        </div>
+                        <h3>فهم الرافعة المالية والهامش</h3>
+                        <p>شرح مفصل عن كيفية عمل الرافعة المالية وإدارة الهامش بشكل آمن...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>ليلى حسين</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="article-card" data-category="تحليل">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="تحليل">
+                        <div class="card-overlay">
+                            <span class="category-badge">تحليل</span>
+                            <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span class="date"><i class="far fa-calendar"></i> 3 ديسمبر 2025</span>
+                            <span class="read-time"><i class="far fa-clock"></i> 7 دقائق</span>
+                        </div>
+                        <h3>تحليل فني للذهب في ديسمبر</h3>
+                        <p>توقعات تفصيلية لحركة الذهب بناءً على المستويات الفنية المهمة...</p>
+                        <div class="card-footer">
+                            <div class="author">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="الكاتب">
+                                <span>علاء الدين</span>
+                            </div>
+                            <a href="#" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+                    </div>
+
+                    <div class="load-more">
+                        <button class="btn btn-outline">
+                            <span>تحميل المزيد</span>
+                            <i class="fas fa-spinner"></i>
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Daily Analysis -->
+    <section class="daily-analysis" id="analysis">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">تحديث مباشر</span>
+                <h2 class="section-title">التحليلات اليومية</h2>
+                <p class="section-subtitle">تحليلات محدثة لأهم أزواج العملات</p>
+            </div>
+            <div class="analysis-grid">
+                <div class="analysis-card bullish">
+                    <div class="analysis-header">
+                        <div class="currency-info">
+                            <div class="currency-flags">
+                                <span class="flag">🇪🇺</span>
+                                <span class="flag">🇺🇸</span>
+                            </div>
+                            <div class="currency-pair">EUR/USD</div>
+                        </div>
+                        <div class="trend-badge bullish">
+                            <i class="fas fa-arrow-trend-up"></i>
+                            <span>صاعد</span>
+                        </div>
+                    </div>
+                    <div class="analysis-chart">
+                        <svg viewBox="0 0 200 80" class="mini-chart">
+                            <path d="M0,60 Q25,55 50,45 T100,35 T150,25 T200,15" fill="none" stroke="#00d4aa" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="analysis-levels">
+                        <div class="level">
+                            <span class="label">الدعم</span>
+                            <span class="value">1.0820</span>
+                        </div>
+                        <div class="level">
+                            <span class="label">المقاومة</span>
+                            <span class="value">1.0920</span>
+                        </div>
+                    </div>
+                    <p class="analysis-summary">الزوج يظهر قوة في الاتجاه الصاعد مع دعم من البيانات الاقتصادية الأوروبية.</p>
+                    <button class="analysis-btn">
+                        <span>قراءة التحليل كامل</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <div class="analysis-card bearish">
+                    <div class="analysis-header">
+                        <div class="currency-info">
+                            <div class="currency-flags">
+                                <span class="flag">🇬🇧</span>
+                                <span class="flag">🇺🇸</span>
+                            </div>
+                            <div class="currency-pair">GBP/USD</div>
+                        </div>
+                        <div class="trend-badge bearish">
+                            <i class="fas fa-arrow-trend-down"></i>
+                            <span>هابط</span>
+                        </div>
+                    </div>
+                    <div class="analysis-chart">
+                        <svg viewBox="0 0 200 80" class="mini-chart">
+                            <path d="M0,20 Q25,25 50,35 T100,45 T150,55 T200,65" fill="none" stroke="#ff4757" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="analysis-levels">
+                        <div class="level">
+                            <span class="label">الدعم</span>
+                            <span class="value">1.2580</span>
+                        </div>
+                        <div class="level">
+                            <span class="label">المقاومة</span>
+                            <span class="value">1.2720</span>
+                        </div>
+                    </div>
+                    <p class="analysis-summary">ضغوط على الجنيه الإسترليني بسبب التطورات السياسية الأخيرة.</p>
+                    <button class="analysis-btn">
+                        <span>قراءة التحليل كامل</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <div class="analysis-card neutral">
+                    <div class="analysis-header">
+                        <div class="currency-info">
+                            <div class="currency-flags">
+                                <span class="flag">🇺🇸</span>
+                                <span class="flag">🇯🇵</span>
+                            </div>
+                            <div class="currency-pair">USD/JPY</div>
+                        </div>
+                        <div class="trend-badge neutral">
+                            <i class="fas fa-arrows-left-right"></i>
+                            <span>محايد</span>
+                        </div>
+                    </div>
+                    <div class="analysis-chart">
+                        <svg viewBox="0 0 200 80" class="mini-chart">
+                            <path d="M0,40 Q25,35 50,45 T100,40 T150,38 T200,42" fill="none" stroke="#ffa502" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="analysis-levels">
+                        <div class="level">
+                            <span class="label">الدعم</span>
+                            <span class="value">148.50</span>
+                        </div>
+                        <div class="level">
+                            <span class="label">المقاومة</span>
+                            <span class="value">151.20</span>
+                        </div>
+                    </div>
+                    <p class="analysis-summary">الزوج في حالة توازن مع انتظار قرارات البنك الياباني.</p>
+                    <button class="analysis-btn">
+                        <span>قراءة التحليل كامل</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Economic Calendar -->
+    <section class="economic-calendar" id="news">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">التقويم الاقتصادي</span>
+                <h2 class="section-title">الأخبار الاقتصادية</h2>
+                <p class="section-subtitle">أهم الأحداث المؤثرة على الأسواق - تحديث مباشر</p>
+            </div>
+            
+            <!-- Calendar Filters -->
+            <div class="calendar-filters">
+                <select id="dateFilter" class="filter-select">
+                    <option value="all">الكل</option>
+                    <option value="today" selected>اليوم</option>
+                    <option value="tomorrow">غداً</option>
+                    <option value="week">الأسبوع</option>
+                    <option value="custom">تاريخ مخصص</option>
+                </select>
+                <input type="date" id="customDate" class="filter-input" style="display: none;">
+                
+                <select id="importanceFilter" class="filter-select">
+                    <option value="all">كل الأهميات</option>
+                    <option value="high">★★★ عالية</option>
+                    <option value="medium">★★ متوسطة</option>
+                    <option value="low">★ منخفضة</option>
+                </select>
+                
+                <select id="currencyFilter" class="filter-select">
+                    <option value="all">كل العملات</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                    <option value="AUD">AUD</option>
+                    <option value="CAD">CAD</option>
+                    <option value="NZD">NZD</option>
+                    <option value="CHF">CHF</option>
+                    <option value="CNY">CNY</option>
+                </select>
+                
+                <button id="resetFilters" class="reset-btn">
+                    <i class="fas fa-redo"></i>
+                </button>
+                
+                <span id="eventCount" class="event-count">0 حدث</span>
+            </div>
+            
+            <!-- Economic Calendar - ForexFactory Style -->
+            <div class="calendar-widget-wrapper">
+                <div class="ff-calendar-wrapper">
+                    <div class="ff-calendar-scroll">
+                        <table class="ff-calendar-table">
+                            <thead>
+                                <tr>
+                                    <th>الوقت</th>
+                                    <th>العملة</th>
+                                    <th>الأهمية</th>
+                                    <th>الحدث</th>
+                                    <th>الفعلي</th>
+                                    <th>المتوقع</th>
+                                    <th>السابق</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ff-body">
+                                <tr>
+                                    <td colspan="7" class="loading-cell">
+                                        <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="poweredBy" style="font-family: 'Tajawal', Arial, Helvetica, sans-serif; text-align:right; direction:rtl;">
+                        <span style="font-size: 14px; color: var(--text-secondary); text-decoration: none;">التقويم الاقتصادي المباشر مقدم من <a href="https://www.forexfactory.com/" rel="nofollow" target="_blank" style="font-size: 14px; color: var(--primary); font-weight: bold;" class="underline_link">Forex Factory</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="education-section" id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">تعلم معنا</span>
+                <h2 class="section-title">الشروحات والدورات</h2>
+                <p class="section-subtitle">ابدأ رحلتك التعليمية في عالم التداول</p>
+            </div>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-icon beginner">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="course-level">مستوى مبتدئ</div>
+                    <h3>أساسيات الفوركس</h3>
+                    <p>تعلم أساسيات سوق العملات وكيفية البدء في التداول</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-video"></i> 12 درس</span>
+                        <span><i class="fas fa-clock"></i> 4 ساعات</span>
+                    </div>
+                    <button class="course-btn">ابدأ التعلم</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon intermediate">
+                        <i class="fas fa-chart-area"></i>
+                    </div>
+                    <div class="course-level">مستوى متوسط</div>
+                    <h3>التحليل الفني</h3>
+                    <p>إتقان قراءة الشارت والمؤشرات الفنية</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-video"></i> 20 درس</span>
+                        <span><i class="fas fa-clock"></i> 8 ساعات</span>
+                    </div>
+                    <button class="course-btn">ابدأ التعلم</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon advanced">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="course-level">مستوى متقدم</div>
+                    <h3>استراتيجيات متقدمة</h3>
+                    <p>استراتيجيات احترافية للمتداولين المتقدمين</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-video"></i> 25 درس</span>
+                        <span><i class="fas fa-clock"></i> 12 ساعة</span>
+                    </div>
+                    <button class="course-btn">ابدأ التعلم</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon expert">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="course-level">مستوى خبير</div>
+                    <h3>إدارة رأس المال</h3>
+                    <p>حماية رأس مالك وتحقيق أرباح مستدامة</p>
+                    <div class="course-meta">
+                        <span><i class="fas fa-video"></i> 15 درس</span>
+                        <span><i class="fas fa-clock"></i> 6 ساعات</span>
+                    </div>
+                    <button class="course-btn">ابدأ التعلم</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-wrapper">
+                <div class="newsletter-content">
+                    <div class="newsletter-icon">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <h2>اشترك في نشرتنا البريدية</h2>
+                    <p>احصل على أفضل التحليلات والاستراتيجيات مباشرة في بريدك</p>
+                    <form class="newsletter-form">
+                        <div class="input-group">
+                            <input type="email" placeholder="أدخل بريدك الإلكتروني" required>
+                            <button type="submit">
+                                <span>اشترك الآن</span>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <p class="privacy-note"><i class="fas fa-lock"></i> لن نشارك بريدك مع أي طرف ثالث</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Economic Calendar Section -->
+    <section class="economic-calendar-section">
+        <div class="container">
+            <div class="calendar-header">
+                <h2>📅 التقويم الاقتصادي المباشر</h2>
+                <p>أحدث المؤشرات والأخبار الاقتصادية العالمية مع التنبؤات</p>
+            </div>
+            <div class="calendar-container">
+                <iframe src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&category=_employment,_economicActivity,_inflation,_credit,_centralBanks,_confidenceIndex,_balance,_Bonds&importance=1,2,3&features=datepicker,timezone,timeselector,filters&countries=114,25,95,17,86,180,168,123,61,33,106,26,89,23,48,10,29,92,121,143,44,145,32,38,174,247,24,52,9,37,66,45,94,105,7,60,54,14,5,35,51,148,8,4,34,70,47,163,53,125,41,46,63,27,85,202,119,232,55,110,80,56,100,84,75,78,162,87,90,112,36,12,238,74,22,193,138,71,178,107,170,204,102,113,6,11,15,122,57,97,68,103,96,111,109,42,59,72,139,188,82,172,20,43,93,21,39&calType=day&timeZone=70&lang=3" width="100%" height="800" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0"></iframe>
+                <div class="powered-by" style="font-family: Arial, Helvetica, sans-serif; text-align: right; direction: rtl; margin-top: 15px;">
+                    <span style="font-size: 13px; color: #999; text-decoration: none;">التقويم الاقتصادي المباشر مقدم من المنفذ المالي الرائد <a href="https://sa.investing.com/" rel="nofollow" target="_blank" style="font-size: 13px; color: #ffd700; font-weight: bold;" class="underline_link">Investing.com السعودية</a> .</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+                <path d="M0,50 C150,100 350,0 500,50 C650,100 850,0 1000,50 C1150,100 1350,0 1440,50 L1440,100 L0,100 Z"></path>
+            </svg>
+        </div>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#home" class="logo">
+                        <div class="logo-text">
+                            <span class="logo-candles">
+                                <svg viewBox="0 0 40 30" width="35" height="25">
+                                    <rect x="4" y="8" width="4" height="14" fill="#10b981" rx="1"/>
+                                    <line x1="6" y1="4" x2="6" y2="8" stroke="#10b981" stroke-width="1.5"/>
+                                    <line x1="6" y1="22" x2="6" y2="26" stroke="#10b981" stroke-width="1.5"/>
+                                    <rect x="12" y="12" width="4" height="10" fill="#ef4444" rx="1"/>
+                                    <line x1="14" y1="6" x2="14" y2="12" stroke="#ef4444" stroke-width="1.5"/>
+                                    <line x1="14" y1="22" x2="14" y2="26" stroke="#ef4444" stroke-width="1.5"/>
+                                    <rect x="20" y="6" width="4" height="16" fill="#10b981" rx="1"/>
+                                    <line x1="22" y1="2" x2="22" y2="6" stroke="#10b981" stroke-width="1.5"/>
+                                    <line x1="22" y1="22" x2="22" y2="28" stroke="#10b981" stroke-width="1.5"/>
+                                    <rect x="28" y="10" width="4" height="12" fill="#ef4444" rx="1"/>
+                                    <line x1="30" y1="5" x2="30" y2="10" stroke="#ef4444" stroke-width="1.5"/>
+                                    <line x1="30" y1="22" x2="30" y2="26" stroke="#ef4444" stroke-width="1.5"/>
+                                </svg>
+                            </span>
+                            <span class="logo-words">
+                                <span class="logo-ar">فوركس كافيه</span>
+                                <span class="logo-en">Forex.Cafe</span>
+                            </span>
+                        </div>
+                    </a>
+                    <p>منصتك الأولى لتعلم التداول باللغة العربية. نقدم محتوى تعليمي شامل وتحليلات دقيقة لمساعدتك في رحلتك نحو الاحتراف.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>الأقسام</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> ما هو الفوركس</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> استراتيجيات التداول</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> إدارة المخاطر</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> التحليل الفني</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> التحليل الأساسي</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>روابط سريعة</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> الأخبار الاقتصادية</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> تحليلات العملات</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> مراجعات المنصات</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> الدورات التعليمية</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-left"></i> المدونة</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>تواصل معنا</h4>
+                        <ul class="contact-info">
+                            <li><i class="fas fa-envelope"></i> info@forexcafe.com</li>
+                            <li><i class="fas fa-phone"></i> +966 50 000 0000</li>
+                            <li><i class="fas fa-map-marker-alt"></i> الرياض، السعودية</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>© 2025 مقهى الفوركس. جميع الحقوق محفوظة.</p>
+                </div>
+                <div class="legal-links">
+                    <a href="#">سياسة الخصوصية</a>
+                    <a href="#">شروط الاستخدام</a>
+                    <a href="#">التنبيه القانوني</a>
+                </div>
+            </div>
+            <div class="disclaimer">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>تنويه: المحتوى المقدم تعليمي فقط وليس نصيحة استثمارية. التداول يحمل مخاطر فقدان رأس المال.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>

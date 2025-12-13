@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - فوركس كافيه</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-text">
+                    <span class="logo-candles">
+                        <svg viewBox="0 0 40 30" width="35" height="25">
+                            <rect x="4" y="8" width="4" height="14" fill="#10b981" rx="1"/>
+                            <line x1="6" y1="4" x2="6" y2="8" stroke="#10b981" stroke-width="1.5"/>
+                            <line x1="6" y1="22" x2="6" y2="26" stroke="#10b981" stroke-width="1.5"/>
+                            <rect x="12" y="12" width="4" height="10" fill="#ef4444" rx="1"/>
+                            <line x1="14" y1="6" x2="14" y2="12" stroke="#ef4444" stroke-width="1.5"/>
+                            <line x1="14" y1="22" x2="14" y2="26" stroke="#ef4444" stroke-width="1.5"/>
+                            <rect x="20" y="6" width="4" height="16" fill="#10b981" rx="1"/>
+                            <line x1="22" y1="2" x2="22" y2="6" stroke="#10b981" stroke-width="1.5"/>
+                            <line x1="22" y1="22" x2="22" y2="28" stroke="#10b981" stroke-width="1.5"/>
+                            <rect x="28" y="10" width="4" height="12" fill="#ef4444" rx="1"/>
+                            <line x1="30" y1="5" x2="30" y2="10" stroke="#ef4444" stroke-width="1.5"/>
+                            <line x1="30" y1="22" x2="30" y2="26" stroke="#ef4444" stroke-width="1.5"/>
+                        </svg>
+                    </span>
+                    <span class="logo-words">
+                        <span class="logo-ar">فوركس كافيه</span>
+                        <span class="logo-en">Forex.Cafe</span>
+                    </span>
+                </div>
+            </div>
+            <span class="admin-badge">لوحة التحكم</span>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active" data-section="dashboard">
+                    <a href="#dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>الرئيسية</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="sections">
+                    <a href="#sections">
+                        <i class="fas fa-layer-group"></i>
+                        <span>إدارة الأقسام</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="subsections">
+                    <a href="#subsections">
+                        <i class="fas fa-sitemap"></i>
+                        <span>الأقسام الفرعية</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="homepage">
+                    <a href="#homepage">
+                        <i class="fas fa-desktop"></i>
+                        <span>أقسام الصفحة الرئيسية</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="articles">
+                    <a href="#articles">
+                        <i class="fas fa-newspaper"></i>
+                        <span>إدارة المقالات</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="filters">
+                    <a href="#filters">
+                        <i class="fas fa-filter"></i>
+                        <span>أزرار الفلترة</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="media">
+                    <a href="#media">
+                        <i class="fas fa-images"></i>
+                        <span>الوسائط</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="users">
+                    <a href="#users">
+                        <i class="fas fa-users"></i>
+                        <span>المستخدمين</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-section="settings">
+                    <a href="#settings">
+                        <i class="fas fa-cog"></i>
+                        <span>إعدادات الموقع</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="index.html" class="view-site-btn">
+                <i class="fas fa-external-link-alt"></i>
+                <span>عرض الموقع</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="بحث...">
+            </div>
+            
+            <div class="topbar-actions">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-menu" id="userMenu">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=d97706&color=fff" alt="Admin">
+                    <span>المدير</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown">
+                        <a href="#" onclick="navigateToSection('settings')"><i class="fas fa-user"></i> الملف الشخصي</a>
+                        <a href="#" onclick="navigateToSection('settings')"><i class="fas fa-cog"></i> الإعدادات</a>
+                        <hr>
+                        <a href="#" onclick="logout()" class="logout-link"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section class="content-section active" id="dashboard">
+            <div class="section-header">
+                <h1>لوحة التحكم</h1>
+                <p>مرحباً بك في لوحة تحكم فوركس كافيه</p>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>24</h3>
+                        <p>المقالات</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>8</h3>
+                        <p>الأقسام</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>12,450</h3>
+                        <p>الزيارات</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>1,230</h3>
+                        <p>المستخدمين</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-grid">
+                <div class="card recent-articles">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clock"></i> آخر المقالات</h2>
+                        <a href="#articles" class="view-all">عرض الكل</a>
+                    </div>
+                    <div class="card-body">
+                        <ul class="article-list">
+                            <li>
+                                <span class="article-title">مقدمة في تداول الفوركس</span>
+                                <span class="article-date">منذ ساعة</span>
+                            </li>
+                            <li>
+                                <span class="article-title">استراتيجيات إدارة المخاطر</span>
+                                <span class="article-date">منذ 3 ساعات</span>
+                            </li>
+                            <li>
+                                <span class="article-title">التحليل الفني للمبتدئين</span>
+                                <span class="article-date">منذ يوم</span>
+                            </li>
+                            <li>
+                                <span class="article-title">أفضل أزواج العملات للتداول</span>
+                                <span class="article-date">منذ يومين</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card quick-actions">
+                    <div class="card-header">
+                        <h2><i class="fas fa-bolt"></i> إجراءات سريعة</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="actions-grid">
+                            <button class="action-btn" onclick="showSection('articles')">
+                                <i class="fas fa-plus"></i>
+                                <span>مقال جديد</span>
+                            </button>
+                            <button class="action-btn" onclick="showSection('sections')">
+                                <i class="fas fa-folder-plus"></i>
+                                <span>قسم جديد</span>
+                            </button>
+                            <button class="action-btn" onclick="showSection('media')">
+                                <i class="fas fa-upload"></i>
+                                <span>رفع صورة</span>
+                            </button>
+                            <button class="action-btn" onclick="showSection('settings')">
+                                <i class="fas fa-cog"></i>
+                                <span>الإعدادات</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sections Management -->
+        <section class="content-section" id="sections">
+            <div class="section-header">
+                <h1>إدارة الأقسام</h1>
+                <button class="btn btn-primary" onclick="openModal('addSectionModal')">
+                    <i class="fas fa-plus"></i> إضافة قسم جديد
+                </button>
+            </div>
+            
+            <div class="info-banner info-banner-gold">
+                <i class="fas fa-filter"></i>
+                <div>
+                    <strong>أزرار الفلترة</strong>
+                    <p>يمكنك التحكم في ظهور كل قسم في أزرار الفلترة بالصفحة الرئيسية من خلال عمود "الفلترة".</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>قائمة الأقسام</h2>
+                    <div class="card-actions">
+                        <input type="text" placeholder="بحث في الأقسام..." class="search-input">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="data-table" id="sectionsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم القسم</th>
+                                <th>الوصف</th>
+                                <th>عدد المقالات</th>
+                                <th>الفلترة</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sectionsTableBody">
+                            <tr data-section-id="1" data-section-slug="تحليل" data-section-icon="fa-chart-line">
+                                <td>1</td>
+                                <td><i class="fas fa-chart-line text-gold"></i> التحليلات</td>
+                                <td>تحليلات يومية وأسبوعية</td>
+                                <td>15</td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" class="filter-toggle" checked onchange="toggleSectionFilter(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit" onclick="openEditSectionModal(1)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-section-id="2" data-section-slug="استراتيجيات" data-section-icon="fa-chess">
+                                <td>2</td>
+                                <td><i class="fas fa-chess text-gold"></i> الاستراتيجيات</td>
+                                <td>استراتيجيات التداول المختلفة</td>
+                                <td>8</td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" class="filter-toggle" checked onchange="toggleSectionFilter(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit" onclick="openEditSectionModal(2)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-section-id="3" data-section-slug="أخبار" data-section-icon="fa-newspaper">
+                                <td>3</td>
+                                <td><i class="fas fa-newspaper text-gold"></i> الأخبار</td>
+                                <td>آخر أخبار الأسواق المالية</td>
+                                <td>20</td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" class="filter-toggle" checked onchange="toggleSectionFilter(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit" onclick="openEditSectionModal(3)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-section-id="4" data-section-slug="تعليم" data-section-icon="fa-graduation-cap">
+                                <td>4</td>
+                                <td><i class="fas fa-graduation-cap text-gold"></i> التعليم</td>
+                                <td>دورات ودروس تعليمية</td>
+                                <td>10</td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" class="filter-toggle" checked onchange="toggleSectionFilter(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit" onclick="openEditSectionModal(4)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-section-id="5" data-section-slug="ما-هو-الفوركس" data-section-icon="fa-question-circle">
+                                <td>5</td>
+                                <td><i class="fas fa-question-circle text-gold"></i> ما هو الفوركس</td>
+                                <td>مقدمة شاملة عن سوق الفوركس</td>
+                                <td>12</td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" class="filter-toggle" onchange="toggleSectionFilter(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td><span class="status inactive">معطل</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit" onclick="openEditSectionModal(5)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-section-id="6" data-section-slug="إدارة-المخاطر" data-section-icon="fa-shield-alt">
+                                <td>6</td>
+                                <td><i class="fas fa-shield-alt text-gold"></i> إدارة المخاطر</td>
+                                <td>أساسيات إدارة رأس المال</td>
+                                <td>6</td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" class="filter-toggle" onchange="toggleSectionFilter(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit" onclick="openEditSectionModal(6)"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sub-Sections Management -->
+        <section class="content-section" id="subsections">
+            <div class="section-header">
+                <h1>إدارة الأقسام الفرعية</h1>
+                <button class="btn btn-primary" onclick="openModal('addSubSectionModal')">
+                    <i class="fas fa-plus"></i> إضافة قسم فرعي
+                </button>
+            </div>
+            
+            <!-- Filter by Main Section -->
+            <div class="card filter-card">
+                <div class="card-body">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>فلترة حسب القسم الرئيسي:</label>
+                            <select class="filter-select" id="mainSectionFilter">
+                                <option value="">كل الأقسام</option>
+                                <option value="forex">ما هو الفوركس</option>
+                                <option value="strategies">الاستراتيجيات</option>
+                                <option value="analysis">التحليلات</option>
+                                <option value="news">الأخبار</option>
+                                <option value="education">التعليم</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <input type="text" placeholder="بحث في الأقسام الفرعية..." class="search-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>قائمة الأقسام الفرعية</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="expandAllSections()">
+                            <i class="fas fa-expand-alt"></i> توسيع الكل
+                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="collapseAllSections()">
+                            <i class="fas fa-compress-alt"></i> طي الكل
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Main Section: ما هو الفوركس -->
+                    <div class="section-group" data-section="forex">
+                        <div class="section-group-header" onclick="toggleSectionGroup(this)">
+                            <div class="section-group-title">
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                                <i class="fas fa-question-circle text-gold"></i>
+                                <span>ما هو الفوركس</span>
+                                <span class="subsection-count">4 أقسام فرعية</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); openAddSubSection('forex')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="section-group-content">
+                            <table class="data-table subsection-table">
+                                <thead>
+                                    <tr>
+                                        <th>الترتيب</th>
+                                        <th>اسم القسم الفرعي</th>
+                                        <th>الوصف</th>
+                                        <th>عدد المقالات</th>
+                                        <th>الحالة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 1</td>
+                                        <td>مقدمة عن سوق الفوركس</td>
+                                        <td>تعريف السوق وكيفية عمله</td>
+                                        <td>5</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 2</td>
+                                        <td>أزواج العملات</td>
+                                        <td>شرح أزواج العملات الرئيسية</td>
+                                        <td>3</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 3</td>
+                                        <td>الرافعة المالية</td>
+                                        <td>فهم الرافعة المالية والهامش</td>
+                                        <td>2</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 4</td>
+                                        <td>منصات التداول</td>
+                                        <td>أشهر منصات تداول الفوركس</td>
+                                        <td>2</td>
+                                        <td><span class="status inactive">معطل</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Section: الاستراتيجيات -->
+                    <div class="section-group" data-section="strategies">
+                        <div class="section-group-header" onclick="toggleSectionGroup(this)">
+                            <div class="section-group-title">
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                                <i class="fas fa-chess text-gold"></i>
+                                <span>الاستراتيجيات</span>
+                                <span class="subsection-count">3 أقسام فرعية</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); openAddSubSection('strategies')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="section-group-content">
+                            <table class="data-table subsection-table">
+                                <thead>
+                                    <tr>
+                                        <th>الترتيب</th>
+                                        <th>اسم القسم الفرعي</th>
+                                        <th>الوصف</th>
+                                        <th>عدد المقالات</th>
+                                        <th>الحالة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 1</td>
+                                        <td>استراتيجيات المبتدئين</td>
+                                        <td>استراتيجيات بسيطة للمبتدئين</td>
+                                        <td>4</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 2</td>
+                                        <td>استراتيجيات السكالبينج</td>
+                                        <td>التداول السريع قصير المدى</td>
+                                        <td>2</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 3</td>
+                                        <td>استراتيجيات السوينج</td>
+                                        <td>التداول متوسط المدى</td>
+                                        <td>2</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Section: التحليلات -->
+                    <div class="section-group" data-section="analysis">
+                        <div class="section-group-header" onclick="toggleSectionGroup(this)">
+                            <div class="section-group-title">
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                                <i class="fas fa-chart-bar text-gold"></i>
+                                <span>التحليلات</span>
+                                <span class="subsection-count">2 أقسام فرعية</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); openAddSubSection('analysis')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="section-group-content">
+                            <table class="data-table subsection-table">
+                                <thead>
+                                    <tr>
+                                        <th>الترتيب</th>
+                                        <th>اسم القسم الفرعي</th>
+                                        <th>الوصف</th>
+                                        <th>عدد المقالات</th>
+                                        <th>الحالة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 1</td>
+                                        <td>التحليل الفني</td>
+                                        <td>تحليل الرسوم البيانية والمؤشرات</td>
+                                        <td>8</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 2</td>
+                                        <td>التحليل الأساسي</td>
+                                        <td>تحليل الأخبار والبيانات الاقتصادية</td>
+                                        <td>7</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Section: الأخبار -->
+                    <div class="section-group collapsed" data-section="news">
+                        <div class="section-group-header" onclick="toggleSectionGroup(this)">
+                            <div class="section-group-title">
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                                <i class="fas fa-newspaper text-gold"></i>
+                                <span>الأخبار</span>
+                                <span class="subsection-count">3 أقسام فرعية</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); openAddSubSection('news')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="section-group-content">
+                            <table class="data-table subsection-table">
+                                <thead>
+                                    <tr>
+                                        <th>الترتيب</th>
+                                        <th>اسم القسم الفرعي</th>
+                                        <th>الوصف</th>
+                                        <th>عدد المقالات</th>
+                                        <th>الحالة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 1</td>
+                                        <td>أخبار العملات</td>
+                                        <td>آخر أخبار سوق العملات</td>
+                                        <td>10</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 2</td>
+                                        <td>أخبار البنوك المركزية</td>
+                                        <td>قرارات وتصريحات البنوك</td>
+                                        <td>6</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 3</td>
+                                        <td>التقويم الاقتصادي</td>
+                                        <td>الأحداث الاقتصادية المهمة</td>
+                                        <td>4</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Section: التعليم -->
+                    <div class="section-group collapsed" data-section="education">
+                        <div class="section-group-header" onclick="toggleSectionGroup(this)">
+                            <div class="section-group-title">
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                                <i class="fas fa-graduation-cap text-gold"></i>
+                                <span>التعليم</span>
+                                <span class="subsection-count">2 أقسام فرعية</span>
+                            </div>
+                            <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); openAddSubSection('education')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="section-group-content">
+                            <table class="data-table subsection-table">
+                                <thead>
+                                    <tr>
+                                        <th>الترتيب</th>
+                                        <th>اسم القسم الفرعي</th>
+                                        <th>الوصف</th>
+                                        <th>عدد المقالات</th>
+                                        <th>الحالة</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 1</td>
+                                        <td>دورة المبتدئين</td>
+                                        <td>دورة شاملة للمبتدئين</td>
+                                        <td>6</td>
+                                        <td><span class="status active">نشط</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i> 2</td>
+                                        <td>دورة المتقدمين</td>
+                                        <td>دورة متقدمة للمحترفين</td>
+                                        <td>4</td>
+                                        <td><span class="status inactive">معطل</span></td>
+                                        <td class="actions">
+                                            <button class="btn-icon move-up"><i class="fas fa-arrow-up"></i></button>
+                                            <button class="btn-icon move-down"><i class="fas fa-arrow-down"></i></button>
+                                            <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                            <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Homepage Sections Management -->
+        <section class="content-section" id="homepage">
+            <div class="section-header">
+                <h1>إدارة أقسام الصفحة الرئيسية</h1>
+                <button class="btn btn-primary" onclick="openModal('addHomepageSectionModal')">
+                    <i class="fas fa-plus"></i> إضافة قسم جديد
+                </button>
+            </div>
+            
+            <div class="info-banner info-banner-blue">
+                <i class="fas fa-desktop"></i>
+                <div>
+                    <strong>أقسام الصفحة الرئيسية</strong>
+                    <p>تحكم في ترتيب وظهور الأقسام المختلفة في الصفحة الرئيسية مثل المفكرة الاقتصادية، الدورات التدريبية، وغيرها.</p>
+                </div>
+            </div>
+
+            <!-- Homepage Preview -->
+            <div class="homepage-preview-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-eye"></i> معاينة ترتيب الأقسام</h2>
+                </div>
+                <div class="card-body">
+                    <div class="homepage-preview" id="homepagePreview">
+                        <div class="preview-section active" data-section="hero">
+                            <i class="fas fa-star"></i> البانر الرئيسي
+                        </div>
+                        <div class="preview-section active" data-section="ticker">
+                            <i class="fas fa-chart-line"></i> شريط الأسعار
+                        </div>
+                        <div class="preview-section active" data-section="articles">
+                            <i class="fas fa-newspaper"></i> المقالات
+                        </div>
+                        <div class="preview-section active" data-section="analysis">
+                            <i class="fas fa-chart-bar"></i> التحليلات اليومية
+                        </div>
+                        <div class="preview-section active" data-section="economic-calendar">
+                            <i class="fas fa-calendar-alt"></i> المفكرة الاقتصادية
+                        </div>
+                        <div class="preview-section active" data-section="courses">
+                            <i class="fas fa-graduation-cap"></i> الدورات التدريبية
+                        </div>
+                        <div class="preview-section active" data-section="newsletter">
+                            <i class="fas fa-envelope"></i> النشرة البريدية
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>قائمة أقسام الصفحة الرئيسية</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="resetHomepageSections()">
+                            <i class="fas fa-undo"></i> إعادة للافتراضي
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="data-table" id="homepageSectionsTable">
+                        <thead>
+                            <tr>
+                                <th>الترتيب</th>
+                                <th>اسم القسم</th>
+                                <th>النوع</th>
+                                <th>الوصف</th>
+                                <th>الإعدادات</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="homepageSectionsBody">
+                            <tr draggable="true" data-section-id="hero">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 1</td>
+                                <td><i class="fas fa-star text-gold"></i> البانر الرئيسي</td>
+                                <td><span class="badge badge-system">نظام</span></td>
+                                <td>القسم الترحيبي مع العنوان والإحصائيات</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('hero')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon" title="لا يمكن حذف" disabled><i class="fas fa-lock"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-section-id="ticker">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 2</td>
+                                <td><i class="fas fa-chart-line text-gold"></i> شريط الأسعار المباشر</td>
+                                <td><span class="badge badge-widget">ودجت</span></td>
+                                <td>عرض أسعار العملات والذهب المباشرة</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('ticker')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-section-id="articles">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 3</td>
+                                <td><i class="fas fa-newspaper text-gold"></i> المقالات والأخبار</td>
+                                <td><span class="badge badge-content">محتوى</span></td>
+                                <td>عرض أحدث المقالات مع الشريط الجانبي</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('articles')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-section-id="analysis">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 4</td>
+                                <td><i class="fas fa-chart-bar text-gold"></i> التحليلات اليومية</td>
+                                <td><span class="badge badge-content">محتوى</span></td>
+                                <td>بطاقات تحليل أزواج العملات الرئيسية</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('analysis')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-section-id="economic-calendar-ff">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 5</td>
+                                <td><i class="fas fa-calendar-alt text-gold"></i> المفكرة الاقتصادية (ForexFactory)</td>
+                                <td><span class="badge badge-external">خارجي</span></td>
+                                <td>التقويم الاقتصادي من ForexFactory</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('economic-calendar-ff')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-section-id="courses">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 6</td>
+                                <td><i class="fas fa-graduation-cap text-gold"></i> الدورات التدريبية</td>
+                                <td><span class="badge badge-content">محتوى</span></td>
+                                <td>عرض الدورات التعليمية بمستوياتها</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('courses')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-section-id="newsletter">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 7</td>
+                                <td><i class="fas fa-envelope text-gold"></i> النشرة البريدية</td>
+                                <td><span class="badge badge-widget">ودجت</span></td>
+                                <td>نموذج الاشتراك في النشرة البريدية</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('newsletter')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-section-id="economic-calendar-inv">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 8</td>
+                                <td><i class="fas fa-calendar-check text-gold"></i> التقويم الاقتصادي (Investing)</td>
+                                <td><span class="badge badge-external">خارجي</span></td>
+                                <td>التقويم الاقتصادي من Investing.com</td>
+                                <td>
+                                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('economic-calendar-inv')" title="إعدادات">
+                                        <i class="fas fa-cog"></i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <label class="toggle-switch mini">
+                                        <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="save-filters-bar">
+                        <span class="unsaved-changes" id="homepageUnsavedChanges" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i> يوجد تغييرات غير محفوظة
+                        </span>
+                        <button class="btn btn-primary" onclick="saveHomepageChanges()">
+                            <i class="fas fa-save"></i> حفظ التغييرات
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Widgets -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2><i class="fas fa-puzzle-piece"></i> الودجات والأقسام المتاحة</h2>
+                </div>
+                <div class="card-body">
+                    <div class="widgets-grid">
+                        <div class="widget-item" onclick="addHomepageSection('tradingview-widget')">
+                            <div class="widget-icon">
+                                <i class="fas fa-chart-candlestick"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>ودجت TradingView</h4>
+                                <p>رسم بياني تفاعلي للعملات</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="widget-item" onclick="addHomepageSection('broker-comparison')">
+                            <div class="widget-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>مقارنة الوسطاء</h4>
+                                <p>جدول مقارنة شركات التداول</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="widget-item" onclick="addHomepageSection('calculator')">
+                            <div class="widget-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>حاسبة التداول</h4>
+                                <p>حاسبة الربح والخسارة</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="widget-item" onclick="addHomepageSection('signals')">
+                            <div class="widget-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>إشارات التداول</h4>
+                                <p>عرض أحدث التوصيات</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="widget-item" onclick="addHomepageSection('testimonials')">
+                            <div class="widget-icon">
+                                <i class="fas fa-quote-right"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>آراء العملاء</h4>
+                                <p>شهادات وتجارب المتداولين</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="widget-item" onclick="addHomepageSection('faq')">
+                            <div class="widget-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>الأسئلة الشائعة</h4>
+                                <p>FAQ أكورديون</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="widget-item" onclick="addHomepageSection('custom-html')">
+                            <div class="widget-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>كود HTML مخصص</h4>
+                                <p>إضافة محتوى HTML خاص</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="widget-item" onclick="addHomepageSection('video-section')">
+                            <div class="widget-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="widget-info">
+                                <h4>قسم الفيديو</h4>
+                                <p>عرض فيديو يوتيوب أو فيميو</p>
+                            </div>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Articles Management -->
+        <section class="content-section" id="articles">
+            <div class="section-header">
+                <h1>إدارة المقالات</h1>
+                <button class="btn btn-primary" onclick="openModal('addArticleModal')">
+                    <i class="fas fa-plus"></i> إضافة مقال جديد
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>قائمة المقالات</h2>
+                    <div class="card-actions">
+                        <select class="filter-select">
+                            <option value="">كل الأقسام</option>
+                            <option value="forex">ما هو الفوركس</option>
+                            <option value="strategies">الاستراتيجيات</option>
+                            <option value="analysis">التحليلات</option>
+                            <option value="news">الأخبار</option>
+                        </select>
+                        <input type="text" placeholder="بحث في المقالات..." class="search-input">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll"></th>
+                                <th>العنوان</th>
+                                <th>القسم</th>
+                                <th>الكاتب</th>
+                                <th>التاريخ</th>
+                                <th>المشاهدات</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>مقدمة في تداول الفوركس للمبتدئين</td>
+                                <td><span class="tag">ما هو الفوركس</span></td>
+                                <td>أحمد محمد</td>
+                                <td>2025/01/15</td>
+                                <td>1,234</td>
+                                <td><span class="status active">منشور</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>استراتيجية الاختراق للتداول اليومي</td>
+                                <td><span class="tag">الاستراتيجيات</span></td>
+                                <td>سارة أحمد</td>
+                                <td>2025/01/14</td>
+                                <td>987</td>
+                                <td><span class="status active">منشور</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>تحليل زوج EUR/USD - التوقعات الأسبوعية</td>
+                                <td><span class="tag">التحليلات</span></td>
+                                <td>محمد علي</td>
+                                <td>2025/01/13</td>
+                                <td>2,100</td>
+                                <td><span class="status active">منشور</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>قرارات البنك المركزي الأوروبي</td>
+                                <td><span class="tag">الأخبار</span></td>
+                                <td>فاطمة حسن</td>
+                                <td>2025/01/12</td>
+                                <td>756</td>
+                                <td><span class="status draft">مسودة</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="pagination">
+                        <button class="btn-page"><i class="fas fa-chevron-right"></i></button>
+                        <button class="btn-page active">1</button>
+                        <button class="btn-page">2</button>
+                        <button class="btn-page">3</button>
+                        <button class="btn-page"><i class="fas fa-chevron-left"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter Buttons Management -->
+        <section class="content-section" id="filters">
+            <div class="section-header">
+                <h1>إدارة أزرار الفلترة</h1>
+                <button class="btn btn-primary" onclick="openModal('addFilterModal')">
+                    <i class="fas fa-plus"></i> إضافة زر فلترة
+                </button>
+            </div>
+            
+            <div class="info-banner">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>ما هي أزرار الفلترة؟</strong>
+                    <p>أزرار الفلترة تظهر في الصفحة الرئيسية فوق المقالات وتسمح للزوار بتصفية المقالات حسب التصنيف. يتم إنشاؤها تلقائياً من الأقسام المفعّلة.</p>
+                </div>
+            </div>
+
+            <!-- Sync from Sections -->
+            <div class="card sync-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-sync-alt"></i> مزامنة مع الأقسام الرئيسية</h2>
+                </div>
+                <div class="card-body">
+                    <div class="sync-info">
+                        <p><i class="fas fa-link text-gold"></i> أزرار الفلترة مرتبطة بالأقسام الرئيسية. يمكنك تفعيل/تعطيل ظهور كل قسم في الفلترة من <a href="#" onclick="navigateTo('sections')">صفحة إدارة الأقسام</a>.</p>
+                    </div>
+                    <div class="sync-actions">
+                        <button class="btn btn-outline" onclick="syncFiltersFromSections()">
+                            <i class="fas fa-sync"></i> مزامنة الآن
+                        </button>
+                        <button class="btn btn-primary" onclick="openModal('addFilterModal')">
+                            <i class="fas fa-plus"></i> إضافة فلتر مخصص
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-preview-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-eye"></i> معاينة أزرار الفلترة</h2>
+                </div>
+                <div class="card-body">
+                    <div class="filters-preview">
+                        <div class="preview-label">المظهر في الموقع:</div>
+                        <div class="preview-filters" id="filtersPreview">
+                            <button class="filter-btn-preview active">الكل</button>
+                            <button class="filter-btn-preview">التحليلات</button>
+                            <button class="filter-btn-preview">الاستراتيجيات</button>
+                            <button class="filter-btn-preview">الأخبار</button>
+                            <button class="filter-btn-preview">التعليم</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>قائمة أزرار الفلترة</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="resetFiltersToDefault()">
+                            <i class="fas fa-undo"></i> إعادة للافتراضي
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="data-table" id="filtersTable">
+                        <thead>
+                            <tr>
+                                <th>الترتيب</th>
+                                <th>اسم الزر</th>
+                                <th>القسم المرتبط</th>
+                                <th>قيمة الفلترة</th>
+                                <th>الأيقونة</th>
+                                <th>اللون</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="filtersTableBody">
+                            <tr draggable="true" data-filter-id="1" data-section-id="0">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 1</td>
+                                <td>الكل</td>
+                                <td><span class="badge badge-system">نظام</span></td>
+                                <td><code>all</code></td>
+                                <td><i class="fas fa-th-large text-gold"></i></td>
+                                <td><span class="color-dot" style="background: #d97706;"></span> ذهبي</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon edit" title="تعديل"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon" title="لا يمكن حذف زر الكل" disabled><i class="fas fa-lock"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-filter-id="2" data-section-id="1">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 2</td>
+                                <td>التحليلات</td>
+                                <td><span class="badge badge-section"><i class="fas fa-chart-line"></i> التحليلات</span></td>
+                                <td><code>تحليل</code></td>
+                                <td><i class="fas fa-chart-line text-gold"></i></td>
+                                <td><span class="color-dot" style="background: #3b82f6;"></span> أزرق</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon edit" title="تعديل"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-filter-id="3" data-section-id="2">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 3</td>
+                                <td>الاستراتيجيات</td>
+                                <td><span class="badge badge-section"><i class="fas fa-chess"></i> الاستراتيجيات</span></td>
+                                <td><code>استراتيجيات</code></td>
+                                <td><i class="fas fa-chess text-gold"></i></td>
+                                <td><span class="color-dot" style="background: #10b981;"></span> أخضر</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon edit" title="تعديل"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-filter-id="4" data-section-id="3">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 4</td>
+                                <td>الأخبار</td>
+                                <td><span class="badge badge-section"><i class="fas fa-newspaper"></i> الأخبار</span></td>
+                                <td><code>أخبار</code></td>
+                                <td><i class="fas fa-newspaper text-gold"></i></td>
+                                <td><span class="color-dot" style="background: #ef4444;"></span> أحمر</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon edit" title="تعديل"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr draggable="true" data-filter-id="5" data-section-id="4">
+                                <td><i class="fas fa-grip-vertical drag-handle"></i> 5</td>
+                                <td>التعليم</td>
+                                <td><span class="badge badge-section"><i class="fas fa-graduation-cap"></i> التعليم</span></td>
+                                <td><code>تعليم</code></td>
+                                <td><i class="fas fa-graduation-cap text-gold"></i></td>
+                                <td><span class="color-dot" style="background: #8b5cf6;"></span> بنفسجي</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn-icon edit" title="تعديل"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete" title="حذف"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="save-filters-bar">
+                        <span class="unsaved-changes" id="unsavedChanges" style="display: none;">
+                            <i class="fas fa-exclamation-circle"></i> يوجد تغييرات غير محفوظة
+                        </span>
+                        <button class="btn btn-primary" onclick="saveFilterChanges()">
+                            <i class="fas fa-save"></i> حفظ التغييرات
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Settings -->
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2><i class="fas fa-cog"></i> إعدادات عرض الفلترة</h2>
+                </div>
+                <div class="card-body">
+                    <form class="settings-form" id="filterSettingsForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>عرض أزرار الفلترة</label>
+                                <div class="toggle-switch-group">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="showFilters" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <span>إظهار في الصفحة الرئيسية</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>تأثير الحركة</label>
+                                <select id="filterAnimation">
+                                    <option value="fade">تلاشي</option>
+                                    <option value="slide">انزلاق</option>
+                                    <option value="scale">تكبير/تصغير</option>
+                                    <option value="none">بدون تأثير</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>نمط العرض</label>
+                                <div class="style-options">
+                                    <label class="style-option active">
+                                        <input type="radio" name="filterStyle" value="pills" checked>
+                                        <span class="style-preview pills">
+                                            <span></span><span></span><span></span>
+                                        </span>
+                                        <span>حبوب</span>
+                                    </label>
+                                    <label class="style-option">
+                                        <input type="radio" name="filterStyle" value="tabs">
+                                        <span class="style-preview tabs">
+                                            <span></span><span></span><span></span>
+                                        </span>
+                                        <span>تبويبات</span>
+                                    </label>
+                                    <label class="style-option">
+                                        <input type="radio" name="filterStyle" value="buttons">
+                                        <span class="style-preview buttons">
+                                            <span></span><span></span><span></span>
+                                        </span>
+                                        <span>أزرار</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>المحاذاة</label>
+                                <div class="align-options">
+                                    <button type="button" class="align-btn" data-align="right"><i class="fas fa-align-right"></i></button>
+                                    <button type="button" class="align-btn active" data-align="center"><i class="fas fa-align-center"></i></button>
+                                    <button type="button" class="align-btn" data-align="left"><i class="fas fa-align-left"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">حفظ الإعدادات</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Media Management -->
+        <section class="content-section" id="media">
+            <div class="section-header">
+                <h1>إدارة الوسائط</h1>
+                <button class="btn btn-primary">
+                    <i class="fas fa-upload"></i> رفع ملفات
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>مكتبة الوسائط</h2>
+                    <div class="card-actions">
+                        <div class="view-toggle">
+                            <button class="active"><i class="fas fa-th"></i></button>
+                            <button><i class="fas fa-list"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="upload-zone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>اسحب الملفات هنا أو اضغط للرفع</p>
+                        <span>PNG, JPG, GIF حتى 10MB</span>
+                    </div>
+                    
+                    <div class="media-grid">
+                        <div class="media-item">
+                            <img src="https://via.placeholder.com/200x150/1f2937/d97706?text=Chart" alt="صورة">
+                            <div class="media-overlay">
+                                <button><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="media-item">
+                            <img src="https://via.placeholder.com/200x150/1f2937/10b981?text=Trading" alt="صورة">
+                            <div class="media-overlay">
+                                <button><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="media-item">
+                            <img src="https://via.placeholder.com/200x150/1f2937/ef4444?text=Forex" alt="صورة">
+                            <div class="media-overlay">
+                                <button><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="media-item">
+                            <img src="https://via.placeholder.com/200x150/1f2937/6366f1?text=Analysis" alt="صورة">
+                            <div class="media-overlay">
+                                <button><i class="fas fa-eye"></i></button>
+                                <button><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Management -->
+        <section class="content-section" id="users">
+            <div class="section-header">
+                <h1>إدارة المستخدمين</h1>
+                <button class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> إضافة مستخدم
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>قائمة المستخدمين</h2>
+                </div>
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>المستخدم</th>
+                                <th>البريد الإلكتروني</th>
+                                <th>الدور</th>
+                                <th>تاريخ التسجيل</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Admin&background=d97706&color=fff" alt="">
+                                        <span>المدير العام</span>
+                                    </div>
+                                </td>
+                                <td>admin@forex.cafe</td>
+                                <td><span class="role admin">مدير</span></td>
+                                <td>2024/01/01</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Ahmed&background=10b981&color=fff" alt="">
+                                        <span>أحمد محمد</span>
+                                    </div>
+                                </td>
+                                <td>ahmed@forex.cafe</td>
+                                <td><span class="role editor">محرر</span></td>
+                                <td>2024/03/15</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="user-cell">
+                                        <img src="https://ui-avatars.com/api/?name=Sara&background=6366f1&color=fff" alt="">
+                                        <span>سارة أحمد</span>
+                                    </div>
+                                </td>
+                                <td>sara@forex.cafe</td>
+                                <td><span class="role author">كاتب</span></td>
+                                <td>2024/06/20</td>
+                                <td><span class="status active">نشط</span></td>
+                                <td class="actions">
+                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
+                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="content-section" id="settings">
+            <div class="section-header">
+                <h1>إعدادات الموقع</h1>
+            </div>
+            
+            <div class="settings-grid">
+                <!-- General Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-globe"></i> الإعدادات العامة</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label>اسم الموقع</label>
+                                <input type="text" value="فوركس كافيه">
+                            </div>
+                            <div class="form-group">
+                                <label>وصف الموقع</label>
+                                <textarea rows="3">منصتك الأولى لتعلم التداول باللغة العربية</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>البريد الإلكتروني</label>
+                                <input type="email" value="info@forex.cafe">
+                            </div>
+                            <div class="form-group">
+                                <label>لغة الموقع</label>
+                                <select>
+                                    <option value="ar" selected>العربية</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Appearance Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-palette"></i> المظهر</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label>الوضع</label>
+                                <div class="theme-options">
+                                    <label class="theme-option active">
+                                        <input type="radio" name="theme" value="dark" checked>
+                                        <span class="theme-preview dark"></span>
+                                        <span>داكن</span>
+                                    </label>
+                                    <label class="theme-option">
+                                        <input type="radio" name="theme" value="light">
+                                        <span class="theme-preview light"></span>
+                                        <span>فاتح</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>اللون الرئيسي</label>
+                                <div class="color-options">
+                                    <label class="color-option active">
+                                        <input type="radio" name="color" value="gold" checked>
+                                        <span style="background: #d97706;"></span>
+                                    </label>
+                                    <label class="color-option">
+                                        <input type="radio" name="color" value="blue">
+                                        <span style="background: #3b82f6;"></span>
+                                    </label>
+                                    <label class="color-option">
+                                        <input type="radio" name="color" value="green">
+                                        <span style="background: #10b981;"></span>
+                                    </label>
+                                    <label class="color-option">
+                                        <input type="radio" name="color" value="purple">
+                                        <span style="background: #8b5cf6;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Social Media Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-share-alt"></i> وسائل التواصل</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label><i class="fab fa-twitter"></i> Twitter</label>
+                                <input type="url" placeholder="https://twitter.com/...">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fab fa-facebook"></i> Facebook</label>
+                                <input type="url" placeholder="https://facebook.com/...">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fab fa-instagram"></i> Instagram</label>
+                                <input type="url" placeholder="https://instagram.com/...">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fab fa-telegram"></i> Telegram</label>
+                                <input type="url" placeholder="https://t.me/...">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fab fa-youtube"></i> YouTube</label>
+                                <input type="url" placeholder="https://youtube.com/...">
+                            </div>
+                            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- SEO Settings -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-search"></i> تحسين محركات البحث (SEO)</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label>عنوان الصفحة الرئيسية</label>
+                                <input type="text" value="فوركس كافيه - منصة التداول العربية">
+                            </div>
+                            <div class="form-group">
+                                <label>الوصف (Meta Description)</label>
+                                <textarea rows="3">منصتك الأولى لتعلم التداول باللغة العربية. نقدم محتوى تعليمي شامل وتحليلات دقيقة.</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>الكلمات المفتاحية</label>
+                                <input type="text" value="فوركس, تداول, عملات, تحليل فني, استراتيجيات">
+                            </div>
+                            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Section Modal -->
+    <div class="modal" id="addSectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إضافة قسم جديد</h2>
+                <button class="close-modal" onclick="closeModal('addSectionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>اسم القسم</label>
+                        <input type="text" placeholder="أدخل اسم القسم">
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف</label>
+                        <textarea rows="3" placeholder="أدخل وصف القسم"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>الأيقونة</label>
+                        <select>
+                            <option value="fa-newspaper">📰 أخبار</option>
+                            <option value="fa-chart-bar">📊 تحليلات</option>
+                            <option value="fa-graduation-cap">🎓 تعليم</option>
+                            <option value="fa-chess">♟️ استراتيجيات</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <select>
+                            <option value="active">نشط</option>
+                            <option value="inactive">معطل</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addSectionModal')">إلغاء</button>
+                <button class="btn btn-primary">إضافة القسم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Article Modal -->
+    <div class="modal" id="addArticleModal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2>إضافة مقال جديد</h2>
+                <button class="close-modal" onclick="closeModal('addArticleModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>عنوان المقال</label>
+                            <input type="text" placeholder="أدخل عنوان المقال">
+                        </div>
+                        <div class="form-group">
+                            <label>القسم</label>
+                            <select>
+                                <option value="">اختر القسم</option>
+                                <option value="forex">ما هو الفوركس</option>
+                                <option value="strategies">الاستراتيجيات</option>
+                                <option value="analysis">التحليلات</option>
+                                <option value="news">الأخبار</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>الصورة البارزة</label>
+                        <div class="upload-area">
+                            <i class="fas fa-image"></i>
+                            <p>اسحب الصورة هنا أو اضغط للاختيار</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>محتوى المقال</label>
+                        <div class="editor-toolbar">
+                            <button type="button"><i class="fas fa-bold"></i></button>
+                            <button type="button"><i class="fas fa-italic"></i></button>
+                            <button type="button"><i class="fas fa-underline"></i></button>
+                            <button type="button"><i class="fas fa-list-ul"></i></button>
+                            <button type="button"><i class="fas fa-list-ol"></i></button>
+                            <button type="button"><i class="fas fa-link"></i></button>
+                            <button type="button"><i class="fas fa-image"></i></button>
+                        </div>
+                        <textarea rows="10" placeholder="اكتب محتوى المقال هنا..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الكلمات المفتاحية</label>
+                            <input type="text" placeholder="فوركس, تداول, استراتيجية">
+                        </div>
+                        <div class="form-group">
+                            <label>الحالة</label>
+                            <select>
+                                <option value="draft">مسودة</option>
+                                <option value="published">منشور</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addArticleModal')">إلغاء</button>
+                <button class="btn btn-outline">حفظ كمسودة</button>
+                <button class="btn btn-primary">نشر المقال</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Filter Button Modal -->
+    <div class="modal" id="addFilterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إضافة زر فلترة جديد</h2>
+                <button class="close-modal" onclick="closeModal('addFilterModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addFilterForm">
+                    <div class="form-group">
+                        <label>نوع الفلتر</label>
+                        <div class="filter-type-options">
+                            <label class="filter-type-option active">
+                                <input type="radio" name="filterType" value="section" checked onchange="toggleFilterTypeFields(this)">
+                                <i class="fas fa-link"></i>
+                                <span>مرتبط بقسم</span>
+                            </label>
+                            <label class="filter-type-option">
+                                <input type="radio" name="filterType" value="custom" onchange="toggleFilterTypeFields(this)">
+                                <i class="fas fa-edit"></i>
+                                <span>فلتر مخصص</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group section-select-group">
+                        <label>اختر القسم الرئيسي</label>
+                        <select id="filterSectionSelect" onchange="populateFilterFromSection(this)">
+                            <option value="">اختر قسم...</option>
+                            <option value="1" data-name="التحليلات" data-icon="fa-chart-line" data-slug="تحليل">التحليلات</option>
+                            <option value="2" data-name="الاستراتيجيات" data-icon="fa-chess" data-slug="استراتيجيات">الاستراتيجيات</option>
+                            <option value="3" data-name="الأخبار" data-icon="fa-newspaper" data-slug="أخبار">الأخبار</option>
+                            <option value="4" data-name="التعليم" data-icon="fa-graduation-cap" data-slug="تعليم">التعليم</option>
+                            <option value="5" data-name="ما هو الفوركس" data-icon="fa-question-circle" data-slug="ما-هو-الفوركس">ما هو الفوركس</option>
+                            <option value="6" data-name="إدارة المخاطر" data-icon="fa-shield-alt" data-slug="إدارة-المخاطر">إدارة المخاطر</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم الزر (النص الظاهر)</label>
+                        <input type="text" id="filterName" placeholder="مثال: تحليل فني" required>
+                    </div>
+                    <div class="form-group">
+                        <label>قيمة الفلترة</label>
+                        <input type="text" id="filterValue" placeholder="مثال: تحليل-فني">
+                        <small class="form-hint">يجب أن تتطابق مع تصنيف المقالات في data-category</small>
+                    </div>
+                    <div class="form-group">
+                        <label>الأيقونة</label>
+                        <div class="icon-picker" id="filterIconPicker">
+                            <button type="button" class="icon-option" data-icon="fa-th-large"><i class="fas fa-th-large"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-chart-line"><i class="fas fa-chart-line"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-chart-bar"><i class="fas fa-chart-bar"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-chess"><i class="fas fa-chess"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-newspaper"><i class="fas fa-newspaper"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-graduation-cap"><i class="fas fa-graduation-cap"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-lightbulb"><i class="fas fa-lightbulb"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-book"><i class="fas fa-book"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-signal"><i class="fas fa-signal"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-bullseye"><i class="fas fa-bullseye"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-star"><i class="fas fa-star"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-fire"><i class="fas fa-fire"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-shield-alt"><i class="fas fa-shield-alt"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-question-circle"><i class="fas fa-question-circle"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>اللون</label>
+                        <div class="color-picker-grid">
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#d97706">
+                                <span style="background: #d97706;"></span>
+                                <small>ذهبي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#3b82f6">
+                                <span style="background: #3b82f6;"></span>
+                                <small>أزرق</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#10b981">
+                                <span style="background: #10b981;"></span>
+                                <small>أخضر</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#ef4444">
+                                <span style="background: #ef4444;"></span>
+                                <small>أحمر</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#8b5cf6">
+                                <span style="background: #8b5cf6;"></span>
+                                <small>بنفسجي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#f59e0b">
+                                <span style="background: #f59e0b;"></span>
+                                <small>برتقالي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#ec4899">
+                                <span style="background: #ec4899;"></span>
+                                <small>وردي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="filterColor" value="#06b6d4">
+                                <span style="background: #06b6d4;"></span>
+                                <small>سماوي</small>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <div class="toggle-switch-group">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="filterStatus" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span>نشط (يظهر في الموقع)</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addFilterModal')">إلغاء</button>
+                <button class="btn btn-primary" onclick="saveNewFilter()">إضافة الزر</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Filter Button Modal -->
+    <div class="modal" id="editFilterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تعديل زر الفلترة</h2>
+                <button class="close-modal" onclick="closeModal('editFilterModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editFilterForm">
+                    <input type="hidden" id="editFilterId">
+                    <div class="form-group">
+                        <label>اسم الزر (النص الظاهر)</label>
+                        <input type="text" id="editFilterName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>قيمة الفلترة</label>
+                        <input type="text" id="editFilterValue">
+                        <small class="form-hint">يجب أن تتطابق مع تصنيف المقالات في data-category</small>
+                    </div>
+                    <div class="form-group">
+                        <label>الأيقونة</label>
+                        <div class="icon-picker" id="editFilterIconPicker">
+                            <button type="button" class="icon-option" data-icon="fa-th-large"><i class="fas fa-th-large"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-chart-line"><i class="fas fa-chart-line"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-chart-bar"><i class="fas fa-chart-bar"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-chess"><i class="fas fa-chess"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-newspaper"><i class="fas fa-newspaper"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-graduation-cap"><i class="fas fa-graduation-cap"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-lightbulb"><i class="fas fa-lightbulb"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-book"><i class="fas fa-book"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-signal"><i class="fas fa-signal"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-bullseye"><i class="fas fa-bullseye"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-star"><i class="fas fa-star"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-fire"><i class="fas fa-fire"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>اللون</label>
+                        <div class="color-picker-grid" id="editFilterColorPicker">
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#d97706">
+                                <span style="background: #d97706;"></span>
+                                <small>ذهبي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#3b82f6">
+                                <span style="background: #3b82f6;"></span>
+                                <small>أزرق</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#10b981">
+                                <span style="background: #10b981;"></span>
+                                <small>أخضر</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#ef4444">
+                                <span style="background: #ef4444;"></span>
+                                <small>أحمر</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#8b5cf6">
+                                <span style="background: #8b5cf6;"></span>
+                                <small>بنفسجي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#f59e0b">
+                                <span style="background: #f59e0b;"></span>
+                                <small>برتقالي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#ec4899">
+                                <span style="background: #ec4899;"></span>
+                                <small>وردي</small>
+                            </label>
+                            <label class="color-pick-option">
+                                <input type="radio" name="editFilterColor" value="#06b6d4">
+                                <span style="background: #06b6d4;"></span>
+                                <small>سماوي</small>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <div class="toggle-switch-group">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="editFilterStatus" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span>نشط (يظهر في الموقع)</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editFilterModal')">إلغاء</button>
+                <button class="btn btn-primary" onclick="updateFilter()">حفظ التغييرات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Sub-Section Modal -->
+    <div class="modal" id="addSubSectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إضافة قسم فرعي جديد</h2>
+                <button class="close-modal" onclick="closeModal('addSubSectionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addSubSectionForm">
+                    <div class="form-group">
+                        <label>القسم الرئيسي</label>
+                        <select id="parentSectionSelect" required>
+                            <option value="">اختر القسم الرئيسي</option>
+                            <option value="forex">ما هو الفوركس</option>
+                            <option value="strategies">الاستراتيجيات</option>
+                            <option value="analysis">التحليلات</option>
+                            <option value="news">الأخبار</option>
+                            <option value="education">التعليم</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم القسم الفرعي</label>
+                        <input type="text" placeholder="أدخل اسم القسم الفرعي" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف</label>
+                        <textarea rows="3" placeholder="أدخل وصف القسم الفرعي"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>الترتيب</label>
+                        <input type="number" value="1" min="1" placeholder="ترتيب القسم الفرعي">
+                    </div>
+                    <div class="form-group">
+                        <label>الأيقونة (اختياري)</label>
+                        <div class="icon-picker">
+                            <button type="button" class="icon-option" data-icon="fa-book"><i class="fas fa-book"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-chart-line"><i class="fas fa-chart-line"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-lightbulb"><i class="fas fa-lightbulb"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-cogs"><i class="fas fa-cogs"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-university"><i class="fas fa-university"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-dollar-sign"><i class="fas fa-dollar-sign"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-signal"><i class="fas fa-signal"></i></button>
+                            <button type="button" class="icon-option" data-icon="fa-bullseye"><i class="fas fa-bullseye"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <div class="toggle-switch-group">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span>نشط</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addSubSectionModal')">إلغاء</button>
+                <button class="btn btn-primary" onclick="saveSubSection()">إضافة القسم الفرعي</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Sub-Section Modal -->
+    <div class="modal" id="editSubSectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تعديل القسم الفرعي</h2>
+                <button class="close-modal" onclick="closeModal('editSubSectionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editSubSectionForm">
+                    <div class="form-group">
+                        <label>القسم الرئيسي</label>
+                        <select id="editParentSectionSelect" required>
+                            <option value="forex">ما هو الفوركس</option>
+                            <option value="strategies">الاستراتيجيات</option>
+                            <option value="analysis">التحليلات</option>
+                            <option value="news">الأخبار</option>
+                            <option value="education">التعليم</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم القسم الفرعي</label>
+                        <input type="text" id="editSubSectionName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الوصف</label>
+                        <textarea rows="3" id="editSubSectionDesc"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>الترتيب</label>
+                        <input type="number" id="editSubSectionOrder" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>الحالة</label>
+                        <div class="toggle-switch-group">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="editSubSectionStatus" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span>نشط</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editSubSectionModal')">إلغاء</button>
+                <button class="btn btn-primary" onclick="updateSubSection()">حفظ التغييرات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Service -->
+    <script src="js/api-service.js"></script>
+    
+    <!-- Auth Check -->
+    <script>
+        // Check authentication on page load
+        (async function() {
+            if (!API.auth.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            try {
+                const result = await API.auth.me();
+                if (result.success && result.user) {
+                    const userMenu = document.querySelector('.user-menu');
+                    if (userMenu) {
+                        const img = userMenu.querySelector('img');
+                        const name = userMenu.querySelector('span');
+                        if (result.user.photoURL) {
+                            img.src = result.user.photoURL;
+                        } else {
+                            img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(result.user.displayName || 'User')}&background=d97706&color=fff`;
+                        }
+                        name.textContent = result.user.displayName || 'المستخدم';
+                    }
+                    window.currentUser = result.user;
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                API.auth.logout();
+            }
+        })();
+        
+        // Logout function
+        function logout() {
+            API.auth.logout();
+        }
+        
+        // Navigate to section
+        function navigateToSection(sectionName) {
+            const navItem = document.querySelector(`[data-section="${sectionName}"]`);
+            if (navItem) {
+                navItem.click();
+            }
+        }
+    </script>
+    
+    <script src="admin.js"></script>
+</body>
+</html>

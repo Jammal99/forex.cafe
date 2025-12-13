@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - فوركس كافيه</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-primary: #d97706;
+            --accent-secondary: #b45309;
+            --accent-light: #fbbf24;
+            --border-color: #2a2a3a;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(217, 119, 6, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(217, 119, 6, 0.08) 0%, transparent 50%);
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+        .login-container { position: relative; z-index: 1; width: 100%; max-width: 420px; }
+
+        .login-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo { text-align: center; margin-bottom: 30px; }
+
+        .logo-icon {
+            width: 60px; height: 60px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .logo-icon i { font-size: 28px; color: white; }
+        .logo h1 { color: var(--text-primary); font-size: 24px; font-weight: 700; }
+        .logo p { color: var(--text-secondary); font-size: 14px; margin-top: 5px; }
+
+        .tabs {
+            display: flex; gap: 10px; margin-bottom: 30px;
+            background: var(--bg-secondary); padding: 5px; border-radius: 12px;
+        }
+
+        .tab-btn {
+            flex: 1; padding: 12px; border: none; background: transparent;
+            color: var(--text-secondary); font-family: inherit;
+            font-size: 14px; font-weight: 600; border-radius: 8px;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: var(--text-secondary); font-size: 14px; margin-bottom: 8px; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
+
+        .form-group input {
+            width: 100%; padding: 14px 45px 14px 15px;
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 10px; color: var(--text-primary);
+            font-family: inherit; font-size: 15px; transition: all 0.3s ease;
+        }
+
+        .form-group input:focus { outline: none; border-color: var(--accent-primary); }
+        .form-group input::placeholder { color: var(--text-secondary); }
+
+        .submit-btn {
+            width: 100%; padding: 15px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none; border-radius: 10px; color: white;
+            font-family: inherit; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(217, 119, 6, 0.3); }
+        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .submit-btn .spinner {
+            width: 20px; height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white; border-radius: 50%;
+            animation: spin 0.8s linear infinite; display: none;
+        }
+
+        .submit-btn.loading .spinner { display: block; }
+        .submit-btn.loading span { display: none; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .message {
+            padding: 12px; border-radius: 8px; font-size: 13px;
+            margin-bottom: 20px; display: none; align-items: center; gap: 10px;
+        }
+
+        .message.error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--error); }
+        .message.success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--success); }
+        .message.show { display: flex; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .back-link {
+            display: block; text-align: center; margin-top: 25px;
+            color: var(--text-secondary); text-decoration: none; font-size: 14px;
+        }
+        .back-link:hover { color: var(--accent-primary); }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+                <h1>فوركس كافيه</h1>
+                <p>لوحة إدارة الموقع</p>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">تسجيل الدخول</button>
+                <button class="tab-btn" onclick="switchTab('register')">حساب جديد</button>
+            </div>
+
+            <div class="message error" id="errorMessage"><i class="fas fa-exclamation-circle"></i><span></span></div>
+            <div class="message success" id="successMessage"><i class="fas fa-check-circle"></i><span></span></div>
+
+            <!-- Login Form -->
+            <div class="tab-content active" id="loginForm">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" id="loginBtn">
+                        <div class="spinner"></div>
+                        <span>تسجيل الدخول</span>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div class="tab-content" id="registerForm">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="registerName" placeholder="أدخل اسمك الكامل" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>البريد الإلكتروني</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="registerEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>كلمة المرور</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="registerPassword" placeholder="أدخل كلمة المرور" required minlength="6">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>تأكيد كلمة المرور</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="registerConfirmPassword" placeholder="أعد كتابة كلمة المرور" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" id="registerBtn">
+                        <div class="spinner"></div>
+                        <span>إنشاء حساب</span>
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                </form>
+            </div>
+
+            <a href="index.html" class="back-link"><i class="fas fa-home"></i> العودة للصفحة الرئيسية</a>
+        </div>
+    </div>
+
+    <script src="js/api-service.js"></script>
+    <script>
+        if (API.auth.isLoggedIn()) window.location.href = 'admin.html';
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Form').classList.add('active');
+            hideMessages();
+        }
+
+        function showError(msg) {
+            document.getElementById('errorMessage').querySelector('span').textContent = msg;
+            document.getElementById('errorMessage').classList.add('show');
+            document.getElementById('successMessage').classList.remove('show');
+        }
+
+        function showSuccess(msg) {
+            document.getElementById('successMessage').querySelector('span').textContent = msg;
+            document.getElementById('successMessage').classList.add('show');
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+        }
+
+        function setLoading(btn, loading) {
+            btn.classList.toggle('loading', loading);
+            btn.disabled = loading;
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            hideMessages();
+            const btn = document.getElementById('loginBtn');
+            setLoading(btn, true);
+            
+            try {
+                const result = await API.auth.login(
+                    document.getElementById('loginEmail').value,
+                    document.getElementById('loginPassword').value
+                );
+                if (result.success) {
+                    showSuccess('تم تسجيل الدخول بنجاح!');
+                    setTimeout(() => window.location.href = 'admin.html', 1000);
+                } else {
+                    showError(result.error);
+                }
+            } catch (error) {
+                showError(error.message || 'خطأ في الاتصال');
+            }
+            setLoading(btn, false);
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            hideMessages();
+            
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirm) {
+                showError('كلمة المرور غير متطابقة');
+                return;
+            }
+            
+            const btn = document.getElementById('registerBtn');
+            setLoading(btn, true);
+            
+            try {
+                const result = await API.auth.register(
+                    document.getElementById('registerEmail').value,
+                    password,
+                    document.getElementById('registerName').value
+                );
+                if (result.success) {
+                    showSuccess('تم إنشاء الحساب بنجاح!');
+                    setTimeout(() => window.location.href = 'admin.html', 1000);
+                } else {
+                    showError(result.error);
+                }
+            } catch (error) {
+                showError(error.message || 'خطأ في الاتصال');
+            }
+            setLoading(btn, false);
+        }
+    </script>
+</body>
+</html>
