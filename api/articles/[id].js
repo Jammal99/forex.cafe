@@ -3,8 +3,8 @@
  * Get single article by ID
  */
 
-const { getDb } = require('../../../db');
-const { articles } = require('../../../db/schema');
+const { getDb } = require('../../db');
+const { articles } = require('../../db/schema');
 const { eq } = require('drizzle-orm');
 
 module.exports = async (req, res) => {
@@ -20,9 +20,15 @@ module.exports = async (req, res) => {
     try {
         const db = getDb();
         
-        // Extract ID from URL
-        const urlParts = req.url.split('/');
-        const id = parseInt(urlParts[urlParts.length - 1].split('?')[0]);
+        // Extract ID from URL - Vercel passes it in req.query.id
+        let id;
+        if (req.query && req.query.id) {
+            id = parseInt(req.query.id);
+        } else {
+            // Fallback: extract from URL path
+            const urlParts = req.url.split('/');
+            id = parseInt(urlParts[urlParts.length - 1].split('?')[0]);
+        }
         
         if (isNaN(id)) {
             return res.status(400).json({ success: false, error: 'معرف المقال غير صحيح' });
