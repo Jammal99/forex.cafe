@@ -7,17 +7,23 @@ const AdminAPI = {
     // ==========================================
     // Initialize
     // ==========================================
-    init() {
+    async init() {
         if (typeof API === 'undefined') {
             console.error('API Service not loaded');
             return;
         }
         
-        this.loadDashboardStats();
-        this.loadSections();
-        this.loadArticles();
+        console.log('Admin API initializing...');
         
-        console.log('Admin API initialized');
+        // Load data in parallel
+        await Promise.all([
+            this.loadSections(),
+            this.loadArticles()
+        ]);
+        
+        this.loadDashboardStats();
+        
+        console.log('Admin API initialized - Sections:', this.sections.length, 'Articles:', this.articles.length);
     },
 
     // ==========================================
@@ -144,11 +150,16 @@ const AdminAPI = {
     },
 
     populateSectionDropdowns() {
-        const selects = document.querySelectorAll('.section-select, #articleSection');
+        const selects = document.querySelectorAll('.section-select, #articleSection, #articlesFilterSection');
+        console.log('Populating dropdowns with sections:', this.sections.length);
+        
         selects.forEach(select => {
             const currentValue = select.value;
-            select.innerHTML = '<option value="">اختر القسم</option>' + 
-                this.sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            const options = this.sections
+                .filter(s => s.isActive !== false) // Only active sections
+                .map(s => `<option value="${s.id}">${s.name}</option>`)
+                .join('');
+            select.innerHTML = '<option value="">اختر القسم</option>' + options;
             if (currentValue) select.value = currentValue;
         });
     },
