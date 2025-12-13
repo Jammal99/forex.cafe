@@ -207,13 +207,8 @@ function showNotification(message, type = 'success') {
 // Form Handling
 // ==========================================
 
-// Prevent form submission for demo
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        showNotification('تم حفظ التغييرات بنجاح!', 'success');
-    });
-});
+// Note: Real form handling is done in specific functions like saveArticle()
+// No global preventDefault - each form handles its own submission
 
 // ==========================================
 // Delete Confirmation
@@ -1319,40 +1314,81 @@ function renderArticlesTable(articles) {
 
 // Save new article
 async function saveArticle() {
-    const form = document.getElementById('articleForm');
-    if (!form) {
-        // Get data from modal inputs
-        const modal = document.getElementById('addArticleModal');
-        const title = modal.querySelector('input[type="text"]').value;
-        const content = modal.querySelector('textarea').value;
-        const sectionSelect = modal.querySelectorAll('select')[0];
-        const statusSelect = modal.querySelectorAll('select')[1];
-        
-        if (!title || !content) {
-            showNotification('يرجى ملء العنوان والمحتوى', 'error');
-            return;
-        }
-        
-        try {
-            const result = await API.articles.create({
-                title: title,
-                content: content,
-                sectionId: sectionSelect?.value ? parseInt(sectionSelect.value) : null,
-                status: statusSelect?.value || 'draft'
-            });
-            
-            if (result.success) {
-                showNotification('تم إضافة المقال بنجاح', 'success');
-                closeModal('addArticleModal');
-                loadArticles();
-            } else {
-                showNotification(result.error || 'خطأ في الإضافة', 'error');
-            }
-        } catch (error) {
-            console.error('Error saving article:', error);
-            showNotification('خطأ في حفظ المقال: ' + error.message, 'error');
-        }
+    console.log('saveArticle called');
+    
+    // Get data from modal inputs using proper IDs
+    const title = document.getElementById('articleTitle')?.value?.trim();
+    const content = document.getElementById('articleContent')?.value?.trim();
+    const sectionId = document.getElementById('articleSection')?.value;
+    const subsectionId = document.getElementById('articleSubsection')?.value;
+    const status = document.getElementById('articleStatus')?.value || 'draft';
+    const tags = document.getElementById('articleTags')?.value?.trim();
+    const thumbnail = document.getElementById('articleThumbnail')?.value;
+    
+    console.log('Article data:', { title, content, sectionId, subsectionId, status, tags });
+    
+    // Validate required fields
+    if (!title) {
+        showNotification('يرجى إدخال عنوان المقال', 'error');
         return;
+    }
+    
+    if (!content) {
+        showNotification('يرجى إدخال محتوى المقال', 'error');
+        return;
+    }
+    
+    // Check if API is available
+    if (typeof API === 'undefined') {
+        showNotification('خطأ: API غير متوفر', 'error');
+        console.error('API object is not defined');
+        return;
+    }
+    
+    try {
+        // Prepare article data
+        const articleData = {
+            title: title,
+            content: content,
+            status: status
+        };
+        
+        // Add optional fields if they have values
+        if (sectionId) {
+            articleData.sectionId = parseInt(sectionId);
+        }
+        if (subsectionId) {
+            articleData.subsectionId = parseInt(subsectionId);
+        }
+        if (tags) {
+            articleData.tags = tags;
+        }
+        if (thumbnail) {
+            articleData.thumbnail = thumbnail;
+        }
+        
+        console.log('Sending to API:', articleData);
+        
+        const result = await API.articles.create(articleData);
+        
+        console.log('API response:', result);
+        
+        if (result.success) {
+            showNotification('تم إضافة المقال بنجاح', 'success');
+            closeModal('addArticleModal');
+            
+            // Clear form
+            document.getElementById('articleForm')?.reset();
+            document.getElementById('subsectionRow').style.display = 'none';
+            
+            // Reload articles
+            loadArticles();
+        } else {
+            showNotification(result.error || 'خطأ في إضافة المقال', 'error');
+        }
+    } catch (error) {
+        console.error('Error saving article:', error);
+        showNotification('خطأ في حفظ المقال: ' + error.message, 'error');
     }
 }
 
@@ -1387,13 +1423,22 @@ async function loadSections() {
 
 // Populate section dropdowns
 function populateSectionSelects(sections) {
-    const selects = document.querySelectorAll('select[data-sections]');
-    const articleSectionSelect = document.querySelector('#addArticleModal select');
+    console.log('Populating sections:', sections);
+    
+    // Target the article section select by ID
+    const articleSectionSelect = document.getElementById('articleSection');
     
     if (articleSectionSelect) {
         articleSectionSelect.innerHTML = '<option value="">اختر القسم</option>' + 
             sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        console.log('Article section select populated with', sections.length, 'sections');
     }
+    
+    // Also populate any other section selects with data-sections attribute
+    document.querySelectorAll('select[data-sections]').forEach(select => {
+        select.innerHTML = '<option value="">اختر القسم</option>' + 
+            sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    });
 }
 
 // Initialize on page load
