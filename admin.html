@@ -154,7 +154,7 @@
                         <i class="fas fa-newspaper"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>24</h3>
+                        <h3 id="articles-count">0</h3>
                         <p>المقالات</p>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
                         <i class="fas fa-layer-group"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>8</h3>
+                        <h3 id="sections-count">0</h3>
                         <p>الأقسام</p>
                     </div>
                 </div>
@@ -172,8 +172,8 @@
                         <i class="fas fa-eye"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>12,450</h3>
-                        <p>الزيارات</p>
+                        <h3 id="views-count">0</h3>
+                        <p>المشاهدات</p>
                     </div>
                 </div>
                 <div class="stat-card">
@@ -181,7 +181,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="stat-info">
-                        <h3>1,230</h3>
+                        <h3 id="users-count">1</h3>
                         <p>المستخدمين</p>
                     </div>
                 </div>
@@ -192,25 +192,12 @@
                 <div class="card recent-articles">
                     <div class="card-header">
                         <h2><i class="fas fa-clock"></i> آخر المقالات</h2>
-                        <a href="#articles" class="view-all">عرض الكل</a>
+                        <a href="#articles" class="view-all" onclick="showSection('articles')">عرض الكل</a>
                     </div>
                     <div class="card-body">
-                        <ul class="article-list">
-                            <li>
-                                <span class="article-title">مقدمة في تداول الفوركس</span>
-                                <span class="article-date">منذ ساعة</span>
-                            </li>
-                            <li>
-                                <span class="article-title">استراتيجيات إدارة المخاطر</span>
-                                <span class="article-date">منذ 3 ساعات</span>
-                            </li>
-                            <li>
-                                <span class="article-title">التحليل الفني للمبتدئين</span>
-                                <span class="article-date">منذ يوم</span>
-                            </li>
-                            <li>
-                                <span class="article-title">أفضل أزواج العملات للتداول</span>
-                                <span class="article-date">منذ يومين</span>
+                        <ul class="article-list" id="recent-articles">
+                            <li style="text-align:center;padding:20px;color:#888;">
+                                <i class="fas fa-spinner fa-spin"></i> جاري التحميل...
                             </li>
                         </ul>
                     </div>
@@ -222,11 +209,11 @@
                     </div>
                     <div class="card-body">
                         <div class="actions-grid">
-                            <button class="action-btn" onclick="showSection('articles')">
+                            <button class="action-btn" onclick="openModal('addArticleModal')">
                                 <i class="fas fa-plus"></i>
                                 <span>مقال جديد</span>
                             </button>
-                            <button class="action-btn" onclick="showSection('sections')">
+                            <button class="action-btn" onclick="openModal('addSectionModal')">
                                 <i class="fas fa-folder-plus"></i>
                                 <span>قسم جديد</span>
                             </button>
@@ -1701,36 +1688,40 @@
                 <button class="close-modal" onclick="closeModal('addSectionModal')">&times;</button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="sectionForm">
                     <div class="form-group">
                         <label>اسم القسم</label>
-                        <input type="text" placeholder="أدخل اسم القسم">
+                        <input type="text" id="sectionName" placeholder="أدخل اسم القسم" required>
                     </div>
                     <div class="form-group">
                         <label>الوصف</label>
-                        <textarea rows="3" placeholder="أدخل وصف القسم"></textarea>
+                        <textarea id="sectionDescription" rows="3" placeholder="أدخل وصف القسم"></textarea>
                     </div>
                     <div class="form-group">
                         <label>الأيقونة</label>
-                        <select>
+                        <select id="sectionIcon">
                             <option value="fa-newspaper">📰 أخبار</option>
                             <option value="fa-chart-bar">📊 تحليلات</option>
                             <option value="fa-graduation-cap">🎓 تعليم</option>
                             <option value="fa-chess">♟️ استراتيجيات</option>
+                            <option value="fa-money-bill-wave">💰 تداول</option>
+                            <option value="fa-chart-line">📈 مؤشرات</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>الحالة</label>
-                        <select>
-                            <option value="active">نشط</option>
-                            <option value="inactive">معطل</option>
+                        <select id="sectionStatus">
+                            <option value="true">نشط</option>
+                            <option value="false">معطل</option>
                         </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('addSectionModal')">إلغاء</button>
-                <button class="btn btn-primary">إضافة القسم</button>
+                <button class="btn btn-primary" onclick="saveSection()">
+                    <i class="fas fa-save"></i> إضافة القسم
+                </button>
             </div>
         </div>
     </div>

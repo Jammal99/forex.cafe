@@ -56,21 +56,33 @@ const AdminAPI = {
         if (!container) return;
         
         if (articles.length === 0) {
-            container.innerHTML = '<p style="text-align:center;color:#888;padding:20px;">لا توجد مقالات</p>';
+            container.innerHTML = '<li style="text-align:center;padding:20px;color:#888;">لا توجد مقالات حالياً</li>';
             return;
         }
         
-        container.innerHTML = articles.map(article => `
-            <div class="activity-item">
-                <div class="activity-icon">
-                    <i class="fas fa-newspaper"></i>
-                </div>
-                <div class="activity-content">
-                    <p>${article.title}</p>
-                    <small>${article.status === 'published' ? 'منشور' : 'مسودة'} - ${article.views || 0} مشاهدة</small>
-                </div>
-            </div>
-        `).join('');
+        container.innerHTML = articles.map(article => {
+            const date = new Date(article.createdAt);
+            const timeAgo = this.getTimeAgo(date);
+            return `
+                <li>
+                    <span class="article-title">${article.title}</span>
+                    <span class="article-date">${timeAgo}</span>
+                </li>
+            `;
+        }).join('');
+    },
+    
+    getTimeAgo(date) {
+        const now = new Date();
+        const diff = now - date;
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+        
+        if (minutes < 60) return `منذ ${minutes} دقيقة`;
+        if (hours < 24) return `منذ ${hours} ساعة`;
+        if (days < 30) return `منذ ${days} يوم`;
+        return date.toLocaleDateString('ar');
     },
 
     // ==========================================
@@ -138,14 +150,41 @@ const AdminAPI = {
     },
 
     async saveSection(data) {
+        const name = document.getElementById('sectionName')?.value?.trim();
+        const description = document.getElementById('sectionDescription')?.value?.trim();
+        const icon = document.getElementById('sectionIcon')?.value;
+        const isActive = document.getElementById('sectionStatus')?.value === 'true';
+        
+        if (!name) {
+            showNotification('يرجى إدخال اسم القسم', 'error');
+            return;
+        }
+        
+        // Generate slug from name
+        const slug = name
+            .toLowerCase()
+            .replace(/[^\w\s-\u0600-\u06FF]/g, '')
+            .replace(/\s+/g, '-')
+            .trim();
+        
         try {
-            const result = await API.sections.create(data);
+            const result = await API.sections.create({
+                name,
+                slug,
+                description: description || null,
+                icon: icon || 'fa-folder',
+                isActive
+            });
+            
             if (result.success) {
                 showNotification('تم إضافة القسم بنجاح', 'success');
                 this.loadSections();
                 closeModal('addSectionModal');
+                // Clear form
+                document.getElementById('sectionName').value = '';
+                document.getElementById('sectionDescription').value = '';
             } else {
-                showNotification(result.error || 'خطأ في الإضافة', 'error');
+                showNotification(result.error || 'خطأ في إضافة القسم', 'error');
             }
         } catch (error) {
             showNotification('خطأ: ' + error.message, 'error');
@@ -357,6 +396,11 @@ const AdminAPI = {
 // Global function for save article button
 function saveArticle() {
     AdminAPI.saveArticle();
+}
+
+// Global function for save section button
+function saveSection() {
+    AdminAPI.saveSection();
 }
 
 // Initialize when DOM is ready
