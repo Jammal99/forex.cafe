@@ -337,6 +337,8 @@ const AdminAPI = {
     },
 
     async saveArticle() {
+        console.log('AdminAPI.saveArticle() started');
+        
         const title = document.getElementById('articleTitle')?.value?.trim();
         const content = document.getElementById('articleContent')?.value?.trim();
         const sectionId = document.getElementById('articleSection')?.value;
@@ -344,6 +346,8 @@ const AdminAPI = {
         const status = document.getElementById('articleStatus')?.value || 'draft';
         const tags = document.getElementById('articleTags')?.value?.trim();
         const thumbnail = document.getElementById('articleThumbnail')?.value;
+        
+        console.log('Article data:', { title, content: content?.substring(0, 50), sectionId, status });
         
         if (!title) {
             showNotification('يرجى إدخال عنوان المقال', 'error');
@@ -356,6 +360,7 @@ const AdminAPI = {
         }
         
         try {
+            console.log('Sending to API...');
             const result = await API.articles.create({
                 title,
                 content,
@@ -462,25 +467,46 @@ const AdminAPI = {
 
 // Global function for save article button
 function saveArticle() {
-    AdminAPI.saveArticle();
+    console.log('saveArticle() called');
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.saveArticle();
+    } else {
+        console.error('AdminAPI not defined');
+        alert('خطأ: AdminAPI غير معرف');
+    }
 }
 
 // Global function for save section button
 function saveSection() {
-    AdminAPI.saveSection();
+    console.log('saveSection() called');
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.saveSection();
+    } else {
+        console.error('AdminAPI not defined');
+    }
 }
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing AdminAPI...');
     // Wait for API service to load
     setTimeout(async () => {
         try {
+            if (typeof API === 'undefined') {
+                console.error('API service not loaded!');
+                return;
+            }
             await AdminAPI.init();
         } catch (error) {
             console.error('AdminAPI init error:', error);
         }
-    }, 200);
+    }, 300);
 });
 
 // Make globally available
+window.AdminAPI = AdminAPI;
+window.saveArticle = saveArticle;
+window.saveSection = saveSection;
+
+console.log('admin-api.js loaded');
 window.AdminAPI = AdminAPI;
