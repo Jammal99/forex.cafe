@@ -1741,9 +1741,17 @@
                             <input type="text" id="articleTitle" placeholder="أدخل عنوان المقال" required>
                         </div>
                         <div class="form-group">
-                            <label>القسم</label>
-                            <select id="articleSection" class="section-select">
+                            <label>القسم الرئيسي</label>
+                            <select id="articleSection" class="section-select" onchange="AdminAPI.loadSubsectionsForArticle(this.value)">
                                 <option value="">اختر القسم</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" id="subsectionRow" style="display:none;">
+                        <div class="form-group" style="flex:1;">
+                            <label>القسم الفرعي (اختياري)</label>
+                            <select id="articleSubsection">
+                                <option value="">اختر القسم الفرعي</option>
                             </select>
                         </div>
                     </div>

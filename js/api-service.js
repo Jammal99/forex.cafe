@@ -148,6 +148,43 @@ const API = {
     },
     
     // ==========================================
+    // Subsections Methods
+    // ==========================================
+    subsections: {
+        async getAll() {
+            return API.request('/subsections', { auth: false });
+        },
+        
+        async getBySection(sectionId) {
+            return API.request(`/subsections?sectionId=${sectionId}`, { auth: false });
+        },
+        
+        async getById(id) {
+            return API.request(`/subsections?id=${id}`, { auth: false });
+        },
+        
+        async create(data) {
+            return API.request('/subsections', {
+                method: 'POST',
+                body: data
+            });
+        },
+        
+        async update(id, data) {
+            return API.request(`/subsections?id=${id}`, {
+                method: 'PUT',
+                body: data
+            });
+        },
+        
+        async delete(id) {
+            return API.request(`/subsections?id=${id}`, {
+                method: 'DELETE'
+            });
+        }
+    },
+    
+    // ==========================================
     // Articles Methods
     // ==========================================
     articles: {

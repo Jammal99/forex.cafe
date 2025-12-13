@@ -161,6 +161,40 @@ async function seed() {
         console.log('✅ Sections seeded\n');
         
         // ==========================================
+        // Seed Subsections
+        // ==========================================
+        console.log('📂 Seeding subsections...');
+        
+        const subsectionsData = [
+            // ما هو الفوركس
+            { sectionSlug: 'what-is-forex', name: 'مقدمة للمبتدئين', order: 1 },
+            { sectionSlug: 'what-is-forex', name: 'أساسيات التداول', order: 2 },
+            { sectionSlug: 'what-is-forex', name: 'المصطلحات الأساسية', order: 3 },
+            // الاستراتيجيات
+            { sectionSlug: 'strategies', name: 'استراتيجيات السكالبينج', order: 1 },
+            { sectionSlug: 'strategies', name: 'استراتيجيات السوينج', order: 2 },
+            { sectionSlug: 'strategies', name: 'استراتيجيات طويلة المدى', order: 3 },
+            // التحليل الفني
+            { sectionSlug: 'technical-analysis', name: 'المؤشرات الفنية', order: 1 },
+            { sectionSlug: 'technical-analysis', name: 'النماذج السعرية', order: 2 },
+            { sectionSlug: 'technical-analysis', name: 'خطوط الدعم والمقاومة', order: 3 },
+            // التحليل الأساسي
+            { sectionSlug: 'fundamental-analysis', name: 'البيانات الاقتصادية', order: 1 },
+            { sectionSlug: 'fundamental-analysis', name: 'قرارات البنوك المركزية', order: 2 }
+        ];
+        
+        for (const sub of subsectionsData) {
+            await sql`
+                INSERT INTO subsections (section_id, name, slug, sort_order, is_active)
+                SELECT id, ${sub.name}, ${sub.name.toLowerCase().replace(/\s+/g, '-')}, ${sub.order}, true
+                FROM sections WHERE slug = ${sub.sectionSlug}
+                ON CONFLICT DO NOTHING
+            `;
+        }
+        
+        console.log('✅ Subsections seeded\n');
+        
+        // ==========================================
         // Seed Homepage Sections
         // ==========================================
         console.log('🏠 Seeding homepage sections...');

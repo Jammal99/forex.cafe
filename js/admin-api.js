@@ -89,13 +89,17 @@ const AdminAPI = {
     // Sections Management
     // ==========================================
     sections: [],
+    subsections: [],
     
     async loadSections() {
         try {
             const result = await API.sections.getAll();
             this.sections = result.data || [];
+            console.log('Loaded sections:', this.sections);
             this.renderSectionsTable();
             this.populateSectionDropdowns();
+            // Also load all subsections
+            await this.loadAllSubsections();
         } catch (error) {
             console.error('Error loading sections:', error);
             showNotification('خطأ في تحميل الأقسام', 'error');
@@ -208,6 +212,45 @@ const AdminAPI = {
     },
 
     // ==========================================
+    // Subsections Management
+    // ==========================================
+    async loadAllSubsections() {
+        try {
+            const result = await API.subsections.getAll();
+            this.subsections = result.data || [];
+            console.log('Loaded subsections:', this.subsections);
+        } catch (error) {
+            console.error('Error loading subsections:', error);
+        }
+    },
+    
+    async loadSubsectionsForArticle(sectionId) {
+        const subsectionRow = document.getElementById('subsectionRow');
+        const subsectionSelect = document.getElementById('articleSubsection');
+        
+        if (!sectionId) {
+            if (subsectionRow) subsectionRow.style.display = 'none';
+            return;
+        }
+        
+        try {
+            const result = await API.subsections.getBySection(sectionId);
+            const subs = result.data || [];
+            
+            if (subs.length > 0) {
+                subsectionSelect.innerHTML = '<option value="">اختر القسم الفرعي (اختياري)</option>' +
+                    subs.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                subsectionRow.style.display = 'flex';
+            } else {
+                subsectionRow.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error loading subsections:', error);
+            subsectionRow.style.display = 'none';
+        }
+    },
+
+    // ==========================================
     // Articles Management
     // ==========================================
     articles: [],
@@ -277,6 +320,7 @@ const AdminAPI = {
         const title = document.getElementById('articleTitle')?.value?.trim();
         const content = document.getElementById('articleContent')?.value?.trim();
         const sectionId = document.getElementById('articleSection')?.value;
+        const subsectionId = document.getElementById('articleSubsection')?.value;
         const status = document.getElementById('articleStatus')?.value || 'draft';
         const tags = document.getElementById('articleTags')?.value?.trim();
         const thumbnail = document.getElementById('articleThumbnail')?.value;
@@ -296,6 +340,7 @@ const AdminAPI = {
                 title,
                 content,
                 sectionId: sectionId ? parseInt(sectionId) : null,
+                subsectionId: subsectionId ? parseInt(subsectionId) : null,
                 status,
                 tags: tags || null,
                 thumbnail: thumbnail || null
@@ -308,6 +353,8 @@ const AdminAPI = {
                 document.getElementById('articleTitle').value = '';
                 document.getElementById('articleContent').value = '';
                 document.getElementById('articleSection').value = '';
+                document.getElementById('articleSubsection').value = '';
+                document.getElementById('subsectionRow').style.display = 'none';
                 document.getElementById('articleStatus').value = 'draft';
                 document.getElementById('articleTags').value = '';
                 this.loadArticles();

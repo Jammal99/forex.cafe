@@ -8,6 +8,7 @@
     { "source": "/api/auth/login", "destination": "/api/auth/login" },
     { "source": "/api/auth/me", "destination": "/api/auth/me" },
     { "source": "/api/sections", "destination": "/api/sections/index" },
+    { "source": "/api/subsections", "destination": "/api/subsections/index" },
     { "source": "/api/articles", "destination": "/api/articles/index" },
     { "source": "/api/settings", "destination": "/api/settings/index" }
   ]
