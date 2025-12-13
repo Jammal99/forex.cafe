@@ -1680,6 +1680,29 @@
         </section>
     </main>
 
+    <!-- Global Save Functions -->
+    <script>
+        function saveArticle() {
+            console.log('saveArticle global function called');
+            if (typeof AdminAPI !== 'undefined' && AdminAPI.saveArticle) {
+                AdminAPI.saveArticle();
+            } else {
+                console.error('AdminAPI.saveArticle not available');
+                alert('جاري التحميل، يرجى الانتظار...');
+            }
+        }
+        
+        function saveSection() {
+            console.log('saveSection global function called');
+            if (typeof AdminAPI !== 'undefined' && AdminAPI.saveSection) {
+                AdminAPI.saveSection();
+            } else {
+                console.error('AdminAPI.saveSection not available');
+                alert('جاري التحميل، يرجى الانتظار...');
+            }
+        }
+    </script>
+
     <!-- Add Section Modal -->
     <div class="modal" id="addSectionModal">
         <div class="modal-content">
@@ -2144,6 +2167,7 @@
 
     <!-- API Service -->
     <script src="js/api-service.js"></script>
+    <script src="js/admin-api.js"></script>
     
     <!-- Auth Check -->
     <script>
@@ -2190,7 +2214,6 @@
         }
     </script>
     
-    <script src="js/admin-api.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>
