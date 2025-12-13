@@ -1141,96 +1141,31 @@
                 <div class="card-header">
                     <h2>قائمة المقالات</h2>
                     <div class="card-actions">
-                        <select class="filter-select">
+                        <select class="filter-select section-select" id="articlesFilterSection">
                             <option value="">كل الأقسام</option>
-                            <option value="forex">ما هو الفوركس</option>
-                            <option value="strategies">الاستراتيجيات</option>
-                            <option value="analysis">التحليلات</option>
-                            <option value="news">الأخبار</option>
                         </select>
-                        <input type="text" placeholder="بحث في المقالات..." class="search-input">
+                        <input type="text" placeholder="بحث في المقالات..." class="search-input" id="articlesSearch">
                     </div>
                 </div>
                 <div class="card-body">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" id="selectAll"></th>
+                                <th><input type="checkbox" id="selectAllArticles"></th>
                                 <th>العنوان</th>
                                 <th>القسم</th>
-                                <th>الكاتب</th>
-                                <th>التاريخ</th>
-                                <th>المشاهدات</th>
                                 <th>الحالة</th>
+                                <th>المشاهدات</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>مقدمة في تداول الفوركس للمبتدئين</td>
-                                <td><span class="tag">ما هو الفوركس</span></td>
-                                <td>أحمد محمد</td>
-                                <td>2025/01/15</td>
-                                <td>1,234</td>
-                                <td><span class="status active">منشور</span></td>
-                                <td class="actions">
-                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>استراتيجية الاختراق للتداول اليومي</td>
-                                <td><span class="tag">الاستراتيجيات</span></td>
-                                <td>سارة أحمد</td>
-                                <td>2025/01/14</td>
-                                <td>987</td>
-                                <td><span class="status active">منشور</span></td>
-                                <td class="actions">
-                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>تحليل زوج EUR/USD - التوقعات الأسبوعية</td>
-                                <td><span class="tag">التحليلات</span></td>
-                                <td>محمد علي</td>
-                                <td>2025/01/13</td>
-                                <td>2,100</td>
-                                <td><span class="status active">منشور</span></td>
-                                <td class="actions">
-                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>قرارات البنك المركزي الأوروبي</td>
-                                <td><span class="tag">الأخبار</span></td>
-                                <td>فاطمة حسن</td>
-                                <td>2025/01/12</td>
-                                <td>756</td>
-                                <td><span class="status draft">مسودة</span></td>
-                                <td class="actions">
-                                    <button class="btn-icon view"><i class="fas fa-eye"></i></button>
-                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
+                        <tbody id="articlesTableBody">
+                            <!-- Articles will be loaded dynamically -->
                         </tbody>
                     </table>
                     
-                    <div class="pagination">
-                        <button class="btn-page"><i class="fas fa-chevron-right"></i></button>
-                        <button class="btn-page active">1</button>
-                        <button class="btn-page">2</button>
-                        <button class="btn-page">3</button>
-                        <button class="btn-page"><i class="fas fa-chevron-left"></i></button>
+                    <div class="pagination" id="articlesPagination">
+                        <!-- Pagination will be added dynamically -->
                     </div>
                 </div>
             </div>
@@ -1808,20 +1743,16 @@
                 <button class="close-modal" onclick="closeModal('addArticleModal')">&times;</button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="articleForm">
                     <div class="form-row">
                         <div class="form-group">
                             <label>عنوان المقال</label>
-                            <input type="text" placeholder="أدخل عنوان المقال">
+                            <input type="text" id="articleTitle" placeholder="أدخل عنوان المقال" required>
                         </div>
                         <div class="form-group">
                             <label>القسم</label>
-                            <select>
+                            <select id="articleSection" class="section-select">
                                 <option value="">اختر القسم</option>
-                                <option value="forex">ما هو الفوركس</option>
-                                <option value="strategies">الاستراتيجيات</option>
-                                <option value="analysis">التحليلات</option>
-                                <option value="news">الأخبار</option>
                             </select>
                         </div>
                     </div>
@@ -1830,6 +1761,7 @@
                         <div class="upload-area">
                             <i class="fas fa-image"></i>
                             <p>اسحب الصورة هنا أو اضغط للاختيار</p>
+                            <input type="hidden" id="articleThumbnail">
                         </div>
                     </div>
                     <div class="form-group">
@@ -1843,16 +1775,16 @@
                             <button type="button"><i class="fas fa-link"></i></button>
                             <button type="button"><i class="fas fa-image"></i></button>
                         </div>
-                        <textarea rows="10" placeholder="اكتب محتوى المقال هنا..."></textarea>
+                        <textarea id="articleContent" rows="10" placeholder="اكتب محتوى المقال هنا..." required></textarea>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>الكلمات المفتاحية</label>
-                            <input type="text" placeholder="فوركس, تداول, استراتيجية">
+                            <input type="text" id="articleTags" placeholder="فوركس, تداول, استراتيجية">
                         </div>
                         <div class="form-group">
                             <label>الحالة</label>
-                            <select>
+                            <select id="articleStatus">
                                 <option value="draft">مسودة</option>
                                 <option value="published">منشور</option>
                             </select>
@@ -2259,6 +2191,8 @@
         }
     </script>
     
+    <script src="js/api-service.js"></script>
+    <script src="js/admin-api.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>
