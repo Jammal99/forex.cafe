@@ -957,6 +957,66 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
+    <script src="js/api-service.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Load articles from API
+        async function loadArticlesFromAPI() {
+            try {
+                const result = await API.articles.getAll({ status: 'published', limit: 6 });
+                if (result.success && result.data && result.data.length > 0) {
+                    renderArticles(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading articles:', error);
+            }
+        }
+        
+        function renderArticles(articles) {
+            const grid = document.querySelector('.articles-grid');
+            if (!grid || articles.length === 0) return;
+            
+            // Keep first 2 static articles as fallback, add API articles
+            const apiArticlesHtml = articles.map(article => {
+                const date = new Date(article.createdAt || article.publishedAt);
+                const formattedDate = date.toLocaleDateString('ar', { day: 'numeric', month: 'long', year: 'numeric' });
+                const excerpt = article.excerpt || (article.content ? article.content.substring(0, 100) + '...' : '');
+                const category = article.tags ? article.tags.split(',')[0] : 'مقال';
+                
+                return `
+                    <article class="article-card" data-category="${category}">
+                        <div class="card-image">
+                            <img src="${article.thumbnail || 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80'}" alt="${article.title}">
+                            <div class="card-overlay">
+                                <span class="category-badge">${category}</span>
+                                <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-meta">
+                                <span class="date"><i class="far fa-calendar"></i> ${formattedDate}</span>
+                                <span class="read-time"><i class="far fa-clock"></i> ${Math.ceil((article.content?.length || 500) / 1000)} دقائق</span>
+                            </div>
+                            <h3>${article.title}</h3>
+                            <p>${excerpt}</p>
+                            <div class="card-footer">
+                                <div class="author">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" alt="الكاتب">
+                                    <span>فوركس كافيه</span>
+                                </div>
+                                <a href="article.html?id=${article.id}" class="read-more">اقرأ المزيد <i class="fas fa-arrow-left"></i></a>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+            
+            // Prepend API articles to the grid
+            grid.insertAdjacentHTML('afterbegin', apiArticlesHtml);
+        }
+        
+        // Load articles when page loads
+        document.addEventListener('DOMContentLoaded', loadArticlesFromAPI);
+    </script>
 </body>
 </html>

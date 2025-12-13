@@ -509,4 +509,3 @@ window.saveArticle = saveArticle;
 window.saveSection = saveSection;
 
 console.log('admin-api.js loaded');
-window.AdminAPI = AdminAPI;
