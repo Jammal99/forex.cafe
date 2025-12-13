@@ -9,6 +9,8 @@
     { "source": "/api/auth/me", "destination": "/api/auth/me" },
     { "source": "/api/sections", "destination": "/api/sections/index" },
     { "source": "/api/subsections", "destination": "/api/subsections/index" },
+    { "source": "/api/articles/:id", "destination": "/api/articles/[id]" },
+    { "source": "/api/articles/:id/view", "destination": "/api/articles/[id]" },
     { "source": "/api/articles", "destination": "/api/articles/index" },
     { "source": "/api/settings", "destination": "/api/settings/index" }
   ]
