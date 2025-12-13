@@ -306,7 +306,19 @@ const AdminAPI = {
         }
         
         tbody.innerHTML = this.articles.map(article => {
+            // Get section and subsection names
             const section = this.sections.find(s => s.id === article.sectionId);
+            const subsection = this.subsections.find(s => s.id === article.subsectionId);
+            
+            // Build category display
+            let categoryDisplay = '-';
+            if (section) {
+                categoryDisplay = `<span class="tag">${section.name}</span>`;
+                if (subsection) {
+                    categoryDisplay += ` <span class="tag tag-sub" style="background:#444;margin-right:4px;">${subsection.name}</span>`;
+                }
+            }
+            
             return `
                 <tr data-id="${article.id}">
                     <td><input type="checkbox"></td>
@@ -316,7 +328,7 @@ const AdminAPI = {
                             <span>${article.title}</span>
                         </div>
                     </td>
-                    <td>${section ? `<span class="tag">${section.name}</span>` : '-'}</td>
+                    <td>${categoryDisplay}</td>
                     <td>
                         <span class="status ${article.status === 'published' ? 'active' : 'draft'}">
                             ${article.status === 'published' ? 'منشور' : 'مسودة'}

@@ -960,9 +960,51 @@
     <script src="js/api-service.js"></script>
     <script src="script.js"></script>
     <script>
+        // Cache for sections data
+        let sectionsCache = [];
+        let subsectionsCache = [];
+        
+        // Load sections and subsections first
+        async function loadCategoriesData() {
+            try {
+                const [sectionsResult, subsectionsResult] = await Promise.all([
+                    API.sections.getAll(),
+                    API.subsections.getAll()
+                ]);
+                
+                if (sectionsResult.success) {
+                    sectionsCache = sectionsResult.data || [];
+                    console.log('Loaded sections:', sectionsCache.length);
+                }
+                
+                if (subsectionsResult.success) {
+                    subsectionsCache = subsectionsResult.data || [];
+                    console.log('Loaded subsections:', subsectionsCache.length);
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+        
+        // Get section name by ID
+        function getSectionName(sectionId) {
+            const section = sectionsCache.find(s => s.id === sectionId);
+            return section ? section.name : 'مقال';
+        }
+        
+        // Get subsection name by ID
+        function getSubsectionName(subsectionId) {
+            const subsection = subsectionsCache.find(s => s.id === subsectionId);
+            return subsection ? subsection.name : '';
+        }
+        
         // Load articles from API
         async function loadArticlesFromAPI() {
             console.log('Loading published articles from API...');
+            
+            // Load categories first
+            await loadCategoriesData();
+            
             try {
                 const result = await API.articles.getAll({ status: 'published', limit: 6 });
                 console.log('API response:', result);
@@ -970,12 +1012,56 @@
                 if (result.success && result.data && result.data.length > 0) {
                     console.log('Rendering', result.data.length, 'articles');
                     renderArticles(result.data);
+                    updateFilterButtons();
                 } else {
                     console.log('No published articles found');
+                    // Keep static articles as fallback
                 }
             } catch (error) {
                 console.error('Error loading articles:', error);
             }
+        }
+        
+        // Update filter buttons based on sections
+        function updateFilterButtons() {
+            const filterContainer = document.querySelector('.articles-filter');
+            if (!filterContainer) return;
+            
+            // Get active sections that have articles
+            const activeSections = sectionsCache.filter(s => s.isActive && s.showInFilter);
+            
+            let buttonsHtml = '<button class="filter-btn active" data-filter="all">الكل</button>';
+            activeSections.forEach(section => {
+                buttonsHtml += `<button class="filter-btn" data-filter="${section.name}">${section.name}</button>`;
+            });
+            
+            filterContainer.innerHTML = buttonsHtml;
+            
+            // Re-initialize filter functionality
+            initArticleFilterButtons();
+        }
+        
+        // Initialize filter button clicks
+        function initArticleFilterButtons() {
+            const filterBtns = document.querySelectorAll('.articles-filter .filter-btn');
+            const articleCards = document.querySelectorAll('.article-card');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const filter = btn.getAttribute('data-filter');
+                    
+                    articleCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
         }
         
         function renderArticles(articles) {
@@ -989,14 +1075,23 @@
                 const date = new Date(article.publishedAt || article.createdAt);
                 const formattedDate = date.toLocaleDateString('ar', { day: 'numeric', month: 'long', year: 'numeric' });
                 const excerpt = article.excerpt || (article.content ? article.content.substring(0, 100) + '...' : '');
-                const category = article.tags ? article.tags.split(',')[0].trim() : 'مقال';
+                
+                // Get section name (use sectionId if available, otherwise tags)
+                const sectionName = article.sectionId ? getSectionName(article.sectionId) : (article.tags ? article.tags.split(',')[0].trim() : 'مقال');
+                const subsectionName = article.subsectionId ? getSubsectionName(article.subsectionId) : '';
+                
+                // Build category badge - show both section and subsection
+                let categoryBadge = sectionName;
+                if (subsectionName) {
+                    categoryBadge = `${sectionName} / ${subsectionName}`;
+                }
                 
                 return `
-                    <article class="article-card" data-category="${category}">
+                    <article class="article-card" data-category="${sectionName}">
                         <div class="card-image">
                             <img src="${article.thumbnail || 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80'}" alt="${article.title}">
                             <div class="card-overlay">
-                                <span class="category-badge">${category}</span>
+                                <span class="category-badge">${categoryBadge}</span>
                                 <button class="bookmark-btn"><i class="far fa-bookmark"></i></button>
                             </div>
                         </div>
