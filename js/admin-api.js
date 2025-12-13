@@ -15,15 +15,22 @@ const AdminAPI = {
         
         console.log('Admin API initializing...');
         
-        // Load data in parallel
-        await Promise.all([
-            this.loadSections(),
-            this.loadArticles()
-        ]);
-        
-        this.loadDashboardStats();
-        
-        console.log('Admin API initialized - Sections:', this.sections.length, 'Articles:', this.articles.length);
+        try {
+            // Load sections first (needed for dropdowns)
+            await this.loadSections();
+            console.log('Sections loaded:', this.sections.length);
+            
+            // Then load articles
+            await this.loadArticles();
+            console.log('Articles loaded:', this.articles.length);
+            
+            // Update dashboard
+            this.loadDashboardStats();
+            
+            console.log('Admin API initialized successfully!');
+        } catch (error) {
+            console.error('Admin API init error:', error);
+        }
     },
 
     // ==========================================
@@ -99,9 +106,11 @@ const AdminAPI = {
     
     async loadSections() {
         try {
+            console.log('Loading sections from API...');
             const result = await API.sections.getAll();
+            console.log('Sections API response:', result);
             this.sections = result.data || [];
-            console.log('Loaded sections:', this.sections);
+            console.log('Loaded sections count:', this.sections.length);
             this.renderSectionsTable();
             this.populateSectionDropdowns();
             // Also load all subsections
@@ -464,9 +473,13 @@ function saveSection() {
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     // Wait for API service to load
-    setTimeout(() => {
-        AdminAPI.init();
-    }, 100);
+    setTimeout(async () => {
+        try {
+            await AdminAPI.init();
+        } catch (error) {
+            console.error('AdminAPI init error:', error);
+        }
+    }, 200);
 });
 
 // Make globally available

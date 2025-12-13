@@ -42,7 +42,8 @@ module.exports = async (req, res) => {
             }
             
             // All sections
-            const result = await db.select().from(sections).orderBy(asc(sections.order));
+            const result = await db.select().from(sections).orderBy(asc(sections.sortOrder));
+            console.log('Fetched sections:', result.length);
             return res.status(200).json({ success: true, data: result });
         }
         
