@@ -1381,12 +1381,18 @@ img {
     border: 1px solid rgba(217, 119, 6, 0.15);
 }
 
+.pagination-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+}
+
 .pagination-numbers {
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
 }
 
 .pagination-btn {
@@ -1405,6 +1411,7 @@ img {
     align-items: center;
     justify-content: center;
     gap: 8px;
+    white-space: nowrap;
 }
 
 .pagination-btn.pagination-nav {

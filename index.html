@@ -790,69 +790,64 @@
         }
         
         // Render pagination
-        function renderPagination(total, currentPage, totalPages) {
+        function renderPagination(total, pageNum, totalPagesCount) {
             const paginationContainer = document.getElementById('articlesPagination');
             if (!paginationContainer) return;
             
-            console.log('Rendering pagination:', { total, currentPage, totalPages });
+            console.log('Rendering pagination:', { total, pageNum, totalPagesCount });
             
             // Don't show pagination if only 1 page or no articles
-            if (totalPages <= 1) {
+            if (totalPagesCount <= 1) {
                 paginationContainer.innerHTML = '';
                 return;
             }
             
-            let html = '';
+            let html = '<div class="pagination-row">';
             
             // Previous button
-            html += `<button class="pagination-btn pagination-nav ${currentPage === 1 ? 'disabled' : ''}" 
-                     onclick="window.goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+            html += `<button class="pagination-btn pagination-nav ${pageNum === 1 ? 'disabled' : ''}" 
+                     onclick="window.goToPage(${pageNum - 1})" ${pageNum === 1 ? 'disabled' : ''}>
                 <i class="fas fa-chevron-right"></i>
                 <span>السابق</span>
             </button>`;
             
-            // Page numbers container - show only 3 numbers around current page
+            // Page numbers - show only 3 numbers around current page
             html += '<div class="pagination-numbers">';
             
             // Calculate which 3 pages to show
             let startPage, endPage;
-            if (totalPages <= 3) {
-                // If 3 or fewer pages, show all
+            if (totalPagesCount <= 3) {
                 startPage = 1;
-                endPage = totalPages;
-            } else if (currentPage <= 2) {
-                // Near beginning - show 1, 2, 3
+                endPage = totalPagesCount;
+            } else if (pageNum <= 2) {
                 startPage = 1;
                 endPage = 3;
-            } else if (currentPage >= totalPages - 1) {
-                // Near end - show last 3
-                startPage = totalPages - 2;
-                endPage = totalPages;
+            } else if (pageNum >= totalPagesCount - 1) {
+                startPage = totalPagesCount - 2;
+                endPage = totalPagesCount;
             } else {
-                // Middle - show current and neighbors
-                startPage = currentPage - 1;
-                endPage = currentPage + 1;
+                startPage = pageNum - 1;
+                endPage = pageNum + 1;
             }
             
-            console.log('Showing pages:', startPage, 'to', endPage);
-            
-            // Render the page numbers
             for (let i = startPage; i <= endPage; i++) {
-                html += `<button class="pagination-btn pagination-num ${i === currentPage ? 'active' : ''}" 
+                html += `<button class="pagination-btn pagination-num ${i === pageNum ? 'active' : ''}" 
                          onclick="window.goToPage(${i})">${i}</button>`;
             }
             
             html += '</div>';
             
             // Next button
-            html += `<button class="pagination-btn pagination-nav ${currentPage === totalPages ? 'disabled' : ''}" 
-                     onclick="window.goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+            html += `<button class="pagination-btn pagination-nav ${pageNum === totalPagesCount ? 'disabled' : ''}" 
+                     onclick="window.goToPage(${pageNum + 1})" ${pageNum === totalPagesCount ? 'disabled' : ''}>
                 <span>التالي</span>
                 <i class="fas fa-chevron-left"></i>
             </button>`;
             
+            html += '</div>';
+            
             // Page info
-            html += `<div class="pagination-info">صفحة ${currentPage} من ${totalPages} (${total} مقال)</div>`;
+            html += `<div class="pagination-info">صفحة ${pageNum} من ${totalPagesCount} (${total} مقال)</div>`;
             
             paginationContainer.innerHTML = html;
         }
