@@ -789,12 +789,12 @@
             }
         }
         
-        // Render pagination
+        // Render pagination - v2.0
         function renderPagination(total, pageNum, totalPagesCount) {
             const paginationContainer = document.getElementById('articlesPagination');
             if (!paginationContainer) return;
             
-            console.log('Rendering pagination:', { total, pageNum, totalPagesCount });
+            console.log('Pagination v2:', { total, pageNum, totalPagesCount });
             
             // Don't show pagination if only 1 page or no articles
             if (totalPagesCount <= 1) {
@@ -805,8 +805,9 @@
             let html = '<div class="pagination-row">';
             
             // Previous button
-            html += `<button class="pagination-btn pagination-nav ${pageNum === 1 ? 'disabled' : ''}" 
-                     onclick="window.goToPage(${pageNum - 1})" ${pageNum === 1 ? 'disabled' : ''}>
+            const prevDisabled = pageNum === 1;
+            html += `<button class="pagination-btn pagination-nav ${prevDisabled ? 'disabled' : ''}" 
+                     onclick="window.goToPage(${pageNum - 1})" ${prevDisabled ? 'disabled' : ''}>
                 <i class="fas fa-chevron-right"></i>
                 <span>السابق</span>
             </button>`;
@@ -815,31 +816,35 @@
             html += '<div class="pagination-numbers">';
             
             // Calculate which 3 pages to show
-            let startPage, endPage;
-            if (totalPagesCount <= 3) {
-                startPage = 1;
-                endPage = totalPagesCount;
-            } else if (pageNum <= 2) {
-                startPage = 1;
-                endPage = 3;
-            } else if (pageNum >= totalPagesCount - 1) {
-                startPage = totalPagesCount - 2;
-                endPage = totalPagesCount;
-            } else {
-                startPage = pageNum - 1;
-                endPage = pageNum + 1;
+            let startPage = 1;
+            let endPage = totalPagesCount;
+            
+            if (totalPagesCount > 3) {
+                if (pageNum <= 2) {
+                    startPage = 1;
+                    endPage = 3;
+                } else if (pageNum >= totalPagesCount - 1) {
+                    startPage = totalPagesCount - 2;
+                    endPage = totalPagesCount;
+                } else {
+                    startPage = pageNum - 1;
+                    endPage = pageNum + 1;
+                }
             }
             
+            // Generate page number buttons
             for (let i = startPage; i <= endPage; i++) {
-                html += `<button class="pagination-btn pagination-num ${i === pageNum ? 'active' : ''}" 
+                const isActive = i === pageNum;
+                html += `<button class="pagination-btn pagination-num ${isActive ? 'active' : ''}" 
                          onclick="window.goToPage(${i})">${i}</button>`;
             }
             
             html += '</div>';
             
             // Next button
-            html += `<button class="pagination-btn pagination-nav ${pageNum === totalPagesCount ? 'disabled' : ''}" 
-                     onclick="window.goToPage(${pageNum + 1})" ${pageNum === totalPagesCount ? 'disabled' : ''}>
+            const nextDisabled = pageNum === totalPagesCount;
+            html += `<button class="pagination-btn pagination-nav ${nextDisabled ? 'disabled' : ''}" 
+                     onclick="window.goToPage(${pageNum + 1})" ${nextDisabled ? 'disabled' : ''}>
                 <span>التالي</span>
                 <i class="fas fa-chevron-left"></i>
             </button>`;
