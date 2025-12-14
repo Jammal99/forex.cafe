@@ -1460,9 +1460,21 @@
         <section class="content-section" id="users">
             <div class="section-header">
                 <h1>إدارة المستخدمين</h1>
-                <button class="btn btn-primary">
+                <div class="user-limit-badge" id="userLimitBadge">
+                    <i class="fas fa-users"></i>
+                    <span id="userCountText">0 / 5 مستخدمين</span>
+                </div>
+                <button class="btn btn-primary" onclick="openAddUserModal()" id="addUserBtn">
                     <i class="fas fa-user-plus"></i> إضافة مستخدم
                 </button>
+            </div>
+            
+            <div class="info-banner" style="background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.3); padding: 15px 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-shield-alt" style="color: #d97706; font-size: 24px;"></i>
+                <div>
+                    <strong style="color: #d97706;">نظام إدارة مغلق</strong>
+                    <p style="color: #a0a0a0; font-size: 14px; margin: 5px 0 0;">التسجيل مغلق للعامة. يمكن فقط للمدير إضافة مستخدمين جدد (الحد الأقصى: 5 مستخدمين)</p>
+                </div>
             </div>
             
             <div class="card">
@@ -1476,57 +1488,16 @@
                                 <th>المستخدم</th>
                                 <th>البريد الإلكتروني</th>
                                 <th>الدور</th>
-                                <th>تاريخ التسجيل</th>
+                                <th>آخر دخول</th>
                                 <th>الحالة</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="usersTableBody">
                             <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Admin&background=d97706&color=fff" alt="">
-                                        <span>المدير العام</span>
-                                    </div>
-                                </td>
-                                <td>admin@forex.cafe</td>
-                                <td><span class="role admin">مدير</span></td>
-                                <td>2024/01/01</td>
-                                <td><span class="status active">نشط</span></td>
-                                <td class="actions">
-                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Ahmed&background=10b981&color=fff" alt="">
-                                        <span>أحمد محمد</span>
-                                    </div>
-                                </td>
-                                <td>ahmed@forex.cafe</td>
-                                <td><span class="role editor">محرر</span></td>
-                                <td>2024/03/15</td>
-                                <td><span class="status active">نشط</span></td>
-                                <td class="actions">
-                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-cell">
-                                        <img src="https://ui-avatars.com/api/?name=Sara&background=6366f1&color=fff" alt="">
-                                        <span>سارة أحمد</span>
-                                    </div>
-                                </td>
-                                <td>sara@forex.cafe</td>
-                                <td><span class="role author">كاتب</span></td>
-                                <td>2024/06/20</td>
-                                <td><span class="status active">نشط</span></td>
-                                <td class="actions">
-                                    <button class="btn-icon edit"><i class="fas fa-edit"></i></button>
-                                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
+                                <td colspan="6" style="text-align: center; padding: 40px;">
+                                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #d97706;"></i>
+                                    <p style="margin-top: 10px; color: #a0a0a0;">جاري التحميل...</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -1534,6 +1505,38 @@
                 </div>
             </div>
         </section>
+
+        <!-- Add User Modal -->
+        <div class="modal" id="addUserModal">
+            <div class="modal-content" style="max-width: 500px;">
+                <div class="modal-header">
+                    <h2><i class="fas fa-user-plus"></i> إضافة مستخدم جديد</h2>
+                    <button class="close-btn" onclick="closeModal('addUserModal')"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="form-group">
+                            <label>الاسم الكامل <span class="required">*</span></label>
+                            <input type="text" id="newUserName" required placeholder="أدخل اسم المستخدم">
+                        </div>
+                        <div class="form-group">
+                            <label>البريد الإلكتروني <span class="required">*</span></label>
+                            <input type="email" id="newUserEmail" required placeholder="example@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label>كلمة المرور <span class="required">*</span></label>
+                            <input type="password" id="newUserPassword" required minlength="6" placeholder="كلمة مرور قوية (6 أحرف على الأقل)">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal('addUserModal')">إلغاء</button>
+                    <button class="btn btn-primary" onclick="createNewUser()">
+                        <i class="fas fa-plus"></i> إضافة المستخدم
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Settings Section -->
         <section class="content-section" id="settings">

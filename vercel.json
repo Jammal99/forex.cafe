@@ -12,6 +12,8 @@
     { "source": "/api/articles/:id", "destination": "/api/articles/[id]" },
     { "source": "/api/articles/:id/view", "destination": "/api/articles/[id]" },
     { "source": "/api/articles", "destination": "/api/articles/index" },
+    { "source": "/api/users/:id", "destination": "/api/users/[id]" },
+    { "source": "/api/users", "destination": "/api/users/index" },
     { "source": "/api/settings", "destination": "/api/settings/index" }
   ]
 }

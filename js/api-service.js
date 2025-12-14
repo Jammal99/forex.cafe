@@ -236,6 +236,35 @@ const API = {
     },
     
     // ==========================================
+    // Users Methods (Admin only)
+    // ==========================================
+    users: {
+        async getAll() {
+            return API.request('/users');
+        },
+        
+        async create(data) {
+            return API.request('/auth/register', {
+                method: 'POST',
+                body: data
+            });
+        },
+        
+        async delete(id) {
+            return API.request(`/users/${id}`, {
+                method: 'DELETE'
+            });
+        },
+        
+        async toggleActive(id, isActive) {
+            return API.request(`/users/${id}`, {
+                method: 'PATCH',
+                body: { isActive }
+            });
+        }
+    },
+    
+    // ==========================================
     // Stats Methods
     // ==========================================
     stats: {

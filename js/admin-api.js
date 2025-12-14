@@ -611,8 +611,205 @@ const AdminAPI = {
         } catch (error) {
             showNotification('خطأ: ' + error.message, 'error');
         }
+    },
+
+    // ==========================================
+    // Users Management
+    // ==========================================
+    currentUser: null,
+    usersData: [],
+
+    async loadUsers() {
+        try {
+            const result = await API.users.getAll();
+            if (result.success) {
+                this.usersData = result.data || [];
+                this.renderUsersTable(this.usersData, result.count, result.maxUsers);
+            } else {
+                showNotification(result.error || 'خطأ في تحميل المستخدمين', 'error');
+            }
+        } catch (error) {
+            console.error('Load users error:', error);
+            showNotification('خطأ في الاتصال بالخادم', 'error');
+        }
+    },
+
+    renderUsersTable(users, count, maxUsers) {
+        const tbody = document.getElementById('usersTableBody');
+        const countText = document.getElementById('userCountText');
+        const addBtn = document.getElementById('addUserBtn');
+        
+        if (countText) {
+            countText.textContent = `${count} / ${maxUsers} مستخدمين`;
+        }
+        
+        if (addBtn) {
+            addBtn.disabled = count >= maxUsers;
+            if (count >= maxUsers) {
+                addBtn.title = 'تم الوصول للحد الأقصى';
+            }
+        }
+        
+        if (!tbody) return;
+        
+        if (users.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-users" style="font-size: 48px; color: #666; margin-bottom: 15px; display: block;"></i>
+                        <p>لا يوجد مستخدمين</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        // Get current user ID from token
+        const token = API.getToken();
+        let currentUserId = null;
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                currentUserId = payload.id;
+            } catch (e) {}
+        }
+        
+        tbody.innerHTML = users.map(user => {
+            const isCurrentUser = user.id === currentUserId;
+            const initials = (user.displayName || user.email).substring(0, 2);
+            const bgColor = user.role === 'admin' ? 'd97706' : '10b981';
+            const lastLogin = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString('ar-EG') : 'لم يسجل دخول';
+            
+            return `
+                <tr data-user-id="${user.id}">
+                    <td>
+                        <div class="user-cell">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${bgColor}&color=fff" alt="">
+                            <span>${user.displayName || user.email.split('@')[0]}${isCurrentUser ? ' (أنت)' : ''}</span>
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td><span class="role admin">مدير</span></td>
+                    <td>${lastLogin}</td>
+                    <td>
+                        <span class="status ${user.isActive ? 'active' : 'inactive'}">
+                            ${user.isActive ? 'نشط' : 'معطل'}
+                        </span>
+                    </td>
+                    <td class="actions">
+                        ${!isCurrentUser ? `
+                            <button class="btn-icon ${user.isActive ? 'warning' : 'success'}" 
+                                    onclick="toggleUserStatus(${user.id}, ${!user.isActive})" 
+                                    title="${user.isActive ? 'تعطيل' : 'تفعيل'}">
+                                <i class="fas fa-${user.isActive ? 'ban' : 'check'}"></i>
+                            </button>
+                            <button class="btn-icon delete" onclick="deleteUser(${user.id})" title="حذف">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : `
+                            <span style="color: #666; font-size: 12px;">حسابك</span>
+                        `}
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    },
+
+    async createUser() {
+        const name = document.getElementById('newUserName').value.trim();
+        const email = document.getElementById('newUserEmail').value.trim();
+        const password = document.getElementById('newUserPassword').value;
+        
+        if (!name || !email || !password) {
+            showNotification('جميع الحقول مطلوبة', 'error');
+            return;
+        }
+        
+        if (password.length < 6) {
+            showNotification('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+            return;
+        }
+        
+        try {
+            const result = await API.users.create({
+                displayName: name,
+                email,
+                password,
+                role: 'admin'
+            });
+            
+            if (result.success) {
+                showNotification('تم إضافة المستخدم بنجاح', 'success');
+                closeModal('addUserModal');
+                document.getElementById('addUserForm').reset();
+                await this.loadUsers();
+            } else {
+                showNotification(result.error || 'خطأ في إضافة المستخدم', 'error');
+            }
+        } catch (error) {
+            showNotification('خطأ: ' + error.message, 'error');
+        }
+    },
+
+    async deleteUser(id) {
+        if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
+            return;
+        }
+        
+        try {
+            const result = await API.users.delete(id);
+            
+            if (result.success) {
+                showNotification('تم حذف المستخدم بنجاح', 'success');
+                await this.loadUsers();
+            } else {
+                showNotification(result.error || 'خطأ في حذف المستخدم', 'error');
+            }
+        } catch (error) {
+            showNotification('خطأ: ' + error.message, 'error');
+        }
+    },
+
+    async toggleUserStatus(id, isActive) {
+        try {
+            const result = await API.users.toggleActive(id, isActive);
+            
+            if (result.success) {
+                showNotification(result.message, 'success');
+                await this.loadUsers();
+            } else {
+                showNotification(result.error || 'خطأ في تحديث الحالة', 'error');
+            }
+        } catch (error) {
+            showNotification('خطأ: ' + error.message, 'error');
+        }
     }
 };
+
+// Global functions for user management
+function openAddUserModal() {
+    if (typeof openModal === 'function') {
+        openModal('addUserModal');
+    }
+}
+
+function createNewUser() {
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.createUser();
+    }
+}
+
+function deleteUser(id) {
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.deleteUser(id);
+    }
+}
+
+function toggleUserStatus(id, isActive) {
+    if (typeof AdminAPI !== 'undefined') {
+        AdminAPI.toggleUserStatus(id, isActive);
+    }
+}
 
 // Global function for save article button
 function saveArticle() {
@@ -646,6 +843,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             await AdminAPI.init();
+            
+            // Load users if on users section
+            await AdminAPI.loadUsers();
         } catch (error) {
             console.error('AdminAPI init error:', error);
         }
@@ -656,5 +856,9 @@ document.addEventListener('DOMContentLoaded', function() {
 window.AdminAPI = AdminAPI;
 window.saveArticle = saveArticle;
 window.saveSection = saveSection;
+window.openAddUserModal = openAddUserModal;
+window.createNewUser = createNewUser;
+window.deleteUser = deleteUser;
+window.toggleUserStatus = toggleUserStatus;
 
 console.log('admin-api.js loaded');
