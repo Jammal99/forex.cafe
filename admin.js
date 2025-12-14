@@ -19,9 +19,25 @@ function initNavigation() {
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             const section = this.dataset.section;
-            showSection(section);
+            if (section) {
+                showSection(section);
+            }
         });
+        
+        // Also handle clicks on the anchor inside
+        const link = item.querySelector('a');
+        if (link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const section = item.dataset.section;
+                if (section) {
+                    showSection(section);
+                }
+            });
+        }
     });
     
     // Handle hash in URL
