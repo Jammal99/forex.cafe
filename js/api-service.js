@@ -251,6 +251,43 @@ const API = {
     },
     
     // ==========================================
+    // Homepage Sections Methods
+    // ==========================================
+    homepageSections: {
+        async getAll() {
+            return API.request('/homepage-sections', { auth: false });
+        },
+        
+        async create(data) {
+            return API.request('/homepage-sections', {
+                method: 'POST',
+                body: data
+            });
+        },
+        
+        async update(data) {
+            return API.request('/homepage-sections', {
+                method: 'PUT',
+                body: data
+            });
+        },
+        
+        async bulkUpdate(sections) {
+            return API.request('/homepage-sections', {
+                method: 'PUT',
+                body: { sections }
+            });
+        },
+        
+        async delete(id, sectionKey) {
+            const param = id ? `id=${id}` : `sectionKey=${sectionKey}`;
+            return API.request(`/homepage-sections?${param}`, {
+                method: 'DELETE'
+            });
+        }
+    },
+    
+    // ==========================================
     // Settings Methods
     // ==========================================
     settings: {
