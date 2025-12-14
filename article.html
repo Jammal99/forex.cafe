@@ -190,6 +190,33 @@
             margin: 20px 0;
         }
         
+        /* Article figure images with captions */
+        .article-content figure.article-image {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .article-content figure.article-image img {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .article-content figure.article-image img:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(217, 119, 6, 0.2);
+        }
+        
+        .article-content figure.article-image figcaption {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #888;
+            font-style: italic;
+        }
+        
         .article-content a {
             color: #d97706;
             text-decoration: none;

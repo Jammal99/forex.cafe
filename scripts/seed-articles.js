@@ -211,8 +211,13 @@ function generateSlug(title) {
         .toLowerCase() + '-' + Date.now().toString(36);
 }
 
-// Generate article content
-function generateContent(title, excerpt) {
+// Generate article content with images
+function generateContent(title, excerpt, imageSet, articleIndex) {
+    // Get different images for article sections
+    const img1 = imageSet[(articleIndex * 3) % imageSet.length];
+    const img2 = imageSet[(articleIndex * 3 + 1) % imageSet.length];
+    const img3 = imageSet[(articleIndex * 3 + 2) % imageSet.length];
+    
     return `
 <h2>${title}</h2>
 <p>${excerpt}</p>
@@ -220,19 +225,49 @@ function generateContent(title, excerpt) {
 <h3>مقدمة</h3>
 <p>في هذا المقال سنتناول بالتفصيل موضوع "${title}" وأهميته في عالم تداول الفوركس. سنستعرض المفاهيم الأساسية والتطبيقات العملية التي ستساعدك على فهم هذا الموضوع بشكل أعمق.</p>
 
+<figure class="article-image">
+    <img src="${img1}" alt="${title}" loading="lazy">
+    <figcaption>صورة توضيحية للمفاهيم الأساسية</figcaption>
+</figure>
+
 <h3>لماذا هذا الموضوع مهم؟</h3>
 <p>يعتبر هذا الموضوع من المواضيع الأساسية التي يجب على كل متداول فهمها جيداً. فالمعرفة الصحيحة هي أساس النجاح في أسواق المال، وبدون فهم عميق لهذه المفاهيم قد تقع في أخطاء مكلفة.</p>
 
+<p>التداول في سوق الفوركس يتطلب مزيجاً من المعرفة التقنية والفهم العميق للأسواق المالية. ومن خلال هذا المقال، سنساعدك على بناء أساس قوي يمكنك البناء عليه في رحلتك التداولية.</p>
+
+<figure class="article-image">
+    <img src="${img2}" alt="التحليل والتطبيق العملي" loading="lazy">
+    <figcaption>التحليل والتطبيق العملي في التداول</figcaption>
+</figure>
+
 <h3>النقاط الرئيسية</h3>
 <ul>
-<li>فهم الأساسيات والمفاهيم الجوهرية</li>
-<li>التطبيق العملي في التداول اليومي</li>
-<li>تجنب الأخطاء الشائعة</li>
-<li>نصائح من الخبراء والمحترفين</li>
+<li>فهم الأساسيات والمفاهيم الجوهرية للتداول</li>
+<li>التطبيق العملي في التداول اليومي وكيفية اتخاذ القرارات</li>
+<li>تجنب الأخطاء الشائعة التي يقع فيها المبتدئون</li>
+<li>نصائح من الخبراء والمحترفين في المجال</li>
+<li>استراتيجيات مجربة لتحسين نتائج التداول</li>
 </ul>
+
+<h3>التطبيق العملي</h3>
+<p>بعد فهم المفاهيم النظرية، يأتي دور التطبيق العملي. من المهم أن تبدأ بحساب تجريبي لتطبيق ما تعلمته دون المخاطرة برأس مالك الحقيقي. مع الممارسة المستمرة، ستتمكن من تطوير مهاراتك وبناء الثقة اللازمة للتداول الفعلي.</p>
+
+<figure class="article-image">
+    <img src="${img3}" alt="نتائج التداول" loading="lazy">
+    <figcaption>تحقيق النتائج من خلال التطبيق الصحيح</figcaption>
+</figure>
+
+<h3>نصائح للنجاح</h3>
+<p>النجاح في التداول يتطلب الصبر والانضباط. لا تتوقع تحقيق أرباح كبيرة في البداية، بل ركز على التعلم وتطوير مهاراتك. احتفظ بسجل لصفقاتك وراجعها بانتظام لتحديد نقاط القوة والضعف.</p>
+
+<blockquote>
+"التداول الناجح ليس عن كسب المال في كل صفقة، بل عن إدارة المخاطر بشكل صحيح وتحقيق نتائج إيجابية على المدى الطويل."
+</blockquote>
 
 <h3>الخلاصة</h3>
 <p>نأمل أن يكون هذا المقال قد أضاف لك معلومات قيمة حول "${title}". تذكر دائماً أن التعلم المستمر هو مفتاح النجاح في عالم التداول. استمر في القراءة والتطبيق، ولا تتردد في العودة لهذا المقال كمرجع في المستقبل.</p>
+
+<p>إذا كان لديك أي أسئلة أو استفسارات، لا تتردد في التواصل معنا أو ترك تعليق أدناه. نحن هنا لمساعدتك في رحلتك نحو احتراف التداول.</p>
     `.trim();
 }
 
@@ -267,7 +302,7 @@ async function seedArticles() {
             for (let i = 0; i < subsectionData.articles.length; i++) {
                 const article = subsectionData.articles[i];
                 const slug = generateSlug(article.title);
-                const content = generateContent(article.title, article.excerpt);
+                const content = generateContent(article.title, article.excerpt, imageSet, i);
                 const thumbnail = imageSet[i % imageSet.length];
                 
                 await sql`

@@ -806,7 +806,7 @@
             
             // Previous button
             html += `<button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
-                     onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                     onclick="window.goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
                 <i class="fas fa-chevron-right"></i>
             </button>`;
             
@@ -821,7 +821,7 @@
             
             // First page + ellipsis
             if (startPage > 1) {
-                html += `<button class="pagination-btn" onclick="goToPage(1)">1</button>`;
+                html += `<button class="pagination-btn" onclick="window.goToPage(1)">1</button>`;
                 if (startPage > 2) {
                     html += `<span class="pagination-ellipsis">...</span>`;
                 }
@@ -830,7 +830,7 @@
             // Page numbers
             for (let i = startPage; i <= endPage; i++) {
                 html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
-                         onclick="goToPage(${i})">${i}</button>`;
+                         onclick="window.goToPage(${i})">${i}</button>`;
             }
             
             // Last page + ellipsis
@@ -838,20 +838,20 @@
                 if (endPage < totalPages - 1) {
                     html += `<span class="pagination-ellipsis">...</span>`;
                 }
-                html += `<button class="pagination-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+                html += `<button class="pagination-btn" onclick="window.goToPage(${totalPages})">${totalPages}</button>`;
             }
             
             // Next button
             html += `<button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
-                     onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                     onclick="window.goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
                 <i class="fas fa-chevron-left"></i>
             </button>`;
             
             paginationContainer.innerHTML = html;
         }
         
-        // Go to specific page
-        function goToPage(page) {
+        // Go to specific page - make global
+        window.goToPage = function(page) {
             if (page < 1 || page > totalPages) return;
             
             // Scroll to articles section
