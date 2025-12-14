@@ -809,11 +809,31 @@
                 <span>السابق</span>
             </button>`;
             
-            // Page numbers container
+            // Page numbers container - show only 3 numbers around current page
             html += '<div class="pagination-numbers">';
             
-            // Show all page numbers
-            for (let i = 1; i <= totalPages; i++) {
+            // Calculate which 3 pages to show
+            let startPage, endPage;
+            if (totalPages <= 3) {
+                // If 3 or fewer pages, show all
+                startPage = 1;
+                endPage = totalPages;
+            } else if (currentPage === 1) {
+                // First page - show 1, 2, 3
+                startPage = 1;
+                endPage = 3;
+            } else if (currentPage === totalPages) {
+                // Last page - show last 3
+                startPage = totalPages - 2;
+                endPage = totalPages;
+            } else {
+                // Middle - show current and neighbors
+                startPage = currentPage - 1;
+                endPage = currentPage + 1;
+            }
+            
+            // Render the 3 page numbers
+            for (let i = startPage; i <= endPage; i++) {
                 html += `<button class="pagination-btn pagination-num ${i === currentPage ? 'active' : ''}" 
                          onclick="window.goToPage(${i})">${i}</button>`;
             }
@@ -828,8 +848,6 @@
             </button>`;
             
             // Page info
-            const startArticle = (currentPage - 1) * articlesPerPage + 1;
-            const endArticle = Math.min(currentPage * articlesPerPage, total);
             html += `<div class="pagination-info">صفحة ${currentPage} من ${totalPages} (${total} مقال)</div>`;
             
             paginationContainer.innerHTML = html;
