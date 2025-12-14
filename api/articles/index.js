@@ -63,20 +63,40 @@ module.exports = async (req, res) => {
             const status = url.searchParams.get('status');
             const sectionId = url.searchParams.get('section');
             const limit = parseInt(url.searchParams.get('limit')) || 50;
-            
-            let query = db.select().from(articles);
+            const offset = parseInt(url.searchParams.get('offset')) || 0;
+            const withCount = url.searchParams.get('count') === 'true';
             
             const conditions = [];
             if (status) conditions.push(eq(articles.status, status));
             if (sectionId) conditions.push(eq(articles.sectionId, parseInt(sectionId)));
             
+            // Get total count if requested
+            let total = 0;
+            if (withCount) {
+                let countQuery = db.select().from(articles);
+                if (conditions.length > 0) {
+                    countQuery = countQuery.where(and(...conditions));
+                }
+                const countResult = await countQuery;
+                total = countResult.length;
+            }
+            
+            // Get paginated results
+            let query = db.select().from(articles);
             if (conditions.length > 0) {
                 query = query.where(and(...conditions));
             }
             
-            const result = await query.orderBy(desc(articles.createdAt)).limit(limit);
+            const result = await query.orderBy(desc(articles.createdAt)).limit(limit).offset(offset);
             
-            return res.status(200).json({ success: true, data: result });
+            const response = { success: true, data: result };
+            if (withCount) {
+                response.total = total;
+                response.page = Math.floor(offset / limit) + 1;
+                response.totalPages = Math.ceil(total / limit);
+            }
+            
+            return res.status(200).json(response);
         }
         
         // ==========================================

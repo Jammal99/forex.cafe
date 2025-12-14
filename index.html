@@ -297,11 +297,8 @@
 
                     </div>
 
-                    <div class="load-more">
-                        <button class="btn btn-outline">
-                            <span>تحميل المزيد</span>
-                            <i class="fas fa-spinner"></i>
-                        </button>
+                    <div class="pagination" id="articlesPagination">
+                        <!-- Pagination will be rendered by JavaScript -->
                     </div>
                 </main>
             </div>
@@ -755,28 +752,115 @@
             return subsection ? subsection.name : '';
         }
         
-        // Load articles from API
-        async function loadArticlesFromAPI() {
-            console.log('Loading published articles from API...');
+        // Pagination state
+        let currentPage = 1;
+        const articlesPerPage = 6;
+        let totalPages = 1;
+        
+        // Load articles from API with pagination
+        async function loadArticlesFromAPI(page = 1) {
+            console.log('Loading published articles from API, page:', page);
+            currentPage = page;
             
             // Load categories first
             await loadCategoriesData();
             
             try {
-                const result = await API.articles.getAll({ status: 'published', limit: 6 });
+                const offset = (page - 1) * articlesPerPage;
+                const result = await API.articles.getAll({ 
+                    status: 'published', 
+                    limit: articlesPerPage,
+                    offset: offset,
+                    count: 'true'
+                });
                 console.log('API response:', result);
                 
                 if (result.success && result.data && result.data.length > 0) {
                     console.log('Rendering', result.data.length, 'articles');
+                    totalPages = result.totalPages || 1;
                     renderArticles(result.data);
+                    renderPagination(result.total, page, totalPages);
                     updateFilterButtons();
                 } else {
                     console.log('No published articles found');
                     // Keep static articles as fallback
+                    renderPagination(0, 1, 1);
                 }
             } catch (error) {
                 console.error('Error loading articles:', error);
             }
+        }
+        
+        // Render pagination
+        function renderPagination(total, currentPage, totalPages) {
+            const paginationContainer = document.getElementById('articlesPagination');
+            if (!paginationContainer) return;
+            
+            // Don't show pagination if only 1 page or no articles
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // Previous button
+            html += `<button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                     onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-right"></i>
+            </button>`;
+            
+            // Page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // First page + ellipsis
+            if (startPage > 1) {
+                html += `<button class="pagination-btn" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    html += `<span class="pagination-ellipsis">...</span>`;
+                }
+            }
+            
+            // Page numbers
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                         onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            // Last page + ellipsis
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    html += `<span class="pagination-ellipsis">...</span>`;
+                }
+                html += `<button class="pagination-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+            
+            // Next button
+            html += `<button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                     onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i>
+            </button>`;
+            
+            paginationContainer.innerHTML = html;
+        }
+        
+        // Go to specific page
+        function goToPage(page) {
+            if (page < 1 || page > totalPages) return;
+            
+            // Scroll to articles section
+            const articlesSection = document.querySelector('.articles-grid');
+            if (articlesSection) {
+                articlesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            loadArticlesFromAPI(page);
         }
         
         // Update filter buttons based on sections

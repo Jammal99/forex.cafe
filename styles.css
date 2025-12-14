@@ -1368,66 +1368,55 @@ img {
     gap: 8px;
 }
 
-/* Load More */
-.load-more {
-    text-align: center;
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
     margin-top: 50px;
     padding: 30px 20px;
+    flex-wrap: wrap;
 }
 
-.load-more .btn {
-    padding: 14px 40px;
+.pagination-btn {
+    width: 42px;
+    height: 42px;
+    border: 2px solid rgba(217, 119, 6, 0.3);
+    background: var(--bg-card);
+    color: var(--text);
+    border-radius: 10px;
     font-size: 1rem;
     font-weight: 600;
+    cursor: pointer;
     transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.load-more .btn-outline {
-    border: 2px solid var(--primary);
+.pagination-btn:hover:not(.disabled):not(.active) {
+    border-color: var(--primary);
     color: var(--primary);
-    position: relative;
-    overflow: hidden;
+    background: rgba(217, 119, 6, 0.1);
 }
 
-.load-more .btn-outline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
+.pagination-btn.active {
     background: var(--primary);
-    transition: left var(--transition-normal);
-    z-index: -1;
-}
-
-.load-more .btn-outline:hover::before {
-    left: 0;
-}
-
-.load-more .btn-outline:hover {
+    border-color: var(--primary);
     color: var(--text-on-primary);
-    box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+    box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
 }
 
-.load-more .btn-outline i {
-    margin-left: 8px;
-    animation: spinLoadMore 0.6s ease-in-out infinite;
+.pagination-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
-.load-more .btn-outline i.fa-spinner {
-    display: inline-block;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spinLoadMore {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(180deg); }
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.pagination-ellipsis {
+    color: var(--text-muted);
+    padding: 0 8px;
+    font-weight: 600;
 }
 
 /* ==========================================
