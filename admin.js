@@ -3,6 +3,7 @@
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Admin JS loaded');
     initNavigation();
     initSidebar();
     initModals();
@@ -14,29 +15,36 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================================
 
 function initNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
+    console.log('initNavigation called');
+    const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+    console.log('Found nav items:', navItems.length);
     
     navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
+        const section = item.dataset.section;
+        console.log('Adding listener for section:', section);
+        
+        item.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
-            const section = this.dataset.section;
+            console.log('Nav item clicked:', section);
             if (section) {
                 showSection(section);
             }
-        });
+            return false;
+        };
         
         // Also handle clicks on the anchor inside
         const link = item.querySelector('a');
         if (link) {
-            link.addEventListener('click', function(e) {
+            link.onclick = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                const section = item.dataset.section;
+                console.log('Link clicked for section:', section);
                 if (section) {
                     showSection(section);
                 }
-            });
+                return false;
+            };
         }
     });
     
@@ -47,23 +55,37 @@ function initNavigation() {
     }
 }
 
-function showSection(sectionId) {
+// Make showSection globally accessible
+window.showSection = function(sectionId) {
+    console.log('showSection called with:', sectionId);
+    
+    if (!sectionId) {
+        console.error('No sectionId provided');
+        return;
+    }
+    
     // Update active nav item
-    document.querySelectorAll('.nav-item').forEach(item => {
+    document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
         item.classList.remove('active');
         if (item.dataset.section === sectionId) {
             item.classList.add('active');
         }
     });
     
-    // Show corresponding section
+    // Hide all sections
     document.querySelectorAll('.content-section').forEach(section => {
         section.classList.remove('active');
+        section.style.display = 'none';
     });
     
+    // Show target section
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.add('active');
+        targetSection.style.display = 'block';
+        console.log('Section activated:', sectionId);
+    } else {
+        console.error('Section not found:', sectionId);
     }
     
     // Update URL hash
@@ -76,8 +98,12 @@ function showSection(sectionId) {
     
     // Close sidebar on mobile
     if (window.innerWidth <= 1024) {
-        document.getElementById('sidebar').classList.remove('active');
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.remove('active');
+        }
     }
+};
 }
 
 // ==========================================
