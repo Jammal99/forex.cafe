@@ -20,6 +20,10 @@ const AdminAPI = {
             await this.loadSections();
             console.log('Sections loaded:', this.sections.length);
             
+            // Load subsections (needed for article display)
+            await this.loadAllSubsections();
+            console.log('Subsections loaded:', this.subsections.length);
+            
             // Then load articles
             await this.loadArticles();
             console.log('Articles loaded:', this.articles.length);
@@ -38,16 +42,20 @@ const AdminAPI = {
     // ==========================================
     async loadDashboardStats() {
         try {
-            // Get articles count
-            const articlesResult = await API.articles.getAll();
-            const articles = articlesResult.data || [];
+            // Get articles count using count parameter
+            const articlesResult = await API.articles.getAll({ count: true, limit: 1 });
+            const articlesCount = articlesResult.total || 0;
+            
+            // Get all articles for views calculation (limit to reasonable number)
+            const allArticlesResult = await API.articles.getAll({ limit: 1000 });
+            const articles = allArticlesResult.data || [];
             
             // Get sections count
             const sectionsResult = await API.sections.getAll();
             const sections = sectionsResult.data || [];
             
             // Update dashboard stats
-            this.updateStat('articles-count', articles.length);
+            this.updateStat('articles-count', articlesCount);
             this.updateStat('sections-count', sections.length);
             this.updateStat('views-count', articles.reduce((sum, a) => sum + (a.views || 0), 0));
             
@@ -274,15 +282,129 @@ const AdminAPI = {
     // Articles Management
     // ==========================================
     articles: [],
+    articlesCurrentPage: 1,
+    articlesPerPage: 15,
+    articlesTotalCount: 0,
+    articlesTotalPages: 0,
     
-    async loadArticles() {
+    async loadArticles(page = 1) {
         try {
-            const result = await API.articles.getAll();
+            const offset = (page - 1) * this.articlesPerPage;
+            const result = await API.articles.getAll({
+                limit: this.articlesPerPage,
+                offset: offset,
+                count: true
+            });
+            
             this.articles = result.data || [];
+            this.articlesTotalCount = result.total || 0;
+            this.articlesTotalPages = result.totalPages || Math.ceil(this.articlesTotalCount / this.articlesPerPage);
+            this.articlesCurrentPage = page;
+            
             this.renderArticlesTable();
+            this.renderArticlesPagination();
+            this.updateArticlesCount();
         } catch (error) {
             console.error('Error loading articles:', error);
             showNotification('خطأ في تحميل المقالات', 'error');
+        }
+    },
+    
+    updateArticlesCount() {
+        const countEl = document.getElementById('articlesCount');
+        if (countEl) {
+            countEl.textContent = `إجمالي المقالات: ${this.articlesTotalCount}`;
+        }
+    },
+    
+    renderArticlesPagination() {
+        const paginationContainer = document.getElementById('articlesPagination');
+        if (!paginationContainer) return;
+        
+        if (this.articlesTotalPages <= 1) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
+        
+        let paginationHTML = '<div class="pagination-wrapper">';
+        
+        // Previous button
+        paginationHTML += `
+            <button class="pagination-btn ${this.articlesCurrentPage === 1 ? 'disabled' : ''}" 
+                    onclick="AdminAPI.goToArticlesPage(${this.articlesCurrentPage - 1})"
+                    ${this.articlesCurrentPage === 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-right"></i> السابق
+            </button>
+        `;
+        
+        // Page numbers
+        paginationHTML += '<div class="pagination-numbers">';
+        
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, this.articlesCurrentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(this.articlesTotalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+        
+        // First page
+        if (startPage > 1) {
+            paginationHTML += `<button class="pagination-num" onclick="AdminAPI.goToArticlesPage(1)">1</button>`;
+            if (startPage > 2) {
+                paginationHTML += '<span class="pagination-dots">...</span>';
+            }
+        }
+        
+        // Page numbers
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHTML += `
+                <button class="pagination-num ${i === this.articlesCurrentPage ? 'active' : ''}" 
+                        onclick="AdminAPI.goToArticlesPage(${i})">${i}</button>
+            `;
+        }
+        
+        // Last page
+        if (endPage < this.articlesTotalPages) {
+            if (endPage < this.articlesTotalPages - 1) {
+                paginationHTML += '<span class="pagination-dots">...</span>';
+            }
+            paginationHTML += `<button class="pagination-num" onclick="AdminAPI.goToArticlesPage(${this.articlesTotalPages})">${this.articlesTotalPages}</button>`;
+        }
+        
+        paginationHTML += '</div>';
+        
+        // Next button
+        paginationHTML += `
+            <button class="pagination-btn ${this.articlesCurrentPage === this.articlesTotalPages ? 'disabled' : ''}" 
+                    onclick="AdminAPI.goToArticlesPage(${this.articlesCurrentPage + 1})"
+                    ${this.articlesCurrentPage === this.articlesTotalPages ? 'disabled' : ''}>
+                التالي <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+        
+        paginationHTML += '</div>';
+        
+        // Page info
+        const startArticle = (this.articlesCurrentPage - 1) * this.articlesPerPage + 1;
+        const endArticle = Math.min(this.articlesCurrentPage * this.articlesPerPage, this.articlesTotalCount);
+        paginationHTML += `
+            <div class="pagination-info">
+                عرض ${startArticle} - ${endArticle} من ${this.articlesTotalCount} مقال
+            </div>
+        `;
+        
+        paginationContainer.innerHTML = paginationHTML;
+    },
+    
+    goToArticlesPage(page) {
+        if (page < 1 || page > this.articlesTotalPages || page === this.articlesCurrentPage) return;
+        this.loadArticles(page);
+        
+        // Scroll to articles section
+        const articlesSection = document.getElementById('articles');
+        if (articlesSection) {
+            articlesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     },
 

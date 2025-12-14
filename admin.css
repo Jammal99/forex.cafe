@@ -785,9 +785,86 @@ body {
 
 .pagination {
     display: flex;
-    justify-content: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
     margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination-num {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.pagination-num:hover:not(.active) {
+    background: var(--bg-hover);
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+.pagination-num.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+.pagination-dots {
+    color: var(--text-muted);
+    padding: 0 0.25rem;
+}
+
+.pagination-info {
+    color: var(--text-muted);
+    font-size: 0.85rem;
 }
 
 .btn-page {
@@ -806,6 +883,29 @@ body {
     background: var(--accent);
     color: white;
     border-color: var(--accent);
+}
+
+/* Section Header with Articles Count */
+.section-header-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section-header-info h1 {
+    margin: 0;
+}
+
+.articles-count-badge {
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* ==========================================

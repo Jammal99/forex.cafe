@@ -1118,7 +1118,10 @@
         <!-- Articles Management -->
         <section class="content-section" id="articles">
             <div class="section-header">
-                <h1>إدارة المقالات</h1>
+                <div class="section-header-info">
+                    <h1>إدارة المقالات</h1>
+                    <span class="articles-count-badge" id="articlesCount">إجمالي المقالات: 0</span>
+                </div>
                 <button class="btn btn-primary" onclick="if(typeof AdminAPI !== 'undefined') AdminAPI.resetArticleForm(); openModal('addArticleModal')">
                     <i class="fas fa-plus"></i> إضافة مقال جديد
                 </button>
