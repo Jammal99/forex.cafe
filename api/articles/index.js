@@ -23,6 +23,13 @@ module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
+    // Cache headers for GET requests - articles list and details
+    if (req.method === 'GET') {
+        // Cache for 5 minutes, stale-while-revalidate for 1 hour
+        res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
+        res.setHeader('Vary', 'Accept-Encoding');
+    }
+    
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }

@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="/api" crossorigin>
+    <script src="js/article-cache.js" defer></script>
     <style>
         /* Article Page Specific Styles */
         .article-page {
@@ -347,12 +350,97 @@
         .article-loading {
             text-align: center;
             padding: 100px 20px;
+            display: none;
         }
         
         .article-loading i {
             font-size: 48px;
             color: #d97706;
             animation: spin 1s linear infinite;
+        }
+        
+        /* Skeleton Loading Styles - Better perceived performance */
+        .skeleton-loading {
+            animation: none !important;
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        
+        .skeleton-title {
+            height: 48px;
+            margin-bottom: 20px;
+            width: 80%;
+        }
+        
+        .skeleton-meta {
+            height: 20px;
+            width: 60%;
+            margin-bottom: 30px;
+        }
+        
+        .skeleton-image {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 30px;
+            border-radius: 16px;
+        }
+        
+        .skeleton-text {
+            height: 18px;
+            margin-bottom: 12px;
+        }
+        
+        .skeleton-text:nth-child(odd) {
+            width: 100%;
+        }
+        
+        .skeleton-text:nth-child(even) {
+            width: 90%;
+        }
+        
+        .skeleton-text:last-child {
+            width: 70%;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Instant content display with fade */
+        .article-content-loaded {
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Revalidating indicator - subtle */
+        .revalidating-indicator {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(217, 119, 6, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: none;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
         }
         
         @keyframes spin {
@@ -497,7 +585,28 @@
             
             <!-- Main Article Content -->
             <div class="article-container">
-            <!-- Loading State -->
+            <!-- Skeleton Loading State - Better perceived performance -->
+            <div id="articleSkeleton" class="article-skeleton">
+                <header class="article-header">
+                    <nav class="article-breadcrumb">
+                        <span class="skeleton" style="width: 60px; height: 16px; display: inline-block;"></span>
+                        <i class="fas fa-chevron-left"></i>
+                        <span class="skeleton" style="width: 80px; height: 16px; display: inline-block;"></span>
+                    </nav>
+                    <div class="skeleton" style="width: 100px; height: 28px; border-radius: 20px; margin-bottom: 15px;"></div>
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-meta"></div>
+                </header>
+                <div class="skeleton skeleton-image"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+            </div>
+            
+            <!-- Fallback Loading State -->
             <div id="articleLoading" class="article-loading">
                 <i class="fas fa-spinner"></i>
                 <p style="margin-top: 20px; color: #888;">جاري تحميل المقال...</p>
@@ -629,37 +738,243 @@
         // Current article data
         let currentArticle = null;
         
-        // Initialize
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadCategoriesData();
-            loadArticle();
-        });
+        // Track if we're showing cached content
+        let showingCachedContent = false;
         
-        // Load sections and subsections for category display
+        // Initialize immediately - don't wait for DOMContentLoaded for critical path
+        (async function initArticlePage() {
+            // Start loading article immediately
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            
+            if (!articleId) {
+                // Wait for DOM then show error
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', showError);
+                } else {
+                    showError();
+                }
+                return;
+            }
+            
+            // Try to load from cache immediately
+            await loadArticleWithCache(articleId);
+            
+            // Load categories in background (not blocking)
+            loadCategoriesData();
+        })();
+        
+        // Load article with cache-first strategy
+        async function loadArticleWithCache(articleId) {
+            // Wait for DOM if needed
+            if (document.readyState === 'loading') {
+                await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+            }
+            
+            // Wait for ArticleCache to be available
+            await waitForCache();
+            
+            // Try cache first
+            const cached = await window.ArticleCache?.getArticle(articleId);
+            
+            if (cached) {
+                // Show cached content immediately - instant display!
+                currentArticle = cached;
+                displayArticle(cached, true);
+                showingCachedContent = true;
+                
+                // Revalidate in background
+                revalidateArticle(articleId, cached);
+            } else {
+                // No cache - show skeleton and fetch
+                showSkeleton();
+                await fetchAndDisplayArticle(articleId);
+            }
+        }
+        
+        // Wait for ArticleCache to be available
+        async function waitForCache(timeout = 100) {
+            const start = Date.now();
+            while (!window.ArticleCache && Date.now() - start < timeout) {
+                await new Promise(r => setTimeout(r, 10));
+            }
+        }
+        
+        // Show skeleton loading
+        function showSkeleton() {
+            const skeleton = document.getElementById('articleSkeleton');
+            const loading = document.getElementById('articleLoading');
+            if (skeleton) skeleton.style.display = 'block';
+            if (loading) loading.style.display = 'none';
+        }
+        
+        // Hide skeleton loading
+        function hideSkeleton() {
+            const skeleton = document.getElementById('articleSkeleton');
+            if (skeleton) skeleton.style.display = 'none';
+        }
+        
+        // Fetch article from API and display
+        async function fetchAndDisplayArticle(articleId) {
+            try {
+                const response = await fetch(`${API_BASE}/articles/${articleId}`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    currentArticle = result.data;
+                    
+                    // Cache for future visits
+                    window.ArticleCache?.setArticle(result.data);
+                    
+                    displayArticle(result.data, false);
+                    loadRelatedArticles(result.data);
+                    incrementViews(articleId);
+                } else {
+                    showError();
+                }
+            } catch (error) {
+                console.error('Error loading article:', error);
+                showError();
+            }
+        }
+        
+        // Revalidate cached article in background
+        async function revalidateArticle(articleId, cachedData) {
+            try {
+                const response = await fetch(`${API_BASE}/articles/${articleId}`);
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    // Check if content has changed
+                    const hasChanged = JSON.stringify(result.data.content) !== JSON.stringify(cachedData.content) ||
+                                       JSON.stringify(result.data.title) !== JSON.stringify(cachedData.title);
+                    
+                    // Always update cache
+                    window.ArticleCache?.setArticle(result.data);
+                    
+                    // If content changed significantly, update display with subtle indicator
+                    if (hasChanged) {
+                        showRevalidatingIndicator();
+                        currentArticle = result.data;
+                        displayArticle(result.data, false);
+                        hideRevalidatingIndicator();
+                    }
+                    
+                    // Load related articles
+                    loadRelatedArticles(result.data);
+                    
+                    // Increment views (only once per visit)
+                    if (!sessionStorage.getItem(`viewed_${articleId}`)) {
+                        incrementViews(articleId);
+                        sessionStorage.setItem(`viewed_${articleId}`, 'true');
+                    }
+                }
+            } catch (error) {
+                // Silent fail - we already have cached content displayed
+                console.warn('Background revalidation failed:', error);
+            }
+        }
+        
+        // Show subtle revalidating indicator
+        function showRevalidatingIndicator() {
+            let indicator = document.getElementById('revalidatingIndicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'revalidatingIndicator';
+                indicator.className = 'revalidating-indicator';
+                indicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> تحديث المحتوى...';
+                document.body.appendChild(indicator);
+            }
+            indicator.style.display = 'block';
+        }
+        
+        function hideRevalidatingIndicator() {
+            const indicator = document.getElementById('revalidatingIndicator');
+            if (indicator) {
+                setTimeout(() => {
+                    indicator.style.display = 'none';
+                }, 500);
+            }
+        }
+        
+        // Load sections and subsections for category display (cached)
         async function loadCategoriesData() {
             try {
-                // Load sections
-                const sectionsRes = await fetch(`${API_BASE}/sections`);
-                const sectionsData = await sectionsRes.json();
-                if (sectionsData.success) {
-                    sectionsData.data.forEach(s => {
-                        sectionsCache[s.id] = s;
-                    });
-                }
+                // Check cache first
+                const cachedSections = await window.ArticleCache?.getMetadata('sections');
+                const cachedSubsections = await window.ArticleCache?.getMetadata('subsections');
                 
-                // Load subsections
-                const subsectionsRes = await fetch(`${API_BASE}/subsections`);
-                const subsectionsData = await subsectionsRes.json();
-                if (subsectionsData.success) {
-                    subsectionsData.data.forEach(s => {
-                        subsectionsCache[s.id] = s;
-                    });
+                if (cachedSections && cachedSubsections) {
+                    // Use cached data immediately
+                    cachedSections.forEach(s => sectionsCache[s.id] = s);
+                    cachedSubsections.forEach(s => subsectionsCache[s.id] = s);
+                    renderSidebarSections();
+                    
+                    // Update article display if already shown
+                    if (currentArticle) {
+                        highlightCurrentSection(currentArticle);
+                        updateCategoryDisplay(currentArticle);
+                    }
+                    
+                    // Revalidate in background
+                    revalidateCategories();
+                } else {
+                    // Fetch fresh
+                    await fetchCategories();
                 }
-                
-                // Render sidebar sections
-                renderSidebarSections();
             } catch (error) {
                 console.error('Error loading categories:', error);
+            }
+        }
+        
+        async function fetchCategories() {
+            try {
+                const [sectionsRes, subsectionsRes] = await Promise.all([
+                    fetch(`${API_BASE}/sections`),
+                    fetch(`${API_BASE}/subsections`)
+                ]);
+                
+                const sectionsData = await sectionsRes.json();
+                const subsectionsData = await subsectionsRes.json();
+                
+                if (sectionsData.success) {
+                    sectionsData.data.forEach(s => sectionsCache[s.id] = s);
+                    window.ArticleCache?.setMetadata('sections', sectionsData.data);
+                }
+                
+                if (subsectionsData.success) {
+                    subsectionsData.data.forEach(s => subsectionsCache[s.id] = s);
+                    window.ArticleCache?.setMetadata('subsections', subsectionsData.data);
+                }
+                
+                renderSidebarSections();
+                
+                if (currentArticle) {
+                    highlightCurrentSection(currentArticle);
+                    updateCategoryDisplay(currentArticle);
+                }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        }
+        
+        async function revalidateCategories() {
+            // Background revalidation - silent
+            try {
+                await fetchCategories();
+            } catch (e) {}
+        }
+        
+        // Update category display after categories load
+        function updateCategoryDisplay(article) {
+            const categoryEl = document.getElementById('articleCategory');
+            const sectionEl = document.getElementById('articleSection');
+            
+            if (categoryEl) {
+                categoryEl.textContent = getCategoryDisplay(article);
+            }
+            if (sectionEl) {
+                sectionEl.textContent = getSectionName(article.sectionId);
             }
         }
         
@@ -710,28 +1025,41 @@
             loadPopularPosts();
         }
         
-        // Load popular posts for sidebar
+        // Load popular posts for sidebar (cached)
         async function loadPopularPosts() {
             const container = document.getElementById('popularPosts');
             if (!container) return;
             
             try {
+                // Check cache first
+                const cachedPosts = await window.ArticleCache?.getMetadata('popular_posts');
+                
+                if (cachedPosts) {
+                    renderPopularPosts(container, cachedPosts);
+                }
+                
+                // Fetch fresh (will update cache)
                 const response = await fetch(`${API_BASE}/articles?status=published&limit=4`);
                 const result = await response.json();
                 
                 if (result.success && result.data) {
-                    container.innerHTML = result.data.map((article, index) => `
-                        <li>
-                            <a href="article.html?id=${article.id}">
-                                <span class="post-number">${index + 1}</span>
-                                <span class="post-title">${article.title}</span>
-                            </a>
-                        </li>
-                    `).join('');
+                    window.ArticleCache?.setMetadata('popular_posts', result.data);
+                    renderPopularPosts(container, result.data);
                 }
             } catch (error) {
                 console.error('Error loading popular posts:', error);
             }
+        }
+        
+        function renderPopularPosts(container, posts) {
+            container.innerHTML = posts.map((article, index) => `
+                <li>
+                    <a href="article.html?id=${article.id}">
+                        <span class="post-number">${index + 1}</span>
+                        <span class="post-title">${article.title}</span>
+                    </a>
+                </li>
+            `).join('');
         }
         
         // Highlight current section in sidebar
@@ -773,42 +1101,18 @@
             return subsectionsCache[id]?.name || '';
         }
         
-        // Load article from API
-        async function loadArticle() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const articleId = urlParams.get('id');
-            
-            if (!articleId) {
-                showError();
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE}/articles/${articleId}`);
-                const result = await response.json();
-                
-                if (result.success && result.data) {
-                    currentArticle = result.data;
-                    displayArticle(result.data);
-                    loadRelatedArticles(result.data);
-                    // Increment view count
-                    incrementViews(articleId);
-                } else {
-                    showError();
-                }
-            } catch (error) {
-                console.error('Error loading article:', error);
-                showError();
-            }
-        }
-        
         // Display article content
-        function displayArticle(article) {
-            // Hide loading
+        function displayArticle(article, fromCache = false) {
+            // Hide skeleton and loading
+            hideSkeleton();
             document.getElementById('articleLoading').style.display = 'none';
             
-            // Show content
-            document.getElementById('articleContent').style.display = 'block';
+            // Show content with animation
+            const contentEl = document.getElementById('articleContent');
+            contentEl.style.display = 'block';
+            if (!fromCache) {
+                contentEl.classList.add('article-content-loaded');
+            }
             
             // Highlight current section in sidebar
             highlightCurrentSection(article);
@@ -864,6 +1168,7 @@
         
         // Format date to Arabic
         function formatDate(dateString) {
+            if (!dateString) return '';
             const date = new Date(dateString);
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             return date.toLocaleDateString('ar-SA', options);
@@ -892,40 +1197,56 @@
             ).join('');
         }
         
-        // Load related articles
+        // Load related articles (cached)
         async function loadRelatedArticles(article) {
             try {
-                const response = await fetch(`${API_BASE}/articles?status=published&limit=3`);
+                // Check cache
+                const cacheKey = `related_${article.sectionId || 'all'}`;
+                const cached = await window.ArticleCache?.getMetadata(cacheKey);
+                
+                if (cached) {
+                    renderRelatedArticles(cached.filter(a => a.id !== article.id).slice(0, 3));
+                }
+                
+                // Fetch fresh
+                const response = await fetch(`${API_BASE}/articles?status=published&limit=6`);
                 const result = await response.json();
                 
                 if (result.success && result.data) {
-                    // Filter out current article
+                    window.ArticleCache?.setMetadata(cacheKey, result.data);
                     const related = result.data.filter(a => a.id !== article.id).slice(0, 3);
-                    
-                    if (related.length > 0) {
-                        const grid = document.getElementById('relatedGrid');
-                        grid.innerHTML = related.map(a => `
-                            <a href="article.html?id=${a.id}" class="related-card">
-                                <img src="${a.thumbnail || 'assets/placeholder.jpg'}" alt="${a.title}">
-                                <div class="related-card-content">
-                                    <h4 class="related-card-title">${a.title}</h4>
-                                    <span class="related-card-date">${formatDate(a.publishedAt || a.createdAt)}</span>
-                                </div>
-                            </a>
-                        `).join('');
-                        
-                        document.getElementById('relatedArticles').style.display = 'block';
-                    }
+                    renderRelatedArticles(related);
                 }
             } catch (error) {
                 console.error('Error loading related articles:', error);
             }
         }
         
-        // Increment view count
+        function renderRelatedArticles(articles) {
+            if (articles.length === 0) return;
+            
+            const grid = document.getElementById('relatedGrid');
+            grid.innerHTML = articles.map(a => `
+                <a href="article.html?id=${a.id}" class="related-card">
+                    <img src="${a.thumbnail || 'assets/placeholder.jpg'}" alt="${a.title}" loading="lazy">
+                    <div class="related-card-content">
+                        <h4 class="related-card-title">${a.title}</h4>
+                        <span class="related-card-date">${formatDate(a.publishedAt || a.createdAt)}</span>
+                    </div>
+                </a>
+            `).join('');
+            
+            document.getElementById('relatedArticles').style.display = 'block';
+        }
+        
+        // Increment view count (debounced, once per session)
         async function incrementViews(articleId) {
+            // Skip if already viewed this session
+            if (sessionStorage.getItem(`viewed_${articleId}`)) return;
+            
             try {
                 await fetch(`${API_BASE}/articles/${articleId}/view`, { method: 'POST' });
+                sessionStorage.setItem(`viewed_${articleId}`, 'true');
             } catch (error) {
                 // Silently fail - not critical
             }
@@ -933,6 +1254,7 @@
         
         // Show error state
         function showError() {
+            hideSkeleton();
             document.getElementById('articleLoading').style.display = 'none';
             document.getElementById('articleError').style.display = 'block';
         }

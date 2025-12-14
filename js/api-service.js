@@ -194,8 +194,39 @@ const API = {
             return API.request(endpoint, { auth: false });
         },
         
-        async getById(id) {
-            return API.request(`/articles?id=${id}`, { auth: false });
+        // Get article by ID with cache support
+        async getById(id, useCache = true) {
+            // Try cache first if available
+            if (useCache && window.ArticleCache) {
+                const cached = await window.ArticleCache.getArticle(id);
+                if (cached) {
+                    // Return cached data and revalidate in background
+                    API.articles._revalidateInBackground(id);
+                    return { success: true, data: cached, fromCache: true };
+                }
+            }
+            
+            // Fetch from API
+            const result = await API.request(`/articles/${id}`, { auth: false });
+            
+            // Cache the result
+            if (result.success && result.data && window.ArticleCache) {
+                window.ArticleCache.setArticle(result.data);
+            }
+            
+            return result;
+        },
+        
+        // Background revalidation helper
+        async _revalidateInBackground(id) {
+            try {
+                const result = await API.request(`/articles/${id}`, { auth: false });
+                if (result.success && result.data && window.ArticleCache) {
+                    window.ArticleCache.setArticle(result.data);
+                }
+            } catch (e) {
+                // Silent fail for background revalidation
+            }
         },
         
         async create(data) {

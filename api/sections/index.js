@@ -12,6 +12,12 @@ module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
+    // Cache headers for GET - sections rarely change
+    if (req.method === 'GET') {
+        res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+        res.setHeader('Vary', 'Accept-Encoding');
+    }
+    
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }

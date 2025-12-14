@@ -13,6 +13,13 @@ module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
+    // Cache headers for GET requests - articles rarely change
+    if (req.method === 'GET') {
+        // Cache for 1 hour, stale-while-revalidate for 24 hours
+        res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+        res.setHeader('Vary', 'Accept-Encoding');
+    }
+    
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }

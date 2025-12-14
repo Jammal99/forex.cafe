@@ -3,6 +3,32 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "framework": null,
+  "headers": [
+    {
+      "source": "/api/articles/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, stale-while-revalidate=3600" }
+      ]
+    },
+    {
+      "source": "/api/sections",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/api/subsections",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/js/article-cache.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/api/auth/register", "destination": "/api/auth/register" },
     { "source": "/api/auth/login", "destination": "/api/auth/login" },
