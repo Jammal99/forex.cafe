@@ -752,7 +752,7 @@
         
         // Pagination state
         let currentPage = 1;
-        const articlesPerPage = 6;
+        const articlesPerPage = 9;
         let totalPages = 1;
         
         // Load articles from API with pagination
@@ -803,47 +803,34 @@
             let html = '';
             
             // Previous button
-            html += `<button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+            html += `<button class="pagination-btn pagination-nav ${currentPage === 1 ? 'disabled' : ''}" 
                      onclick="window.goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
                 <i class="fas fa-chevron-right"></i>
+                <span>السابق</span>
             </button>`;
             
-            // Page numbers
-            const maxVisiblePages = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            // Page numbers container
+            html += '<div class="pagination-numbers">';
             
-            if (endPage - startPage + 1 < maxVisiblePages) {
-                startPage = Math.max(1, endPage - maxVisiblePages + 1);
-            }
-            
-            // First page + ellipsis
-            if (startPage > 1) {
-                html += `<button class="pagination-btn" onclick="window.goToPage(1)">1</button>`;
-                if (startPage > 2) {
-                    html += `<span class="pagination-ellipsis">...</span>`;
-                }
-            }
-            
-            // Page numbers
-            for (let i = startPage; i <= endPage; i++) {
-                html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+            // Show all page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="pagination-btn pagination-num ${i === currentPage ? 'active' : ''}" 
                          onclick="window.goToPage(${i})">${i}</button>`;
             }
             
-            // Last page + ellipsis
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    html += `<span class="pagination-ellipsis">...</span>`;
-                }
-                html += `<button class="pagination-btn" onclick="window.goToPage(${totalPages})">${totalPages}</button>`;
-            }
+            html += '</div>';
             
             // Next button
-            html += `<button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+            html += `<button class="pagination-btn pagination-nav ${currentPage === totalPages ? 'disabled' : ''}" 
                      onclick="window.goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                <span>التالي</span>
                 <i class="fas fa-chevron-left"></i>
             </button>`;
+            
+            // Page info
+            const startArticle = (currentPage - 1) * articlesPerPage + 1;
+            const endArticle = Math.min(currentPage * articlesPerPage, total);
+            html += `<div class="pagination-info">صفحة ${currentPage} من ${totalPages} (${total} مقال)</div>`;
             
             paginationContainer.innerHTML = html;
         }
