@@ -1373,15 +1373,19 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin-top: 50px;
+    gap: 10px;
+    margin-top: 40px;
     padding: 30px 20px;
     flex-wrap: wrap;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid rgba(217, 119, 6, 0.15);
 }
 
 .pagination-btn {
-    width: 42px;
-    height: 42px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 12px;
     border: 2px solid rgba(217, 119, 6, 0.3);
     background: var(--bg-card);
     color: var(--text);
@@ -1399,6 +1403,7 @@ img {
     border-color: var(--primary);
     color: var(--primary);
     background: rgba(217, 119, 6, 0.1);
+    transform: translateY(-2px);
 }
 
 .pagination-btn.active {
