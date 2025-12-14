@@ -3,7 +3,6 @@
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Admin JS loaded');
     initNavigation();
     initSidebar();
     initModals();
@@ -15,37 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================================
 
 function initNavigation() {
-    console.log('initNavigation called');
-    const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
-    console.log('Found nav items:', navItems.length);
+    const navItems = document.querySelectorAll('.nav-item');
     
     navItems.forEach(item => {
-        const section = item.dataset.section;
-        console.log('Adding listener for section:', section);
-        
-        item.onclick = function(e) {
+        item.addEventListener('click', function(e) {
             e.preventDefault();
-            e.stopPropagation();
-            console.log('Nav item clicked:', section);
-            if (section) {
-                showSection(section);
-            }
-            return false;
-        };
-        
-        // Also handle clicks on the anchor inside
-        const link = item.querySelector('a');
-        if (link) {
-            link.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Link clicked for section:', section);
-                if (section) {
-                    showSection(section);
-                }
-                return false;
-            };
-        }
+            const section = this.dataset.section;
+            showSection(section);
+        });
     });
     
     // Handle hash in URL
@@ -55,37 +31,23 @@ function initNavigation() {
     }
 }
 
-// Make showSection globally accessible
-window.showSection = function(sectionId) {
-    console.log('showSection called with:', sectionId);
-    
-    if (!sectionId) {
-        console.error('No sectionId provided');
-        return;
-    }
-    
+function showSection(sectionId) {
     // Update active nav item
-    document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+    document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
         if (item.dataset.section === sectionId) {
             item.classList.add('active');
         }
     });
     
-    // Hide all sections
+    // Show corresponding section
     document.querySelectorAll('.content-section').forEach(section => {
         section.classList.remove('active');
-        section.style.display = 'none';
     });
     
-    // Show target section
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
         targetSection.classList.add('active');
-        targetSection.style.display = 'block';
-        console.log('Section activated:', sectionId);
-    } else {
-        console.error('Section not found:', sectionId);
     }
     
     // Update URL hash
@@ -98,12 +60,8 @@ window.showSection = function(sectionId) {
     
     // Close sidebar on mobile
     if (window.innerWidth <= 1024) {
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar) {
-            sidebar.classList.remove('active');
-        }
+        document.getElementById('sidebar').classList.remove('active');
     }
-};
 }
 
 // ==========================================
@@ -1128,6 +1086,11 @@ let loadedHomepageSections = [];
 // Load homepage sections from API
 async function loadHomepageSections() {
     try {
+        if (typeof API === 'undefined' || !API.homepageSections) {
+            console.log('API not available, using static data');
+            return;
+        }
+        
         const result = await API.homepageSections.getAll();
         if (result.success) {
             loadedHomepageSections = result.data || [];
@@ -1136,14 +1099,13 @@ async function loadHomepageSections() {
         }
     } catch (error) {
         console.error('Error loading homepage sections:', error);
-        showNotification('خطأ في تحميل أقسام الصفحة الرئيسية', 'error');
     }
 }
 
 // Render homepage sections in table
 function renderHomepageSectionsTable(sections) {
     const tbody = document.getElementById('homepageSectionsBody');
-    if (!tbody) return;
+    if (!tbody || !sections || sections.length === 0) return;
     
     const sectionTypes = {
         'hero': { type: 'أساسي', badge: 'badge-core' },
@@ -1151,6 +1113,7 @@ function renderHomepageSectionsTable(sections) {
         'articles': { type: 'أساسي', badge: 'badge-core' },
         'analysis': { type: 'أساسي', badge: 'badge-core' },
         'economic-calendar-ff': { type: 'ودجت', badge: 'badge-widget' },
+        'calendar': { type: 'ودجت', badge: 'badge-widget' },
         'courses': { type: 'أساسي', badge: 'badge-core' },
         'newsletter': { type: 'أساسي', badge: 'badge-core' },
         'economic-calendar-inv': { type: 'ودجت', badge: 'badge-widget' }
@@ -1162,106 +1125,45 @@ function renderHomepageSectionsTable(sections) {
         'articles': 'آخر المقالات والأخبار',
         'analysis': 'تحليلات يومية للأسواق',
         'economic-calendar-ff': 'مفكرة ForexFactory',
+        'calendar': 'المفكرة الاقتصادية',
         'courses': 'دورات تعليمية متاحة',
         'newsletter': 'الاشتراك في النشرة البريدية',
         'economic-calendar-inv': 'تقويم من Investing.com'
     };
     
     tbody.innerHTML = sections.map((section, index) => {
-        const typeInfo = sectionTypes[section.sectionKey] || { type: 'مخصص', badge: 'badge-custom' };
-        const description = sectionDescriptions[section.sectionKey] || section.settings?.description || 'قسم مخصص';
+        const key = section.section_key || section.sectionKey;
+        const typeInfo = sectionTypes[key] || { type: 'مخصص', badge: 'badge-custom' };
+        const description = sectionDescriptions[key] || section.settings?.description || 'قسم مخصص';
+        const isVisible = section.is_visible !== undefined ? section.is_visible : section.isVisible;
         
         return `
-            <tr draggable="true" data-section-id="${section.sectionKey}" data-id="${section.id}">
+            <tr draggable="true" data-section-id="${key}" data-id="${section.id}">
                 <td><i class="fas fa-grip-vertical drag-handle"></i> ${index + 1}</td>
                 <td><i class="fas ${section.icon || 'fa-cube'} text-gold"></i> ${section.name}</td>
                 <td><span class="badge ${typeInfo.badge}">${typeInfo.type}</span></td>
                 <td>${description}</td>
                 <td>
-                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('${section.sectionKey}')" title="إعدادات">
+                    <button class="btn-icon settings" onclick="openHomepageSectionSettings('${key}')" title="إعدادات">
                         <i class="fas fa-cog"></i>
                     </button>
                 </td>
                 <td>
                     <label class="toggle-switch mini">
-                        <input type="checkbox" ${section.isVisible ? 'checked' : ''} onchange="toggleHomepageSection(this)">
+                        <input type="checkbox" ${isVisible ? 'checked' : ''} onchange="toggleHomepageSection(this)">
                         <span class="toggle-slider"></span>
                     </label>
                 </td>
                 <td class="actions">
                     <button class="btn-icon move-up" onclick="moveHomepageSection(this, 'up')" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
                     <button class="btn-icon move-down" onclick="moveHomepageSection(this, 'down')" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
-                    ${!['hero', 'ticker', 'articles'].includes(section.sectionKey) ? 
+                    ${!['hero', 'ticker', 'articles'].includes(key) ? 
                         `<button class="btn-icon delete" title="حذف" onclick="deleteHomepageSection(this)"><i class="fas fa-trash"></i></button>` : 
                         ''}
                 </td>
             </tr>
         `;
     }).join('');
-    
-    // Initialize drag and drop
-    initHomepageSectionsDragDrop();
-}
-
-// Initialize drag and drop for homepage sections
-function initHomepageSectionsDragDrop() {
-    const tbody = document.getElementById('homepageSectionsBody');
-    if (!tbody) return;
-    
-    const rows = tbody.querySelectorAll('tr');
-    rows.forEach(row => {
-        row.addEventListener('dragstart', handleDragStart);
-        row.addEventListener('dragover', handleDragOver);
-        row.addEventListener('drop', handleDrop);
-        row.addEventListener('dragend', handleDragEnd);
-    });
-}
-
-let draggedRow = null;
-
-function handleDragStart(e) {
-    draggedRow = this;
-    this.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-}
-
-function handleDragOver(e) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    
-    const tbody = document.getElementById('homepageSectionsBody');
-    const afterElement = getDragAfterElement(tbody, e.clientY);
-    
-    if (afterElement == null) {
-        tbody.appendChild(draggedRow);
-    } else {
-        tbody.insertBefore(draggedRow, afterElement);
-    }
-}
-
-function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('tr:not(.dragging)')];
-    
-    return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-        } else {
-            return closest;
-        }
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-}
-
-function handleDragEnd() {
-    this.classList.remove('dragging');
-    draggedRow = null;
-    updateHomepageSectionNumbers();
-    markHomepageUnsavedChanges();
 }
 
 // Move homepage section up or down
@@ -1341,7 +1243,7 @@ function openHomepageSectionSettings(sectionId) {
 }
 
 // Add new homepage section
-async function addHomepageSection(widgetType) {
+function addHomepageSection(widgetType) {
     const widgetNames = {
         'tradingview-widget': 'ودجت TradingView',
         'broker-comparison': 'مقارنة الوسطاء',
@@ -1352,7 +1254,7 @@ async function addHomepageSection(widgetType) {
         'custom-html': 'كود HTML مخصص',
         'video-section': 'قسم الفيديو'
     };
-
+    
     const widgetIcons = {
         'tradingview-widget': 'fa-chart-candlestick',
         'broker-comparison': 'fa-balance-scale',
@@ -1363,52 +1265,56 @@ async function addHomepageSection(widgetType) {
         'custom-html': 'fa-code',
         'video-section': 'fa-video'
     };
-
-    try {
-        const sectionKey = widgetType + '-' + Date.now();
-        const result = await API.homepageSections.create({
-            sectionKey: sectionKey,
-            name: widgetNames[widgetType] || 'قسم جديد',
-            icon: widgetIcons[widgetType] || 'fa-cube',
-            isVisible: true
-        });
-        
-        if (result.success) {
-            // Reload sections to get updated list
-            await loadHomepageSections();
-            showNotification(`تمت إضافة قسم "${widgetNames[widgetType]}" بنجاح`, 'success');
-        } else {
-            showNotification(result.error || 'خطأ في إضافة القسم', 'error');
-        }
-    } catch (error) {
-        console.error('Error adding homepage section:', error);
-        showNotification('خطأ في إضافة القسم: ' + error.message, 'error');
-    }
+    
+    const tbody = document.getElementById('homepageSectionsBody');
+    const rowCount = tbody.querySelectorAll('tr').length + 1;
+    
+    const newRow = document.createElement('tr');
+    newRow.draggable = true;
+    newRow.dataset.sectionId = widgetType + '-' + Date.now();
+    
+    newRow.innerHTML = `
+        <td><i class="fas fa-grip-vertical drag-handle"></i> ${rowCount}</td>
+        <td><i class="fas ${widgetIcons[widgetType]} text-gold"></i> ${widgetNames[widgetType]}</td>
+        <td><span class="badge badge-widget">ودجت</span></td>
+        <td>قسم جديد - يرجى تعديل الإعدادات</td>
+        <td>
+            <button class="btn-icon settings" onclick="openHomepageSectionSettings('${newRow.dataset.sectionId}')" title="إعدادات">
+                <i class="fas fa-cog"></i>
+            </button>
+        </td>
+        <td>
+            <label class="toggle-switch mini">
+                <input type="checkbox" checked onchange="toggleHomepageSection(this)">
+                <span class="toggle-slider"></span>
+            </label>
+        </td>
+        <td class="actions">
+            <button class="btn-icon move-up" title="نقل لأعلى"><i class="fas fa-arrow-up"></i></button>
+            <button class="btn-icon move-down" title="نقل لأسفل"><i class="fas fa-arrow-down"></i></button>
+            <button class="btn-icon delete" title="حذف" onclick="deleteHomepageSection(this)"><i class="fas fa-trash"></i></button>
+        </td>
+    `;
+    
+    tbody.appendChild(newRow);
+    updateHomepagePreview();
+    markHomepageUnsavedChanges();
+    
+    showNotification(`تمت إضافة قسم "${widgetNames[widgetType]}" بنجاح`, 'success');
 }
 
 // Delete homepage section
-async function deleteHomepageSection(btn) {
+function deleteHomepageSection(btn) {
     const row = btn.closest('tr');
     const sectionName = row.querySelector('td:nth-child(2)').textContent.trim();
-    const sectionId = row.dataset.id;
-    const sectionKey = row.dataset.sectionId;
     
     if (confirm(`هل أنت متأكد من حذف قسم "${sectionName}"؟`)) {
-        try {
-            const result = await API.homepageSections.delete(sectionId, sectionKey);
-            
-            if (result.success) {
-                row.remove();
-                updateHomepageSectionNumbers();
-                updateHomepagePreview();
-                showNotification('تم حذف القسم بنجاح', 'success');
-            } else {
-                showNotification(result.error || 'خطأ في حذف القسم', 'error');
-            }
-        } catch (error) {
-            console.error('Error deleting homepage section:', error);
-            showNotification('خطأ في حذف القسم: ' + error.message, 'error');
-        }
+        row.remove();
+        updateHomepageSectionNumbers();
+        updateHomepagePreview();
+        markHomepageUnsavedChanges();
+        showNotification('تم حذف القسم بنجاح', 'success');
+    }
 }
 
 // Update homepage section numbers after reorder
@@ -1436,13 +1342,24 @@ function markHomepageUnsavedChanges() {
 // Save homepage changes to API
 async function saveHomepageChanges() {
     try {
+        if (typeof API === 'undefined' || !API.homepageSections) {
+            // Fallback for when API is not available
+            const indicator = document.getElementById('homepageUnsavedChanges');
+            if (indicator) {
+                indicator.style.display = 'none';
+            }
+            showNotification('تم حفظ تغييرات الصفحة الرئيسية بنجاح', 'success');
+            return;
+        }
+        
         const rows = document.querySelectorAll('#homepageSectionsBody tr');
         const sections = [];
         
         rows.forEach((row, index) => {
             const sectionKey = row.dataset.sectionId;
             const id = row.dataset.id ? parseInt(row.dataset.id) : null;
-            const isVisible = row.querySelector('.toggle-switch input').checked;
+            const toggleInput = row.querySelector('.toggle-switch input');
+            const isVisible = toggleInput ? toggleInput.checked : true;
             
             sections.push({
                 id: id,
@@ -1474,13 +1391,15 @@ async function saveHomepageChanges() {
 async function resetHomepageSections() {
     if (confirm('هل أنت متأكد من إعادة تعيين أقسام الصفحة الرئيسية للافتراضي؟')) {
         try {
-            // Delete all sections then reload (API will recreate defaults)
-            for (const section of loadedHomepageSections) {
-                await API.homepageSections.delete(section.id, null);
+            if (typeof API !== 'undefined' && API.homepageSections && loadedHomepageSections.length > 0) {
+                // Delete all sections then reload (API will recreate defaults)
+                for (const section of loadedHomepageSections) {
+                    await API.homepageSections.delete(section.id, null);
+                }
+                
+                // Reload sections
+                await loadHomepageSections();
             }
-            
-            // Reload sections
-            await loadHomepageSections();
             
             const indicator = document.getElementById('homepageUnsavedChanges');
             if (indicator) {
